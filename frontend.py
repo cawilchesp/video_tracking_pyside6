@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 
 import widgets
+from ui import UI
 import backend
 # from object_tracker import detect
 
@@ -34,24 +35,24 @@ import backend
 
 
 
-# --------
-# Settings
-# --------
-settings = QSettings(f'{sys.path[0]}/settings.ini', QSettings.Format.IniFormat)
-language_value = int(settings.value('language'))
-theme_value = int(settings.value('theme'))
-color_value = settings.value('color')
+# # --------
+# # Settings
+# # --------
+# settings = QSettings(f'{sys.path[0]}/settings.ini', QSettings.Format.IniFormat)
+# language_value = int(settings.value('language'))
+# theme_value = int(settings.value('theme'))
+# color_value = settings.value('color')
 
-idioma_dict = {0: ('Español', 'Spanish'), 1: ('Inglés', 'English')}
-tema_dict = {0: ('Oscuro', 'Dark'), 1: ('Claro', 'Light')}
-main_style_dict = {
-    0: 'background-color: rgb(59,66,83); color: rgb(255,255,255)',
-    1: 'background-color: rgb(229,233,240); color: rgb(0,0,0)'
-}
+# idioma_dict = {0: ('Español', 'Spanish'), 1: ('Inglés', 'English')}
+# tema_dict = {0: ('Oscuro', 'Dark'), 1: ('Claro', 'Light')}
+# main_style_dict = {
+#     0: 'background-color: rgb(59,66,83); color: rgb(255,255,255)',
+#     1: 'background-color: rgb(229,233,240); color: rgb(0,0,0)'
+# }
 
-palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
+# palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
 
-data_deque = {}
+# data_deque = {}
 
 
 # # -------------
@@ -85,170 +86,142 @@ data_deque = {}
 class App(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Video Tracker')
-        self.setGeometry(100, 100, 1700, 830)
-        self.setMinimumSize(1700, 830)
-        self.setMaximumSize(1700, 830)
-        self.setStyleSheet(main_style_dict[theme_value])
-        
-        # ------------
-        # Sidebar Left
-        # ------------
-        self.sidebar_left = widgets.Sidebar(self, 'sidebar_left', (0, 0, 200, 830), theme_value)
-        
-        # Menú Archivo
-        y_sidebar_left = 10
-        self.archivo_label = widgets.TitleLabel(self.sidebar_left, 'archivo_label', ('Origen del Video', 'Video Source'), (10, y_sidebar_left, 180), theme_value, language_value)
-
-        y_sidebar_left += 40
-        self.webcam_button = widgets.TextButton(self.sidebar_left, 'webcam_button', ('Cámara Web', 'Webcam'), (10, y_sidebar_left, 180), 'SP_DialogOpenButton', theme_value, language_value)
-        self.webcam_button.clicked.connect(self.on_webcam_button_clicked)
-
-        y_sidebar_left += 40
-        self.ip_camera_button = widgets.TextButton(self.sidebar_left, 'ip_camera_button', ('Cámara IP', 'IP Camera'), (10, y_sidebar_left, 180), 'SP_DialogOpenButton', theme_value, language_value)
-        self.ip_camera_button.clicked.connect(self.on_ip_camera_button_clicked)
-
-        y_sidebar_left += 40
-        self.video_button = widgets.TextButton(self.sidebar_left, 'video_button', ('Archivo de Video', 'Video File'), (10, y_sidebar_left, 180), 'SP_DialogOpenButton', theme_value, language_value)
-        self.video_button.clicked.connect(self.on_video_button_clicked)
-        
-        y_sidebar_left += 40
-        self.line1 = widgets.lineSeparator(self.sidebar_left, 10, y_sidebar_left, 180, theme_value)
-        
-        # Menú Información del Video
-        y_sidebar_left += 10
-        self.informacion_label = widgets.TitleLabel(self.sidebar_left, 'informacion_label', ('Información del Video', 'Video Information'), (10, y_sidebar_left, 180), theme_value, language_value)
-        
-        y_sidebar_left += 40
-        self.ancho_label = widgets.ItemLabel(self.sidebar_left, 'ancho_label', ('Ancho', 'Width'), (10, y_sidebar_left, 90), theme_value, language_value)
-        
-        self.anchoValue_label = widgets.ItemLabel(self.sidebar_left, 'anchoValue_label', ('', ''), (100, y_sidebar_left, 90), theme_value, language_value)
-        
-        y_sidebar_left += 40
-        self.alto_label = widgets.ItemLabel(self.sidebar_left, 'alto_label', ('Alto', 'Height'), (10, y_sidebar_left, 90), theme_value, language_value)
-        
-        self.altoValue_label = widgets.ItemLabel(self.sidebar_left, 'altoValue_label', ('', ''), (100, y_sidebar_left, 90), theme_value, language_value)
-
-        y_sidebar_left += 40
-        self.fps_label = widgets.ItemLabel(self.sidebar_left, 'fps_label', ('FPS', 'FPS'), (10, y_sidebar_left, 90), theme_value, language_value)
-        
-        self.fpsValue_label = widgets.ItemLabel(self.sidebar_left, 'fpsValue_label', ('', ''), (100, y_sidebar_left, 90), theme_value, language_value)
-
-        y_sidebar_left += 40
-        self.line2 = widgets.lineSeparator(self.sidebar_left, 10, y_sidebar_left, 180, theme_value)
-
-        # Menú Calibración
-        y_sidebar_left += 40
-        self.calibracion_button = widgets.TextButton(self.sidebar_left, 'calibracion_button', ('Calibrar', 'Calibrate'), (10, y_sidebar_left, 150, ), 'SP_FileDialogListView', theme_value, language_value)
-        
-        self.calibracionStatusLabel = widgets.IconLabel(self.sidebar_left, 'calibracionStatusLabel', (160, y_sidebar_left, 30, 30), 'SP_DialogCancelButton')
-        
-        y_sidebar_left += 40
-        self.line3 = widgets.lineSeparator(self.sidebar_left, 10, y_sidebar_left, 180, theme_value)
-        
-        
-
-        # -------------
-        # Sidebar Right
-        # -------------
-        self.sidebar_right = widgets.Sidebar(self, 'sidebar_right', (1500, 0, 200, 830), theme_value)
-
-        # Menú Anotaciones
-        y_sidebar_right = 10
-        self.anotacion_label = widgets.TitleLabel(self.sidebar_right, 'anotacion_label', ('Anotaciones', 'Annotations'), (10, y_sidebar_right, 180), theme_value, language_value)
-        
-        y_sidebar_right += 30
-        self.clases_label = widgets.ItemLabel(self.sidebar_right, 'clases_label', ('Clases', 'Classes'), (10, y_sidebar_right, 180), theme_value, language_value)
-        
-        y_sidebar_right += 40
-        self.clases_combobox = widgets.ListComboBox(self.sidebar_right, 'clases_combobox', (10, y_sidebar_right, 180), 2, 2, theme_value)
-        
-        y_sidebar_right += 40
-        self.color_button = widgets.ColorButton(self.sidebar_right, 'color_button', ('Color', 'Colour'), (10, y_sidebar_right, 180), 'images/color.png', color_value, theme_value, language_value)
-        self.color_button.clicked.connect(self.on_color_button_clicked)
-
-        y_sidebar_right += 40
-        self.line4 = widgets.lineSeparator(self.sidebar_right, 10, y_sidebar_right, 180, theme_value)
-        
-        # Menú Configuración
-        y_sidebar_right += 10
-        self.configuracion_label = widgets.TitleLabel(self.sidebar_right, 'configuracion_label', ('Configuración', 'Settings'), (10, y_sidebar_right, 180), theme_value, language_value)
-        
-        y_sidebar_right += 30
-        self.idioma_label = widgets.ItemLabel(self.sidebar_right, 'idioma_label', ('Idioma', 'Language'), (10, y_sidebar_right, 180), theme_value, language_value)
-        
-        y_sidebar_right += 40
-        self.idioma_combobox = widgets.StaticComboBox(self.sidebar_right, 'idioma_combobox', (10, y_sidebar_right, 180), 2, idioma_dict, theme_value, language_value)
-        self.idioma_combobox.currentIndexChanged.connect(self.on_idioma_combobox_currentIndexChanged)
-        
-        y_sidebar_right += 40
-        self.tema_label = widgets.ItemLabel(self.sidebar_right, 'tema_label', ('Tema', 'Theme'), (10, y_sidebar_right, 180), theme_value, language_value)
-        
-        y_sidebar_right += 40
-        self.tema_combobox = widgets.StaticComboBox(self.sidebar_right, 'tema_combobox', (10, y_sidebar_right, 180), 2, tema_dict, theme_value, language_value)
-        self.tema_combobox.currentIndexChanged.connect(self.on_tema_combobox_currentIndexChanged)
-        
-        y_sidebar_right += 40
-        self.line5 = widgets.lineSeparator(self.sidebar_right, 10, y_sidebar_right, 180, theme_value)
-
-        # Menú Ayuda
-        y_sidebar_right += 10
-        self.help_label = widgets.TitleLabel(self.sidebar_right, 'help_label', ('Ayuda', 'Help'), (10, y_sidebar_right, 180), theme_value, language_value)
-        
-        y_sidebar_right += 40
-        self.manual_button = widgets.TextButton(self.sidebar_right, 'manual_button', ('Manual', 'Manual'), (10, y_sidebar_right, 180), 'SP_TitleBarContextHelpButton', theme_value, language_value)
-        self.manual_button.clicked.connect(self.on_manual_button_clicked)
-
-        y_sidebar_right += 40
-        self.about_button = widgets.TextButton(self.sidebar_right, 'about_button', ('Acerca de...', 'About...'), (10, y_sidebar_right, 180), 'SP_CommandLink', theme_value, language_value)
-        self.about_button.clicked.connect(self.on_about_button_clicked)
-
-        y_sidebar_right += 40
-        self.aboutQt_button = widgets.TextButton(self.sidebar_right, 'aboutQt_button', ('Acerca de Qt...', 'About Qt...'), (10, y_sidebar_right, 180), 'SP_TitleBarMenuButton', theme_value, language_value)
-        self.aboutQt_button.clicked.connect(self.on_aboutQt_button_clicked)
-        
-
-        
         # --------
-        # Upperbar
+        # Settings
         # --------
-        self.upperbar = widgets.Sidebar(self, 'upperbar', (200, 0, 1300, 50), theme_value)
+        self.settings = QSettings(f'{sys.path[0]}/settings.ini', QSettings.Format.IniFormat)
+        self.language_value = int(self.settings.value('language'))
+        self.theme_value = eval(self.settings.value('theme'))
+        self.default_path = self.settings.value('default_path')
+
+        # ----------------
+        # Generación de UI
+        # ----------------
+        self.ui = UI(self)
+
+
+
         
-        x_upperbar = 10
-        self.slow_button = widgets.IconButton(self.upperbar, 'slow_button', (x_upperbar, 10), 'images/slow_play.png', theme_value)
+        # # ------------
+        # # Sidebar Left
+        # # ------------
+        # self.sidebar_left = widgets.Sidebar(self, 'sidebar_left', (0, 0, 200, 830), theme_value)
         
-        x_upperbar += 40
-        self.backFrame_button = widgets.IconButton(self.upperbar, 'backFrame_button', (x_upperbar, 10), 'images/back_frame.png', theme_value)
+        # # Menú Archivo
+        # y_sidebar_left = 10
+        # self.archivo_label = widgets.TitleLabel(self.sidebar_left, 'archivo_label', ('Origen del Video', 'Video Source'), (10, y_sidebar_left, 180), theme_value, language_value)
+
+        # y_sidebar_left += 40
+        # self.webcam_button = widgets.TextButton(self.sidebar_left, 'webcam_button', ('Cámara Web', 'Webcam'), (10, y_sidebar_left, 180), 'SP_DialogOpenButton', theme_value, language_value)
+        # self.webcam_button.clicked.connect(self.on_webcam_button_clicked)
+
+        # y_sidebar_left += 40
+        # self.ip_camera_button = widgets.TextButton(self.sidebar_left, 'ip_camera_button', ('Cámara IP', 'IP Camera'), (10, y_sidebar_left, 180), 'SP_DialogOpenButton', theme_value, language_value)
+        # self.ip_camera_button.clicked.connect(self.on_ip_camera_button_clicked)
+
+        # y_sidebar_left += 40
+        # self.video_button = widgets.TextButton(self.sidebar_left, 'video_button', ('Archivo de Video', 'Video File'), (10, y_sidebar_left, 180), 'SP_DialogOpenButton', theme_value, language_value)
+        # self.video_button.clicked.connect(self.on_video_button_clicked)
         
-        x_upperbar += 40
-        self.backPlay_button = widgets.IconButton(self.upperbar, 'backPlay_button', (x_upperbar, 10), 'images/back_play.png', theme_value)
+        # y_sidebar_left += 40
+        # self.line1 = widgets.lineSeparator(self.sidebar_left, 10, y_sidebar_left, 180, theme_value)
         
-        x_upperbar += 40
-        self.pause_button = widgets.IconButton(self.upperbar, 'pause_button', (x_upperbar, 10), 'images/pause.png', theme_value)
+        # # Menú Información del Video
+        # y_sidebar_left += 10
+        # self.informacion_label = widgets.TitleLabel(self.sidebar_left, 'informacion_label', ('Información del Video', 'Video Information'), (10, y_sidebar_left, 180), theme_value, language_value)
         
-        x_upperbar += 40
-        self.play_button = widgets.IconButton(self.upperbar, 'play_button', (x_upperbar, 10), 'images/play.png', theme_value)
+        # y_sidebar_left += 40
+        # self.ancho_label = widgets.ItemLabel(self.sidebar_left, 'ancho_label', ('Ancho', 'Width'), (10, y_sidebar_left, 90), theme_value, language_value)
         
-        x_upperbar += 40
-        self.frontFrame_button = widgets.IconButton(self.upperbar, 'frontFrame_button', (x_upperbar, 10), 'images/front_frame.png', theme_value)
+        # self.anchoValue_label = widgets.ItemLabel(self.sidebar_left, 'anchoValue_label', ('', ''), (100, y_sidebar_left, 90), theme_value, language_value)
         
-        x_upperbar += 40
-        self.fastPlay_button = widgets.IconButton(self.upperbar, 'fastPlay_button', (x_upperbar, 10), 'images/fast_play.png', theme_value)
+        # y_sidebar_left += 40
+        # self.alto_label = widgets.ItemLabel(self.sidebar_left, 'alto_label', ('Alto', 'Height'), (10, y_sidebar_left, 90), theme_value, language_value)
         
-        x_upperbar += 40
-        self.video_slider = widgets.ObjectSlider(self.upperbar, 'video_slider', (x_upperbar, 10, 580), theme_value)
-        self.video_slider.sliderMoved.connect(self.on_video_slider_sliderMoved)
-        self.video_slider.sliderReleased.connect(self.on_video_slider_sliderReleased)
+        # self.altoValue_label = widgets.ItemLabel(self.sidebar_left, 'altoValue_label', ('', ''), (100, y_sidebar_left, 90), theme_value, language_value)
+
+        # y_sidebar_left += 40
+        # self.fps_label = widgets.ItemLabel(self.sidebar_left, 'fps_label', ('FPS', 'FPS'), (10, y_sidebar_left, 90), theme_value, language_value)
         
-        x_upperbar += 590
-        self.frameNumber_edit = widgets.ObjectLineEdit(self.upperbar, 'frameNumber_edit', (x_upperbar, 10, 100), theme_value)
+        # self.fpsValue_label = widgets.ItemLabel(self.sidebar_left, 'fpsValue_label', ('', ''), (100, y_sidebar_left, 90), theme_value, language_value)
+
+        # y_sidebar_left += 40
+        # self.line2 = widgets.lineSeparator(self.sidebar_left, 10, y_sidebar_left, 180, theme_value)
+
+        # # Menú Calibración
+        # y_sidebar_left += 40
+        # self.calibracion_button = widgets.TextButton(self.sidebar_left, 'calibracion_button', ('Calibrar', 'Calibrate'), (10, y_sidebar_left, 150, ), 'SP_FileDialogListView', theme_value, language_value)
         
-        # -----------
-        # Main Window
-        # -----------
-        self.video_label = QtWidgets.QLabel(self)
-        self.video_label.setGeometry(QtCore.QRect(210, 60, 1280, 720))
-        self.video_label.setFrameStyle(QtWidgets.QFrame.Shape.Box)
+        # self.calibracionStatusLabel = widgets.IconLabel(self.sidebar_left, 'calibracionStatusLabel', (160, y_sidebar_left, 30, 30), 'SP_DialogCancelButton')
+        
+        # y_sidebar_left += 40
+        # self.line3 = widgets.lineSeparator(self.sidebar_left, 10, y_sidebar_left, 180, theme_value)
+        
+        
+
+        # # -------------
+        # # Sidebar Right
+        # # -------------
+        # self.sidebar_right = widgets.Sidebar(self, 'sidebar_right', (1500, 0, 200, 830), theme_value)
+
+        # # Menú Anotaciones
+        # y_sidebar_right = 10
+        # self.anotacion_label = widgets.TitleLabel(self.sidebar_right, 'anotacion_label', ('Anotaciones', 'Annotations'), (10, y_sidebar_right, 180), theme_value, language_value)
+        
+        # y_sidebar_right += 30
+        # self.clases_label = widgets.ItemLabel(self.sidebar_right, 'clases_label', ('Clases', 'Classes'), (10, y_sidebar_right, 180), theme_value, language_value)
+        
+        # y_sidebar_right += 40
+        # self.clases_combobox = widgets.ListComboBox(self.sidebar_right, 'clases_combobox', (10, y_sidebar_right, 180), 2, 2, theme_value)
+        
+        # y_sidebar_right += 40
+        # self.color_button = widgets.ColorButton(self.sidebar_right, 'color_button', ('Color', 'Colour'), (10, y_sidebar_right, 180), 'images/color.png', color_value, theme_value, language_value)
+        # self.color_button.clicked.connect(self.on_color_button_clicked)
+
+        
+        
+
+        
+        # # --------
+        # # Upperbar
+        # # --------
+        # self.upperbar = widgets.Sidebar(self, 'upperbar', (200, 0, 1300, 50), theme_value)
+        
+        # x_upperbar = 10
+        # self.slow_button = widgets.IconButton(self.upperbar, 'slow_button', (x_upperbar, 10), 'images/slow_play.png', theme_value)
+        
+        # x_upperbar += 40
+        # self.backFrame_button = widgets.IconButton(self.upperbar, 'backFrame_button', (x_upperbar, 10), 'images/back_frame.png', theme_value)
+        
+        # x_upperbar += 40
+        # self.backPlay_button = widgets.IconButton(self.upperbar, 'backPlay_button', (x_upperbar, 10), 'images/back_play.png', theme_value)
+        
+        # x_upperbar += 40
+        # self.pause_button = widgets.IconButton(self.upperbar, 'pause_button', (x_upperbar, 10), 'images/pause.png', theme_value)
+        
+        # x_upperbar += 40
+        # self.play_button = widgets.IconButton(self.upperbar, 'play_button', (x_upperbar, 10), 'images/play.png', theme_value)
+        
+        # x_upperbar += 40
+        # self.frontFrame_button = widgets.IconButton(self.upperbar, 'frontFrame_button', (x_upperbar, 10), 'images/front_frame.png', theme_value)
+        
+        # x_upperbar += 40
+        # self.fastPlay_button = widgets.IconButton(self.upperbar, 'fastPlay_button', (x_upperbar, 10), 'images/fast_play.png', theme_value)
+        
+        # x_upperbar += 40
+        # self.video_slider = widgets.ObjectSlider(self.upperbar, 'video_slider', (x_upperbar, 10, 580), theme_value)
+        # self.video_slider.sliderMoved.connect(self.on_video_slider_sliderMoved)
+        # self.video_slider.sliderReleased.connect(self.on_video_slider_sliderReleased)
+        
+        # x_upperbar += 590
+        # self.frameNumber_edit = widgets.ObjectLineEdit(self.upperbar, 'frameNumber_edit', (x_upperbar, 10, 100), theme_value)
+        
+        # # -----------
+        # # Main Window
+        # # -----------
+        # self.video_label = QtWidgets.QLabel(self)
+        # self.video_label.setGeometry(QtCore.QRect(210, 60, 1280, 720))
+        # self.video_label.setFrameStyle(QtWidgets.QFrame.Shape.Box)
         
     # ----------------------
     # Funciones de Controles
