@@ -1,6 +1,6 @@
-## Somatotype V 1.0
+## Video Tracking V 1.0
 
-Somatotype is an application for analysis of patient's anthropometric body type.
+Video Tracking is an application for video object detection and tracking.
 
 Copyright ©️ 2022 Carlos Wilches
  
