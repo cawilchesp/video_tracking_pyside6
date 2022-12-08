@@ -316,110 +316,37 @@ class App(QWidget):
         return 0
 
 
+    # -------------
+    # Video Toolbar
+    # -------------
+    def on_slow_button_clicked(self) -> None:
+        return 0
 
 
+    def on_backFrame_button_clicked(self) -> None:
+        return 0
 
 
+    def on_reverse_button_clicked(self) -> None:
+        return 0
 
 
+    def on_pause_button_clicked(self) -> None:
+        return 0
 
 
-    def on_abrir_button_clicked(self):
-        global recent_videos
-
-        connection = psycopg2.connect(user='postgres',
-                              password='ecf406Carolina',
-                              host='localhost',
-                              port='5432',
-                              database='video_annotator')
-        cursor = connection.cursor()
-
-        last_folder = settings.value('video_folder')
-        selected_file = QtWidgets.QFileDialog.getOpenFileName(self, 'Seleccione el archivo de video', last_folder,
-                                                              'Archivos de Video (*.avi *.mp4 *.mpg *.m4v *.mkv)')
-        if selected_file[0]:
-            file_path = pathlib.Path(selected_file[0])
-            video_path = str(file_path.resolve())
-            video_name = str(file_path.name)
-
-            settings.setValue('video_folder', str(file_path.parent))
-
-            cursor.execute(f"SELECT * FROM videos WHERE path='{video_path}'")
-            data = cursor.fetchall()
-
-            if not data:
-                video_properties = backend.open_video(video_path)
-
-                width = video_properties['width']
-                height = video_properties['height']
-                frame_count = video_properties['frame_count']
-                fps = video_properties['fps']
-                is_calibrated = False
-                matrix = ''
-
-                insert_query = f"""INSERT INTO videos (name, path, width, height, frame_count, fps, is_calibrated, matrix) 
-                                VALUES ('{video_name[:-4]}', '{video_path}', '{width}', '{height}', '{frame_count}', '{fps}', '{is_calibrated}', '{matrix}')"""
-                cursor.execute(insert_query)
-                connection.commit()
-                cursor.execute('SELECT * FROM videos')
-                recent_videos = cursor.fetchall()
-
-                self.recientes_combobox.clear()
-                for data in recent_videos:
-                    self.recientes_combobox.addItem(data[1])
-                self.recientes_combobox.setCurrentIndex(self.recientes_combobox.count() - 1)
-
-                self.anchoValue_label.setText(f'{width}')
-                self.altoValue_label.setText(f'{height}')
-                self.video_slider.setMaximum(frame_count)
-
-                cv_img = video_properties['first_frame']
-                qt_img = backend.convert_cv_qt(cv_img)
-                self.video_label.setPixmap(qt_img)
-            else:
-                error_message = QtWidgets.QMessageBox.critical(self, 'Error de Video', 'El video ya se encuentra en la base de datos')
+    def on_play_button_clicked(self) -> None:
+        return 0
 
 
-    def on_eliminar_button_clicked(self):
-        global recent_videos
-
-        connection = psycopg2.connect(user='postgres',
-                              password='ecf406Carolina',
-                              host='localhost',
-                              port='5432',
-                              database='video_annotator')
-        cursor = connection.cursor()
-        
-        video_name = self.recientes_combobox.currentText()
-        if video_name != '':
-            delete_query = f"DELETE FROM videos WHERE name='{video_name}'"
-            cursor.execute(delete_query)
-            connection.commit()
-            cursor.execute('SELECT * FROM videos')
-            recent_videos = cursor.fetchall()
-
-            self.recientes_combobox.clear()
-            for data in recent_videos:
-                self.recientes_combobox.addItem(data[1])
-            self.recientes_combobox.setCurrentIndex(-1)
-
-            self.anchoValue_label.setText('')
-            self.altoValue_label.setText('')
-            self.video_label.clear()
-            
-            connection.close()
-
-            success_message = QtWidgets.QMessageBox.information(self, 'Datos Guardados', 'Video eliminado de la base de datos')
-        else:
-            error_message = QtWidgets.QMessageBox.critical(self, 'Error de Video', 'No se seleccionó ningún video')
+    def on_frontFrame_button_clicked(self) -> None:
+        return 0
 
 
+    def on_fast_button_clicked(self) -> None:
+        return 0
 
 
-
-        
-
-    # Barra de Video
     def on_video_slider_sliderMoved(self):
         self.frameNumber_edit.setText(str(self.video_slider.value()))
 
@@ -429,78 +356,192 @@ class App(QWidget):
         #                 self.ipaddress_combobox.currentText(), self.user_edit.text(), 
         #                 self.password_edit.text())
         return 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # def on_abrir_button_clicked(self):
+    #     global recent_videos
+
+    #     connection = psycopg2.connect(user='postgres',
+    #                           password='ecf406Carolina',
+    #                           host='localhost',
+    #                           port='5432',
+    #                           database='video_annotator')
+    #     cursor = connection.cursor()
+
+    #     last_folder = settings.value('video_folder')
+    #     selected_file = QtWidgets.QFileDialog.getOpenFileName(self, 'Seleccione el archivo de video', last_folder,
+    #                                                           'Archivos de Video (*.avi *.mp4 *.mpg *.m4v *.mkv)')
+    #     if selected_file[0]:
+    #         file_path = pathlib.Path(selected_file[0])
+    #         video_path = str(file_path.resolve())
+    #         video_name = str(file_path.name)
+
+    #         settings.setValue('video_folder', str(file_path.parent))
+
+    #         cursor.execute(f"SELECT * FROM videos WHERE path='{video_path}'")
+    #         data = cursor.fetchall()
+
+    #         if not data:
+    #             video_properties = backend.open_video(video_path)
+
+    #             width = video_properties['width']
+    #             height = video_properties['height']
+    #             frame_count = video_properties['frame_count']
+    #             fps = video_properties['fps']
+    #             is_calibrated = False
+    #             matrix = ''
+
+    #             insert_query = f"""INSERT INTO videos (name, path, width, height, frame_count, fps, is_calibrated, matrix) 
+    #                             VALUES ('{video_name[:-4]}', '{video_path}', '{width}', '{height}', '{frame_count}', '{fps}', '{is_calibrated}', '{matrix}')"""
+    #             cursor.execute(insert_query)
+    #             connection.commit()
+    #             cursor.execute('SELECT * FROM videos')
+    #             recent_videos = cursor.fetchall()
+
+    #             self.recientes_combobox.clear()
+    #             for data in recent_videos:
+    #                 self.recientes_combobox.addItem(data[1])
+    #             self.recientes_combobox.setCurrentIndex(self.recientes_combobox.count() - 1)
+
+    #             self.anchoValue_label.setText(f'{width}')
+    #             self.altoValue_label.setText(f'{height}')
+    #             self.video_slider.setMaximum(frame_count)
+
+    #             cv_img = video_properties['first_frame']
+    #             qt_img = backend.convert_cv_qt(cv_img)
+    #             self.video_label.setPixmap(qt_img)
+    #         else:
+    #             error_message = QtWidgets.QMessageBox.critical(self, 'Error de Video', 'El video ya se encuentra en la base de datos')
+
+
+    # def on_eliminar_button_clicked(self):
+    #     global recent_videos
+
+    #     connection = psycopg2.connect(user='postgres',
+    #                           password='ecf406Carolina',
+    #                           host='localhost',
+    #                           port='5432',
+    #                           database='video_annotator')
+    #     cursor = connection.cursor()
+        
+    #     video_name = self.recientes_combobox.currentText()
+    #     if video_name != '':
+    #         delete_query = f"DELETE FROM videos WHERE name='{video_name}'"
+    #         cursor.execute(delete_query)
+    #         connection.commit()
+    #         cursor.execute('SELECT * FROM videos')
+    #         recent_videos = cursor.fetchall()
+
+    #         self.recientes_combobox.clear()
+    #         for data in recent_videos:
+    #             self.recientes_combobox.addItem(data[1])
+    #         self.recientes_combobox.setCurrentIndex(-1)
+
+    #         self.anchoValue_label.setText('')
+    #         self.altoValue_label.setText('')
+    #         self.video_label.clear()
+            
+    #         connection.close()
+
+    #         success_message = QtWidgets.QMessageBox.information(self, 'Datos Guardados', 'Video eliminado de la base de datos')
+    #     else:
+    #         error_message = QtWidgets.QMessageBox.critical(self, 'Error de Video', 'No se seleccionó ningún video')
+
+
+
+
+
+        
+
+  
     
            
 
-    @pyqtSlot(np.ndarray)
-    def update_image(self, cv_img):
-        """Updates the image_label with a new opencv image"""
-        qt_img = self.convert_cv_qt(cv_img)
-        self.image_label.setPixmap(qt_img)
-        if self.record_button.isChecked():
-            self.thread.output.write(cv_img)
+    # @pyqtSlot(np.ndarray)
+    # def update_image(self, cv_img):
+    #     """Updates the image_label with a new opencv image"""
+    #     qt_img = self.convert_cv_qt(cv_img)
+    #     self.image_label.setPixmap(qt_img)
+    #     if self.record_button.isChecked():
+    #         self.thread.output.write(cv_img)
     
-    def convert_cv_qt(self, cv_img):
-        """Convert from an opencv image to QPixmap"""
-        rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
-        h, w, ch = rgb_image.shape
-        bytes_per_line = ch * w
-        convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format.Format_RGB888)
-        p = convert_to_Qt_format.scaled(1280, 720, Qt.AspectRatioMode.KeepAspectRatio)
-        return QPixmap.fromImage(p)
+    # def convert_cv_qt(self, cv_img):
+    #     """Convert from an opencv image to QPixmap"""
+    #     rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+    #     h, w, ch = rgb_image.shape
+    #     bytes_per_line = ch * w
+    #     convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format.Format_RGB888)
+    #     p = convert_to_Qt_format.scaled(1280, 720, Qt.AspectRatioMode.KeepAspectRatio)
+    #     return QPixmap.fromImage(p)
 
 
-    # --------------------------------------------------------------------------
-    #                                   YOLOR
-    # --------------------------------------------------------------------------
+    # # --------------------------------------------------------------------------
+    # #                                   YOLOR
+    # # --------------------------------------------------------------------------
 
-    def xyxy_to_xywh(self, *xyxy):
-        """" Calculates the relative bounding box from absolute pixel values. """
-        bbox_left = min([xyxy[0].item(), xyxy[2].item()])
-        bbox_top = min([xyxy[1].item(), xyxy[3].item()])
-        bbox_w = abs(xyxy[0].item() - xyxy[2].item())
-        bbox_h = abs(xyxy[1].item() - xyxy[3].item())
-        x_c = (bbox_left + bbox_w / 2)
-        y_c = (bbox_top + bbox_h / 2)
-        w = bbox_w
-        h = bbox_h
+    # def xyxy_to_xywh(self, *xyxy):
+    #     """" Calculates the relative bounding box from absolute pixel values. """
+    #     bbox_left = min([xyxy[0].item(), xyxy[2].item()])
+    #     bbox_top = min([xyxy[1].item(), xyxy[3].item()])
+    #     bbox_w = abs(xyxy[0].item() - xyxy[2].item())
+    #     bbox_h = abs(xyxy[1].item() - xyxy[3].item())
+    #     x_c = (bbox_left + bbox_w / 2)
+    #     y_c = (bbox_top + bbox_h / 2)
+    #     w = bbox_w
+    #     h = bbox_h
 
-        return x_c, y_c, w, h
-
-
-    def xyxy_to_tlwh(self, bbox_xyxy):
-        tlwh_bboxs = []
-        for i, box in enumerate(bbox_xyxy):
-            x1, y1, x2, y2 = [int(i) for i in box]
-            top = x1
-            left = y1
-            w = int(x2 - x1)
-            h = int(y2 - y1)
-            tlwh_obj = [top, left, w, h]
-            tlwh_bboxs.append(tlwh_obj)
-
-        return tlwh_bboxs
+    #     return x_c, y_c, w, h
 
 
-    def compute_color(self, label: str) -> tuple:
-        """
-        Simple function that adds fixed color depending on the class
-        """
-        if label == 0: #person  #BGR
-            color = (85, 45, 255)
-        elif label == 1: #bicycle
-            color = (7, 127, 15)
-        elif label == 2: # Car
-            color = (255, 149, 0)
-        elif label == 3:  # Motobike
-            color = (0, 204, 255)
-        elif label == 5:  # Bus
-            color = (0, 149, 255)
-        elif label == 7:  # truck
-            color = (222, 82, 175)
-        # else:
-        #     color = [int((p * (label ** 2 - label + 1)) % 255) for p in palette]
-        return color
+    # def xyxy_to_tlwh(self, bbox_xyxy):
+    #     tlwh_bboxs = []
+    #     for i, box in enumerate(bbox_xyxy):
+    #         x1, y1, x2, y2 = [int(i) for i in box]
+    #         top = x1
+    #         left = y1
+    #         w = int(x2 - x1)
+    #         h = int(y2 - y1)
+    #         tlwh_obj = [top, left, w, h]
+    #         tlwh_bboxs.append(tlwh_obj)
+
+    #     return tlwh_bboxs
+
+
+    # def compute_color(self, label: str) -> tuple:
+    #     """
+    #     Simple function that adds fixed color depending on the class
+    #     """
+    #     if label == 0: #person  #BGR
+    #         color = (85, 45, 255)
+    #     elif label == 1: #bicycle
+    #         color = (7, 127, 15)
+    #     elif label == 2: # Car
+    #         color = (255, 149, 0)
+    #     elif label == 3:  # Motobike
+    #         color = (0, 204, 255)
+    #     elif label == 5:  # Bus
+    #         color = (0, 149, 255)
+    #     elif label == 7:  # truck
+    #         color = (222, 82, 175)
+    #     # else:
+    #     #     color = [int((p * (label ** 2 - label + 1)) % 255) for p in palette]
+    #     return color
 
 
     # def draw_trajectories(self, img: np.array, bbox: np.array, object_id: np.array,
@@ -555,11 +596,11 @@ class App(QWidget):
     #             f.write(f'{frame_num},{id},{str(names[object_id[i]])},{x1},{y1},{x2-x1},{y2-y1},0,\n')
 
 
-    def load_classes(self, path):
-        # Loads *.names file at 'path'
-        with open(path, 'r') as f:
-            names = f.read().split('\n')
-        return list(filter(None, names))  # filter removes empty strings (such as last line)
+    # def load_classes(self, path):
+    #     # Loads *.names file at 'path'
+    #     with open(path, 'r') as f:
+    #         names = f.read().split('\n')
+    #     return list(filter(None, names))  # filter removes empty strings (such as last line)
 
 
     # def main(self, source, out, imgsz, device, view_img, trailslen):
