@@ -30,6 +30,12 @@ class UI(QWidget):
 
         self.idioma_dict = {0: ('ESP', 'SPA'), 1: ('ING', 'ENG')}
 
+        self.source_options = {
+            0: ('Webcam', 'Webcam'),
+            1: ('Cámara IP', 'IP Camera'),
+            2: ('Archivo de Video', 'Video File')
+        }
+
         self.gui_widgets = {}
 
         # -----------
@@ -63,7 +69,7 @@ class UI(QWidget):
             'language': self.language_value,
             'theme': self.theme_value } )
         self.gui_widgets['idioma_menu'].setCurrentIndex(self.language_value)
-        # self.gui_widgets['idioma_menu'].currentIndexChanged.connect(parent.on_idioma_menu_currentIndexChanged)
+        self.gui_widgets['idioma_menu'].currentIndexChanged.connect(parent.on_idioma_menu_currentIndexChanged)
 
         self.gui_widgets['tema_switch_light'] = MD3Switch(self.gui_widgets['titulo_card'], {
             'name': 'tema_switch_light',
@@ -72,7 +78,7 @@ class UI(QWidget):
             'state': self.theme_value,
             'language': self.language_value,
             'theme': self.theme_value } )
-        # self.gui_widgets['tema_switch_light'].clicked.connect(parent.on_tema_switch_light_clicked)
+        self.gui_widgets['tema_switch_light'].clicked.connect(parent.on_tema_switch_light_clicked)
 
         self.gui_widgets['tema_switch_dark'] = MD3Switch(self.gui_widgets['titulo_card'], {
             'name': 'tema_switch_dark',
@@ -81,7 +87,7 @@ class UI(QWidget):
             'state': not self.theme_value,
             'language': self.language_value,
             'theme': self.theme_value } )
-        # self.gui_widgets['tema_switch_dark'].clicked.connect(parent.on_tema_switch_dark_clicked)
+        self.gui_widgets['tema_switch_dark'].clicked.connect(parent.on_tema_switch_dark_clicked)
 
         self.gui_widgets['database_button'] = MD3IconButton(self.gui_widgets['titulo_card'], {
             'name': 'database_button',
@@ -102,275 +108,261 @@ class UI(QWidget):
             'type': 'filled',
             'icon': 'mail', 
             'theme': self.theme_value } )
-        # self.gui_widgets['about_button'].clicked.connect(parent.on_about_button_clicked)
+        self.gui_widgets['about_button'].clicked.connect(parent.on_about_button_clicked)
 
         self.gui_widgets['aboutQt_button'] = MD3IconButton(self.gui_widgets['titulo_card'], {
             'name': 'aboutQt_button',
             'type': 'filled',
             'icon': 'about_qt', 
             'theme': self.theme_value } )
-        # self.gui_widgets['aboutQt_button'].clicked.connect(parent.on_aboutQt_button_clicked)
+        self.gui_widgets['aboutQt_button'].clicked.connect(parent.on_aboutQt_button_clicked)
 
-        # # -------------
-        # # Card Análisis
-        # # -------------
-        # self.gui_widgets['analisis_card'] = MD3Card(parent, { 
-        #     'name': 'analisis_card',
-        #     'position': (8, 64), 
-        #     'size': (180, 128), 
-        #     'theme': self.theme_value, 
-        #     'labels': ('Análsis', 'Analysis'), 
-        #     'language': self.language_value } )
+        # -----------
+        # Card Source
+        # -----------
+        self.gui_widgets['source_card'] = MD3Card(parent, { 
+            'name': 'source_card',
+            'position': (8, 64), 
+            'size': (180, 128), 
+            'theme': self.theme_value, 
+            'labels': ('Origen del Video', 'Video Source'), 
+            'language': self.language_value } )
 
-        # self.gui_widgets['analisis_menu'] = MD3Menu(self.gui_widgets['analisis_card'], {
-        #     'name': 'analisis_menu',
-        #     'position': (8, 48),
-        #     'size': (164, 32),
-        #     'language': self.language_value,
-        #     'theme': self.theme_value } )
-        # # self.analisis_menu.setEnabled(False)
-        # # self.analisis_menu.textActivated.connect(self.on_analisis_menu_textActivated)
+        self.gui_widgets['source_menu'] = MD3Menu(self.gui_widgets['source_card'], {
+            'name': 'source_menu',
+            'position': (8, 48),
+            'size': (164, 32),
+            'options': self.source_options,
+            'language': self.language_value,
+            'theme': self.theme_value } )
+        self.gui_widgets['source_menu'].textActivated.connect(parent.on_source_menu_textActivated)
 
-        # self.gui_widgets['analisis_add_button'] = MD3IconButton(self.gui_widgets['analisis_card'], {
-        #     'name': 'analisis_add_button',
-        #     'type': 'filled',
-        #     'position': (100, 88),
-        #     'icon': 'new', 
-        #     'theme': self.theme_value } )
-        # # self.analisis_add_button.setEnabled(False)
-        # # self.gui_widgets['analisis_add_button'].clicked.connect(parent.on_analisis_add_button_clicked)
+        self.gui_widgets['source_add_button'] = MD3IconButton(self.gui_widgets['source_card'], {
+            'name': 'source_add_button',
+            'type': 'filled',
+            'position': (140, 88),
+            'icon': 'new', 
+            'theme': self.theme_value } )
+        self.gui_widgets['source_add_button'].setEnabled(False)
+        self.gui_widgets['source_add_button'].clicked.connect(parent.on_source_add_button_clicked)
 
-        # self.gui_widgets['analisis_del_button'] = MD3IconButton(self.gui_widgets['analisis_card'], {
-        #     'name': 'analisis_del_button',
-        #     'type': 'filled',
-        #     'position': (140, 88),
-        #     'icon': 'delete', 
-        #     'theme': self.theme_value } )
-        # # self.analisis_del_button.setEnabled(False)
-        # # self.analisis_del_button.clicked.connect(self.on_analisis_del_button_clicked)
+        # ----------------
+        # Card Information
+        # ----------------
+        self.gui_widgets['info_card'] = MD3Card(parent, { 
+            'name': 'info_card',
+            'position': (8, 200), 
+            'size': (180, 216), 
+            'theme': self.theme_value, 
+            'labels': ('Información', 'Information'), 
+            'language': self.language_value } )
 
-        # # -------------
-        # # Card Paciente
-        # # -------------
-        # self.gui_widgets['paciente_card'] = MD3Card(parent, { 
-        #     'name': 'paciente_card',
-        #     'position': (8, 200), 
-        #     'size': (180, 128), 
-        #     'theme': self.theme_value, 
-        #     'labels': ('Paciente', 'Patient'), 
-        #     'language': self.language_value } )
+        self.gui_widgets['source_icon'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'id_icon', 
+            'position': (8, 48),
+            'type': 'icon',
+            'icon': 'cam',
+            'theme': self.theme_value } )
+
+        self.gui_widgets['source_value'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'source_value',
+            'position': (48, 56),
+            'width': 124,
+            'type': 'subtitle',
+            'labels': ('Origen', 'Source'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
         
-        # self.gui_widgets['pacientes_menu'] = MD3Menu(self.gui_widgets['paciente_card'], {
-        #     'name': 'pacientes_menu',
-        #     'position': (8, 48),
-        #     'size': (164, 32),
-        #     'language': self.language_value,
-        #     'theme': self.theme_value } )
-        # # self.pacientes_menu.textActivated.connect(self.on_pacientes_menu_textActivated)
+        self.gui_widgets['filename_value'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'filename_value', 
+            'position': (48, 88), 
+            'width': 124,
+            'type': 'subtitle',
+            'labels': ('Nombre del archivo', 'File Name'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
 
-        # self.gui_widgets['paciente_add_button'] = MD3IconButton(self.gui_widgets['paciente_card'], {
-        #     'name': 'paciente_add_button',
-        #     'type': 'filled',
-        #     'position': (60, 88),
-        #     'icon': 'person_add', 
-        #     'theme': self.theme_value } )
-        # self.gui_widgets['paciente_add_button'].clicked.connect(parent.on_paciente_add_button_clicked)
+        self.gui_widgets['width_icon'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'width_icon', 
+            'position': (8, 112),
+            'type': 'icon',
+            'icon': 'width',
+            'theme': self.theme_value } )
 
-        # self.gui_widgets['paciente_edit_button'] = MD3IconButton(self.gui_widgets['paciente_card'], {
-        #     'name': 'paciente_edit_button',
-        #     'type': 'filled',
-        #     'position': (100, 88),
-        #     'icon': 'person_edit', 
-        #     'theme': self.theme_value } )
-        # # self.paciente_edit_button.clicked.connect(self.on_paciente_edit_button_clicked)
-
-        # self.gui_widgets['paciente_del_button'] = MD3IconButton(self.gui_widgets['paciente_card'], {
-        #     'name': 'paciente_del_button',
-        #     'type': 'filled',
-        #     'position': (140, 88),
-        #     'icon': 'person_off', 
-        #     'theme': self.theme_value } )
-        # # self.paciente_del_button.clicked.connect(self.on_paciente_del_button_clicked)
-
-        # # ----------------
-        # # Card Información
-        # # ----------------
-        # self.gui_widgets['info_card'] = MD3Card(parent, { 
-        #     'name': 'info_card',
-        #     'position': (8, 336), 
-        #     'size': (180, 312), 
-        #     'theme': self.theme_value, 
-        #     'labels': ('Información', 'Information'), 
-        #     'language': self.language_value } )
+        self.gui_widgets['width_value'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'width_value',
+            'position': (48, 120),
+            'width': 124,
+            'type': 'subtitle',
+            'labels': ('Ancho', 'Width'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
         
-        # self.gui_widgets['last_name_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'last_name_value', 
-        #     'position': (8, 56), 
-        #     'width': 164,
-        #     'type': 'subtitle',
-        #     'labels': ('Apellido', 'Last Name'),
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
+        self.gui_widgets['height_icon'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'height_icon',
+            'position': (8, 144),
+            'type': 'icon',
+            'icon': 'height',
+            'theme': self.theme_value } )
+
+        self.gui_widgets['height_value'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'height_value', 
+            'position': (48, 152), 
+            'width': 124,
+            'type': 'subtitle',
+            'labels': ('Alto', 'Height'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
+
+        self.gui_widgets['fps_icon'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'fps_icon', 
+            'position': (8, 176),
+            'type': 'icon',
+            'icon': 'fps',
+            'theme': self.theme_value } )
+
+        self.gui_widgets['fps_value'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'fps_value', 
+            'position': (48, 184), 
+            'width': 124,
+            'type': 'subtitle',
+            'labels': ('CPS', 'FPS'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
+
+        # ------------
+        # Card Classes
+        # ------------
+        self.gui_widgets['classes_card'] = MD3Card(parent, { 
+            'name': 'classes_card',
+            'position': (8, 424), 
+            'size': (180, 128), 
+            'theme': self.theme_value, 
+            'labels': ('Anotaciones', 'Annotations'), 
+            'language': self.language_value } )
+
+        self.gui_widgets['classes_menu'] = MD3Menu(self.gui_widgets['classes_card'], {
+            'name': 'classes_menu',
+            'position': (8, 48),
+            'size': (164, 32),
+            'options': self.source_options,
+            'language': self.language_value,
+            'theme': self.theme_value } )
+        self.gui_widgets['classes_menu'].textActivated.connect(parent.on_classes_menu_textActivated)
+
+        self.gui_widgets['color_button'] = MD3IconButton(self.gui_widgets['classes_card'], {
+            'name': 'color_button',
+            'type': 'filled',
+            'position': (140, 88),
+            'icon': 'new', 
+            'theme': self.theme_value } )
+        self.gui_widgets['color_button'].setEnabled(False)
+        self.gui_widgets['color_button'].clicked.connect(parent.on_color_button_clicked)
+
+        # ------------------
+        # Card Video Toolbar
+        # ------------------
+        self.gui_widgets['video_toolbar_card'] = MD3Card(parent, {
+            'name': 'video_toolbar_card',
+            'position': (196, 64), 
+            'size': (width-204, 72),
+            'theme': self.theme_value } )
+
+        self.gui_widgets['slow_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+            'name': 'slow_button',
+            'type': 'filled',
+            'position': (8, 20),
+            'icon': 'rewind', 
+            'theme': self.theme_value } )
+        self.gui_widgets['slow_button'].setEnabled(False)
+        # self.gui_widgets['slow_button'].clicked.connect(parent.on_slow_button_clicked)
+
+        self.gui_widgets['backFrame_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+            'name': 'backFrame_button',
+            'type': 'filled',
+            'position': (48, 20),
+            'icon': 'step_backward', 
+            'theme': self.theme_value } )
+        self.gui_widgets['backFrame_button'].setEnabled(False)
+        # self.gui_widgets['backFrame_button'].clicked.connect(parent.on_backFrame_button_clicked)
+
+        self.gui_widgets['reverse_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+            'name': 'reverse_button',
+            'type': 'filled',
+            'position': (88, 20),
+            'icon': 'reverse', 
+            'theme': self.theme_value } )
+        self.gui_widgets['reverse_button'].setEnabled(False)
+        # self.gui_widgets['reverse_button'].clicked.connect(parent.on_reverse_button_clicked)
+
+        self.gui_widgets['pause_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+            'name': 'pause_button',
+            'type': 'filled',
+            'position': (128, 20),
+            'icon': 'pause', 
+            'theme': self.theme_value } )
+        self.gui_widgets['pause_button'].setEnabled(False)
+        # self.gui_widgets['pause_button'].clicked.connect(parent.on_pause_button_clicked)
+
+        self.gui_widgets['play_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+            'name': 'play_button',
+            'type': 'filled',
+            'position': (168, 20),
+            'icon': 'play', 
+            'theme': self.theme_value } )
+        self.gui_widgets['play_button'].setEnabled(False)
+        # self.gui_widgets['play_button'].clicked.connect(parent.on_play_button_clicked)
+
+        self.gui_widgets['frontFrame_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+            'name': 'frontFrame_button',
+            'type': 'filled',
+            'position': (208, 20),
+            'icon': 'step_forward', 
+            'theme': self.theme_value } )
+        self.gui_widgets['frontFrame_button'].setEnabled(False)
+        # self.gui_widgets['frontFrame_button'].clicked.connect(parent.on_frontFrame_button_clicked)
+
+        self.gui_widgets['fast_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+            'name': 'fast_button',
+            'type': 'filled',
+            'position': (248, 20),
+            'icon': 'fast_forward', 
+            'theme': self.theme_value } )
+        self.gui_widgets['fast_button'].setEnabled(False)
+        # self.gui_widgets['fast_button'].clicked.connect(parent.on_fast_button_clicked)
+
+
+
+
+
+
+
+        self.gui_widgets['frame_value_text'] = MD3TextField(self.gui_widgets['video_toolbar_card'], {
+            'name': 'frame_value_text',
+            'position': (self.gui_widgets['video_toolbar_card'].width() - 108, 8),
+            'width': 100,
+            'labels': ('Cuadro', 'Frame'),
+            # 'regular_expression': self.regExp1,
+            'theme': self.theme_value,
+            'language': self.language_value } )
+        # self.gui_widgets['frame_value_text'].text_field.textEdited.connect(parent.on_frame_value_text_textEdited)
+
+
+        # ----------------
+        # Card Video Image
+        # ----------------
+        self.gui_widgets['video_output_card'] = MD3Card(parent, { 
+            'name': 'video_output_card',
+            'theme': self.theme_value, 
+            'labels': ('Salida del Video','Video Output'), 
+            'language': self.language_value } )
         
-        # self.gui_widgets['first_name_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'nombre_value', 
-        #     'position': (8, 88), 
-        #     'width': 164,
-        #     'type': 'subtitle',
-        #     'labels': ('Nombre', 'First Name'),
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['id_icon'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'id_icon', 
-        #     'position': (8, 112),
-        #     'type': 'icon',
-        #     'icon': 'id',
-        #     'theme': self.theme_value } )
-
-        # self.gui_widgets['id_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'id_value',
-        #     'position': (48, 120),
-        #     'width': 124,
-        #     'type': 'subtitle',
-        #     'labels': ('Identificación', 'Identification'),
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
+     
         
-        # self.gui_widgets['date_icon'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'date_icon',
-        #     'position': (8, 144),
-        #     'type': 'icon',
-        #     'icon': 'calendar',
-        #     'theme': self.theme_value } )
 
-        # self.gui_widgets['date_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'date_value', 
-        #     'position': (48, 152), 
-        #     'width': 124,
-        #     'type': 'subtitle',
-        #     'labels': ('Fecha de Nacimiento', 'Birth Date'),
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
 
-        # self.gui_widgets['sex_icon'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'sex_icon', 
-        #     'position': (8, 176),
-        #     'type': 'icon',
-        #     'icon': 'man_woman',
-        #     'theme': self.theme_value } )
 
-        # self.gui_widgets['sex_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'sex_value', 
-        #     'position': (48, 184), 
-        #     'width': 124,
-        #     'type': 'subtitle',
-        #     'labels': ('Sexo', 'Sex'),
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['weight_icon'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'weight_icon', 
-        #     'position': (8, 208),
-        #     'type': 'icon',
-        #     'icon': 'weight',
-        #     'theme': self.theme_value } )
-
-        # self.gui_widgets['weight_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'weight_value', 
-        #     'position': (48, 216), 
-        #     'width': 124,
-        #     'type': 'subtitle',
-        #     'labels': ('Peso', 'Weight'),
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['height_icon'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'height_icon', 
-        #     'position': (8, 240),
-        #     'type': 'icon',
-        #     'icon': 'height',
-        #     'theme': self.theme_value } )
-
-        # self.gui_widgets['height_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'height_value', 
-        #     'position': (48, 248), 
-        #     'width': 124,
-        #     'type': 'subtitle',
-        #     'labels': ('Altura', 'Height'),
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['bmi_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'name': 'bmi_value', 
-        #     'position': (48, 280), 
-        #     'width': 124,
-        #     'type': 'subtitle',
-        #     'labels': ('IMC', 'BMI'),
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-
-        # # --------------------
-        # # Card Somatotype Plot
-        # # --------------------
-        # self.gui_widgets['somatotype_plot_card'] = MD3Card(parent, { 
-        #     'name': 'somatotype_plot_card',
-        #     'theme': self.theme_value, 
-        #     'labels': ('Somatotipo','Somatotype'), 
-        #     'language': self.language_value } )
         
-        # self.gui_widgets['somatotype_plot'] = MPLCanvas(self.gui_widgets['somatotype_plot_card'], self.theme_value)
-
-        # # ---------------
-        # # Card Endomorphy
-        # # ---------------
-        # self.gui_widgets['endomorph_card'] = MD3Card(parent, { 
-        #     'name': 'endomorph_card',
-        #     'size': (208, 288), 
-        #     'theme': self.theme_value, 
-        #     'labels': ('Endomorfismo', 'Endomorphy'),
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['triceps_text'] = MD3TextField(self.gui_widgets['endomorph_card'], {
-        #     'name': 'triceps_text',
-        #     'position': (8, 48),
-        #     'width': self.gui_widgets['endomorph_card'].width() - 16,
-        #     'labels': ('Tríceps (mm)', 'Triceps (mm)'),
-        #     'regular_expression': self.regExp3,
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-        # # self.gui_widgets['triceps_text'].text_field.textEdited.connect(parent.on_triceps_text_textEdited)
-
-        # self.gui_widgets['subescapular_text'] = MD3TextField(self.gui_widgets['endomorph_card'], {
-        #     'name': 'subescapular_text',
-        #     'position': (8, 108),
-        #     'width': self.gui_widgets['endomorph_card'].width() - 16,
-        #     'labels': ('Subescapular (mm)', 'Subescapular (mm)'),
-        #     'regular_expression': self.regExp3,
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-        # # self.gui_widgets['subescapular_text'].text_field.textEdited.connect(parent.on_subescapular_text_textEdited)
-
-        # self.gui_widgets['supraespinal_text'] = MD3TextField(self.gui_widgets['endomorph_card'], {
-        #     'name': 'supraespinal_text',
-        #     'position': (8, 168),
-        #     'width': self.gui_widgets['endomorph_card'].width() - 16,
-        #     'labels': ('Supraespinal (mm)', 'Supraespinal (mm)'),
-        #     'regular_expression': self.regExp3,
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-        # # self.gui_widgets['supraespinal_text'].text_field.textEdited.connect(parent.on_supraespinal_text_textEdited)
-
-        # self.gui_widgets['pantorrilla_text'] = MD3TextField(self.gui_widgets['endomorph_card'], {
-        #     'name': 'pantorrilla_text',
-        #     'position': (8, 228),
-        #     'width': self.gui_widgets['endomorph_card'].width() - 16,
-        #     'labels': ('Pantorrilla (mm)', 'Calf (mm)'),
-        #     'regular_expression': self.regExp3,
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-        # # self.gui_widgets['pantorrilla_text'].text_field.textEdited.connect(parent.on_pantorrilla_text_textEdited)
-
         # # ---------------
         # # Card Mesomorphy
         # # ---------------
@@ -460,31 +452,4 @@ class UI(QWidget):
         #     'language': self.language_value } )
         # # self.gui_widgets['pantorrilla_pliegue_text'].text_field.textEdited.connect(parent.on_pantorrilla_pliegue_text_textEdited)
 
-        # # ---------------
-        # # Card Ectomorphy
-        # # ---------------
-        # self.gui_widgets['ectomorph_card'] = MD3Card(parent, { 
-        #     'name': 'ectomorph_card',
-        #     'size': (208, 128), 
-        #     'theme': self.theme_value, 
-        #     'labels': ('Ectomorfismo', 'Ectomorphy'),
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['peso_ecto_label'] = MD3Label(self.gui_widgets['ectomorph_card'], {
-        #     'name': 'peso_ecto_label',
-        #     'position': (8, 48),
-        #     'width': self.gui_widgets['ectomorph_card'].width() - 16,
-        #     'type': 'subtitle',
-        #     'labels': ('Peso (Kg)', 'Weight (Kg)'),
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['peso_ecto_value_label'] = MD3Label(self.gui_widgets['ectomorph_card'], {
-        #     'name': 'peso_ecto_value_label',
-        #     'position': (8, 68),
-        #     'width': self.gui_widgets['ectomorph_card'].width() - 16,
-        #     'align': 'center',
-        #     'type': 'value',
-        #     'color': '255, 255, 255' if self.theme_value else '0, 0, 0',
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
+        
