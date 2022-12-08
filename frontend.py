@@ -100,113 +100,12 @@ class App(QWidget):
         self.ui = UI(self)
 
 
-
-        
-        # # ------------
-        # # Sidebar Left
-        # # ------------
-        # self.sidebar_left = widgets.Sidebar(self, 'sidebar_left', (0, 0, 200, 830), theme_value)
-        
-        # # Menú Archivo
-        # y_sidebar_left = 10
-        # self.archivo_label = widgets.TitleLabel(self.sidebar_left, 'archivo_label', ('Origen del Video', 'Video Source'), (10, y_sidebar_left, 180), theme_value, language_value)
-
-        # y_sidebar_left += 40
-        # self.webcam_button = widgets.TextButton(self.sidebar_left, 'webcam_button', ('Cámara Web', 'Webcam'), (10, y_sidebar_left, 180), 'SP_DialogOpenButton', theme_value, language_value)
-        # self.webcam_button.clicked.connect(self.on_webcam_button_clicked)
-
-        # y_sidebar_left += 40
-        # self.ip_camera_button = widgets.TextButton(self.sidebar_left, 'ip_camera_button', ('Cámara IP', 'IP Camera'), (10, y_sidebar_left, 180), 'SP_DialogOpenButton', theme_value, language_value)
-        # self.ip_camera_button.clicked.connect(self.on_ip_camera_button_clicked)
-
-        # y_sidebar_left += 40
-        # self.video_button = widgets.TextButton(self.sidebar_left, 'video_button', ('Archivo de Video', 'Video File'), (10, y_sidebar_left, 180), 'SP_DialogOpenButton', theme_value, language_value)
-        # self.video_button.clicked.connect(self.on_video_button_clicked)
-        
-        # y_sidebar_left += 40
-        # self.line1 = widgets.lineSeparator(self.sidebar_left, 10, y_sidebar_left, 180, theme_value)
-        
-        # # Menú Información del Video
-        # y_sidebar_left += 10
-        # self.informacion_label = widgets.TitleLabel(self.sidebar_left, 'informacion_label', ('Información del Video', 'Video Information'), (10, y_sidebar_left, 180), theme_value, language_value)
-        
-        # y_sidebar_left += 40
-        # self.ancho_label = widgets.ItemLabel(self.sidebar_left, 'ancho_label', ('Ancho', 'Width'), (10, y_sidebar_left, 90), theme_value, language_value)
-        
-        # self.anchoValue_label = widgets.ItemLabel(self.sidebar_left, 'anchoValue_label', ('', ''), (100, y_sidebar_left, 90), theme_value, language_value)
-        
-        # y_sidebar_left += 40
-        # self.alto_label = widgets.ItemLabel(self.sidebar_left, 'alto_label', ('Alto', 'Height'), (10, y_sidebar_left, 90), theme_value, language_value)
-        
-        # self.altoValue_label = widgets.ItemLabel(self.sidebar_left, 'altoValue_label', ('', ''), (100, y_sidebar_left, 90), theme_value, language_value)
-
-        # y_sidebar_left += 40
-        # self.fps_label = widgets.ItemLabel(self.sidebar_left, 'fps_label', ('FPS', 'FPS'), (10, y_sidebar_left, 90), theme_value, language_value)
-        
-        # self.fpsValue_label = widgets.ItemLabel(self.sidebar_left, 'fpsValue_label', ('', ''), (100, y_sidebar_left, 90), theme_value, language_value)
-
-        # y_sidebar_left += 40
-        # self.line2 = widgets.lineSeparator(self.sidebar_left, 10, y_sidebar_left, 180, theme_value)
-
-        # # Menú Calibración
-        # y_sidebar_left += 40
-        # self.calibracion_button = widgets.TextButton(self.sidebar_left, 'calibracion_button', ('Calibrar', 'Calibrate'), (10, y_sidebar_left, 150, ), 'SP_FileDialogListView', theme_value, language_value)
-        
-        # self.calibracionStatusLabel = widgets.IconLabel(self.sidebar_left, 'calibracionStatusLabel', (160, y_sidebar_left, 30, 30), 'SP_DialogCancelButton')
-        
-        # y_sidebar_left += 40
-        # self.line3 = widgets.lineSeparator(self.sidebar_left, 10, y_sidebar_left, 180, theme_value)
-        
-        
-
-        # # -------------
-        # # Sidebar Right
-        # # -------------
-        # self.sidebar_right = widgets.Sidebar(self, 'sidebar_right', (1500, 0, 200, 830), theme_value)
-
-        # # Menú Anotaciones
-        # y_sidebar_right = 10
-        # self.anotacion_label = widgets.TitleLabel(self.sidebar_right, 'anotacion_label', ('Anotaciones', 'Annotations'), (10, y_sidebar_right, 180), theme_value, language_value)
-        
-        # y_sidebar_right += 30
-        # self.clases_label = widgets.ItemLabel(self.sidebar_right, 'clases_label', ('Clases', 'Classes'), (10, y_sidebar_right, 180), theme_value, language_value)
-        
-        # y_sidebar_right += 40
-        # self.clases_combobox = widgets.ListComboBox(self.sidebar_right, 'clases_combobox', (10, y_sidebar_right, 180), 2, 2, theme_value)
-        
-        # y_sidebar_right += 40
-        # self.color_button = widgets.ColorButton(self.sidebar_right, 'color_button', ('Color', 'Colour'), (10, y_sidebar_right, 180), 'images/color.png', color_value, theme_value, language_value)
-        # self.color_button.clicked.connect(self.on_color_button_clicked)
-
-        
-        
-
         
         # # --------
         # # Upperbar
         # # --------
         # self.upperbar = widgets.Sidebar(self, 'upperbar', (200, 0, 1300, 50), theme_value)
         
-        # x_upperbar = 10
-        # self.slow_button = widgets.IconButton(self.upperbar, 'slow_button', (x_upperbar, 10), 'images/slow_play.png', theme_value)
-        
-        # x_upperbar += 40
-        # self.backFrame_button = widgets.IconButton(self.upperbar, 'backFrame_button', (x_upperbar, 10), 'images/back_frame.png', theme_value)
-        
-        # x_upperbar += 40
-        # self.backPlay_button = widgets.IconButton(self.upperbar, 'backPlay_button', (x_upperbar, 10), 'images/back_play.png', theme_value)
-        
-        # x_upperbar += 40
-        # self.pause_button = widgets.IconButton(self.upperbar, 'pause_button', (x_upperbar, 10), 'images/pause.png', theme_value)
-        
-        # x_upperbar += 40
-        # self.play_button = widgets.IconButton(self.upperbar, 'play_button', (x_upperbar, 10), 'images/play.png', theme_value)
-        
-        # x_upperbar += 40
-        # self.frontFrame_button = widgets.IconButton(self.upperbar, 'frontFrame_button', (x_upperbar, 10), 'images/front_frame.png', theme_value)
-        
-        # x_upperbar += 40
-        # self.fastPlay_button = widgets.IconButton(self.upperbar, 'fastPlay_button', (x_upperbar, 10), 'images/fast_play.png', theme_value)
         
         # x_upperbar += 40
         # self.video_slider = widgets.ObjectSlider(self.upperbar, 'video_slider', (x_upperbar, 10, 580), theme_value)
@@ -222,24 +121,207 @@ class App(QWidget):
         # self.video_label = QtWidgets.QLabel(self)
         # self.video_label.setGeometry(QtCore.QRect(210, 60, 1280, 720))
         # self.video_label.setFrameStyle(QtWidgets.QFrame.Shape.Box)
+
+    # -----
+    # Title
+    # -----
+    def on_idioma_menu_currentIndexChanged(self, index: int) -> None:
+        """ Language menu control to change components text language
         
-    # ----------------------
-    # Funciones de Controles
-    # ----------------------
-    # Menú Archivo
-    def on_webcam_button_clicked(self):
-        self.detect('0', 'D:/SIER/Datasets/Bogota_ETB/Resultados/source_1_YOLOR_DS', 576, '0', True, 32)
+        Parameters
+        ----------
+        index: int
+            Index of language menu control
+        
+        Returns
+        -------
+        None
+        """
+        for key, value in self.ui.gui_widgets.items():
+            self.ui.gui_widgets[key].language_text(index)
+
+        self.settings.setValue('language', str(index))
+        self.language_value = int(self.settings.value('language'))
+
+
+
+    def on_tema_switch_light_clicked(self, state: bool) -> None:
+        """ Dark Theme switch control to change components stylesheet
+        
+        Parameters
+        ----------
+        state: bool
+            State of theme switch control
+        
+        Returns
+        -------
+        None
+        """
+        if state: 
+            for key, value in self.ui.gui_widgets.items():
+                self.ui.gui_widgets[key].apply_styleSheet(True)
+            self.ui.gui_widgets['tema_switch_light'].set_state(True)
+            self.ui.gui_widgets['tema_switch_dark'].set_state(False)
+        
+            # self.ui.gui_widgets['x_t_signal_plot'].draw()
+            # self.ui.gui_widgets['y_t_signal_plot'].draw()
+            # self.ui.gui_widgets['left_foot_plot'].draw()
+            # self.ui.gui_widgets['center_plot'].draw()
+            # self.ui.gui_widgets['right_foot_plot'].draw()
+
+            self.settings.setValue('theme', f'{True}')
+            self.theme_value = eval(self.settings.value('theme'))
+
+
+    def on_tema_switch_dark_clicked(self, state: bool) -> None:
+        """ Light Theme switch control to change components stylesheet
+        
+        Parameters
+        ----------
+        state: bool
+            State of theme switch control
+        
+        Returns
+        -------
+        None
+        """
+        if state: 
+            for key, value in self.ui.gui_widgets.items():
+                self.ui.gui_widgets[key].apply_styleSheet(False)
+            self.ui.gui_widgets['tema_switch_light'].set_state(False)
+            self.ui.gui_widgets['tema_switch_dark'].set_state(True)
+
+            # self.ui.gui_widgets['x_t_signal_plot'].draw()
+            # self.ui.gui_widgets['y_t_signal_plot'].draw()
+            # self.ui.gui_widgets['left_foot_plot'].draw()
+            # self.ui.gui_widgets['center_plot'].draw()
+            # self.ui.gui_widgets['right_foot_plot'].draw()
+    
+            self.settings.setValue('theme', f'{False}')
+            self.theme_value = eval(self.settings.value('theme'))
+
+
+    # def on_database_button_clicked(self) -> None:
+    #     """ Database button to configure the database """
+    #     self.db_info = database.Database()
+    #     self.db_info.exec()
+        
+    #     if self.db_info.database_data:
+    #         self.patientes_list = backend.create_db('pacientes')
+    #         self.estudios_list = backend.create_db('estudios')
+
+    #         for data in self.patientes_list:
+    #             self.pacientes_menu.addItem(str(data[4]))
+    #         self.pacientes_menu.setCurrentIndex(-1)
+
+    #         self.pacientes_menu.setEnabled(True)
+    #         self.paciente_add_button.setEnabled(True)
+    #         self.paciente_edit_button.setEnabled(True)
+    #         self.paciente_del_button.setEnabled(True)
+
+    #         if self.language_value == 0:
+    #             QtWidgets.QMessageBox.information(self, 'Datos Guardados', 'Base de datos configurada')
+    #         elif self.language_value == 1:
+    #             QtWidgets.QMessageBox.information(self, 'Data Saved', 'Database configured')
+    #     else:
+    #         if self.language_value == 0:
+    #             QtWidgets.QMessageBox.critical(self, 'Error de Datos', 'No se dio información de la base de datos')
+    #         elif self.language_value == 1:
+    #             QtWidgets.QMessageBox.critical(self, 'Data Error', 'No information on the database was given')
+
+
+    # def on_manual_button_clicked(self) -> None:
+    #     """ Manual button to open manual window """
+    #     return 0
+
+
+    def on_about_button_clicked(self) -> None:
+        """ About app button to open about app window dialog """
+        self.about_app = AboutApp()
+        self.about_app.exec()
+
+
+    def on_aboutQt_button_clicked(self) -> None:
+        """ About Qt button to open about Qt window dialog """
+        backend.about_qt_dialog(self, self.language_value)
+
+
+    def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:
+        """ Resize event to control size and position of app components """
+        width = self.geometry().width()
+        height = self.geometry().height()
+
+        self.ui.gui_widgets['titulo_card'].resize(width - 16, 48)
+        self.ui.gui_widgets['idioma_menu'].move(self.ui.gui_widgets['titulo_card'].width() - 300, 8)
+        self.ui.gui_widgets['tema_switch_light'].move(self.ui.gui_widgets['titulo_card'].width() - 220, 8)
+        self.ui.gui_widgets['tema_switch_dark'].move(self.ui.gui_widgets['titulo_card'].width() - 194, 8)
+        self.ui.gui_widgets['database_button'].move(self.ui.gui_widgets['titulo_card'].width() - 160, 8)
+        self.ui.gui_widgets['manual_button'].move(self.ui.gui_widgets['titulo_card'].width() - 120, 8)
+        self.ui.gui_widgets['about_button'].move(self.ui.gui_widgets['titulo_card'].width() - 80, 8)
+        self.ui.gui_widgets['aboutQt_button'].move(self.ui.gui_widgets['titulo_card'].width() - 40, 8)
+
+        self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 72)
+        self.ui.gui_widgets['frame_value_text'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
+
+        self.ui.gui_widgets['video_output_card'].setGeometry(196, 144, width - 204, height - 152)
+        self.ui.gui_widgets['video_output_card'].title.resize(width - 204, 32)
+        
+        # self.ui.gui_widgets['left_foot_card'].setGeometry(196, int(80 + (height * 0.5)), int((width - 436) / 3), int(height - (88 + (height * 0.5))))
+        # self.ui.gui_widgets['left_foot_card'].title.resize(self.ui.gui_widgets['left_foot_card'].width() - 16, 32)
+        # self.ui.gui_widgets['left_foot_plot'].setGeometry(8, 48, self.ui.gui_widgets['left_foot_card'].width()-16, self.ui.gui_widgets['left_foot_card'].height()-96)
+        # self.ui.gui_widgets['left_ellipse_button'].setGeometry(8, self.ui.gui_widgets['left_foot_card'].height()- 40, 32, 32)
+        # self.ui.gui_widgets['left_hull_button'].setGeometry(40, self.ui.gui_widgets['left_foot_card'].height()- 40, 32, 32)
+        # self.ui.gui_widgets['left_pca_button'].setGeometry(72, self.ui.gui_widgets['left_foot_card'].height()- 40, 32, 32)
+        
+        # self.ui.gui_widgets['center_card'].setGeometry(int(204 + ((width - 436) / 3)), int(80 + (height * 0.5)), int((width - 436) / 3), int(height - (88 + (height * 0.5))))
+        # self.ui.gui_widgets['center_card'].title.resize(self.ui.gui_widgets['center_card'].width() - 16, 32)
+        # self.ui.gui_widgets['center_plot'].setGeometry(8, 48, self.ui.gui_widgets['center_card'].width()-16, self.ui.gui_widgets['center_card'].height() - 96)
+        
+        # self.ui.gui_widgets['right_foot_card'].setGeometry(int(212 + (2 * (width - 436) / 3)), int(80 + (height * 0.5)), int((width - 436) / 3), int(height - (88 + (height * 0.5))))
+        # self.ui.gui_widgets['right_foot_card'].title.resize(self.ui.gui_widgets['right_foot_card'].width() - 16, 32)
+        # self.ui.gui_widgets['right_foot_plot'].setGeometry(8, 48, self.ui.gui_widgets['right_foot_card'].width()-16, self.ui.gui_widgets['right_foot_card'].height() - 96)
+        
+        # self.ui.gui_widgets['parameters_XT_card'].setGeometry(width - 216, 64, 208, 128)
+        # self.ui.gui_widgets['parameters_YT_card'].setGeometry(width - 216, 200, 208, 128)
+        # self.ui.gui_widgets['parameters_XY_card'].setGeometry(width - 216, 336, 208, 128)
+        # self.ui.gui_widgets['areas_card'].setGeometry(width - 216, 472, 208, 128) 
+
+        return super().resizeEvent(a0)
+
+
+    # ------
+    # Source
+    # ------
+    def on_source_menu_textActivated(self, source: str) -> None:
         return 0
 
 
-    def on_ip_camera_button_clicked(self):
-
+    def on_source_add_button_clicked(self) -> None:
         return 0
 
 
-    def on_video_button_clicked(self):
-
+    # -------
+    # Classes
+    # -------
+    def on_classes_menu_textActivated(self, class_name: str) -> None:
         return 0
+
+
+    def on_color_button_clicked(self) -> None:
+        selected_color = QtWidgets.QColorDialog.getColor()
+        color = f'{selected_color.red()}, {selected_color.green()}, {selected_color.blue()}'
+        # self.color_button.style_sheet(theme_value, color)
+        # settings.setValue('color', color)
+        
+        return 0
+
+
+
+
+
+
+
+
 
 
     def on_abrir_button_clicked(self):
@@ -332,91 +414,9 @@ class App(QWidget):
             error_message = QtWidgets.QMessageBox.critical(self, 'Error de Video', 'No se seleccionó ningún video')
 
 
-    def on_idioma_combobox_currentIndexChanged(self, index: int):
-        self.archivo_label.language_text(index)
-        self.configuracion_label.language_text(index)
-        self.idioma_label.language_text(index)
-        self.idioma_combobox.language_text(index)
-        self.tema_label.language_text(index)
-        self.tema_combobox.language_text(index)
-        self.informacion_label.language_text(index)
-        self.ancho_label.language_text(index)
-        self.alto_label.language_text(index)
-        self.calibracion_button.language_text(index)
-        self.help_label.language_text(index)
-        self.about_button.language_text(index)
-        self.aboutQt_button.language_text(index)
-        self.anotacion_label.language_text(index)
-        self.clases_label.language_text(index)
-        self.color_button.language_text(index)
-        
-
-        settings.setValue('language', str(index))
-
-    def on_tema_combobox_currentIndexChanged(self, index: int):
-        self.setStyleSheet(main_style_dict[index])
-        self.sidebar_left.style_sheet(index)
-        self.archivo_label.style_sheet(index)
-        self.line1.style_sheet(index)
-        self.configuracion_label.style_sheet(index)
-        self.idioma_label.style_sheet(index)
-        self.idioma_combobox.style_sheet(index)
-        self.tema_label.style_sheet(index)
-        self.tema_combobox.style_sheet(index)
-        self.line2.style_sheet(index)
-        self.informacion_label.style_sheet(index)
-        self.ancho_label.style_sheet(index)
-        self.anchoValue_label.style_sheet(index)
-        self.alto_label.style_sheet(index)
-        self.altoValue_label.style_sheet(index)
-        self.calibracion_button.style_sheet(index)
-        self.line3.style_sheet(index)
-        self.help_label.style_sheet(index)
-        self.manual_button.style_sheet(index)
-        self.about_button.style_sheet(index)
-        self.aboutQt_button.style_sheet(index)
-        self.sidebar_right.style_sheet(index)
-        self.anotacion_label.style_sheet(index)
-        self.clases_label.style_sheet(index)
-        self.clases_combobox.style_sheet(index)
-        self.color_button.style_sheet(index, settings.value('color'))
-        self.line4.style_sheet(index)
-        
-        self.line5.style_sheet(index)
-        
-        self.upperbar.style_sheet(index)
-        self.slow_button.style_sheet(index)
-        self.backFrame_button.style_sheet(index)
-        self.backPlay_button.style_sheet(index)
-        self.pause_button.style_sheet(index)
-        self.play_button.style_sheet(index)
-        self.frontFrame_button.style_sheet(index)
-        self.fastPlay_button.style_sheet(index)
-        self.frameNumber_edit.style_sheet(index)
-
-        settings.setValue('theme', str(index))
 
 
-    # Menú Ayuda
-    def on_manual_button_clicked(self):
-        # HelpWindow helpVideoApp
-        # helpVideoApp.exec()
-        return 0
-        
 
-    def on_about_button_clicked(self):
-        backend.about_dialog(int(settings.value('theme')), int(settings.value('language')))
-
-
-    def on_aboutQt_button_clicked(self):
-        backend.about_qt_dialog(self, int(settings.value('language')))
-
-
-    def on_color_button_clicked(self):
-        selected_color = QtWidgets.QColorDialog.getColor()
-        color = f'{selected_color.red()}, {selected_color.green()}, {selected_color.blue()}'
-        self.color_button.style_sheet(theme_value, color)
-        settings.setValue('color', color)
         
 
     # Barra de Video
