@@ -26,7 +26,7 @@ class UI(QWidget):
         self.language_value = int(self.settings.value('language'))
         self.theme_value = eval(self.settings.value('theme'))
 
-        self.regExp3 = QRegularExpressionValidator(QRegularExpression('[0-9.]{1,5}'), self)
+        self.regExp1 = QRegularExpressionValidator(QRegularExpression('[0-9]{1,7}'), self)
 
         self.idioma_dict = {0: ('ESP', 'SPA'), 1: ('ING', 'ENG')}
 
@@ -275,7 +275,7 @@ class UI(QWidget):
             'icon': 'rewind', 
             'theme': self.theme_value } )
         self.gui_widgets['slow_button'].setEnabled(False)
-        # self.gui_widgets['slow_button'].clicked.connect(parent.on_slow_button_clicked)
+        self.gui_widgets['slow_button'].clicked.connect(parent.on_slow_button_clicked)
 
         self.gui_widgets['backFrame_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
             'name': 'backFrame_button',
@@ -284,7 +284,7 @@ class UI(QWidget):
             'icon': 'step_backward', 
             'theme': self.theme_value } )
         self.gui_widgets['backFrame_button'].setEnabled(False)
-        # self.gui_widgets['backFrame_button'].clicked.connect(parent.on_backFrame_button_clicked)
+        self.gui_widgets['backFrame_button'].clicked.connect(parent.on_backFrame_button_clicked)
 
         self.gui_widgets['reverse_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
             'name': 'reverse_button',
@@ -293,7 +293,7 @@ class UI(QWidget):
             'icon': 'reverse', 
             'theme': self.theme_value } )
         self.gui_widgets['reverse_button'].setEnabled(False)
-        # self.gui_widgets['reverse_button'].clicked.connect(parent.on_reverse_button_clicked)
+        self.gui_widgets['reverse_button'].clicked.connect(parent.on_reverse_button_clicked)
 
         self.gui_widgets['pause_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
             'name': 'pause_button',
@@ -302,7 +302,7 @@ class UI(QWidget):
             'icon': 'pause', 
             'theme': self.theme_value } )
         self.gui_widgets['pause_button'].setEnabled(False)
-        # self.gui_widgets['pause_button'].clicked.connect(parent.on_pause_button_clicked)
+        self.gui_widgets['pause_button'].clicked.connect(parent.on_pause_button_clicked)
 
         self.gui_widgets['play_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
             'name': 'play_button',
@@ -311,7 +311,7 @@ class UI(QWidget):
             'icon': 'play', 
             'theme': self.theme_value } )
         self.gui_widgets['play_button'].setEnabled(False)
-        # self.gui_widgets['play_button'].clicked.connect(parent.on_play_button_clicked)
+        self.gui_widgets['play_button'].clicked.connect(parent.on_play_button_clicked)
 
         self.gui_widgets['frontFrame_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
             'name': 'frontFrame_button',
@@ -320,7 +320,7 @@ class UI(QWidget):
             'icon': 'step_forward', 
             'theme': self.theme_value } )
         self.gui_widgets['frontFrame_button'].setEnabled(False)
-        # self.gui_widgets['frontFrame_button'].clicked.connect(parent.on_frontFrame_button_clicked)
+        self.gui_widgets['frontFrame_button'].clicked.connect(parent.on_frontFrame_button_clicked)
 
         self.gui_widgets['fast_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
             'name': 'fast_button',
@@ -329,7 +329,7 @@ class UI(QWidget):
             'icon': 'fast_forward', 
             'theme': self.theme_value } )
         self.gui_widgets['fast_button'].setEnabled(False)
-        # self.gui_widgets['fast_button'].clicked.connect(parent.on_fast_button_clicked)
+        self.gui_widgets['fast_button'].clicked.connect(parent.on_fast_button_clicked)
 
 
 
@@ -342,7 +342,7 @@ class UI(QWidget):
             'position': (self.gui_widgets['video_toolbar_card'].width() - 108, 8),
             'width': 100,
             'labels': ('Cuadro', 'Frame'),
-            # 'regular_expression': self.regExp1,
+            'regular_expression': self.regExp1,
             'theme': self.theme_value,
             'language': self.language_value } )
         # self.gui_widgets['frame_value_text'].text_field.textEdited.connect(parent.on_frame_value_text_textEdited)
