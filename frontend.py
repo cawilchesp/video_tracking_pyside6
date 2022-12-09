@@ -101,20 +101,6 @@ class App(QWidget):
 
 
         
-        # # --------
-        # # Upperbar
-        # # --------
-        # self.upperbar = widgets.Sidebar(self, 'upperbar', (200, 0, 1300, 50), theme_value)
-        
-        
-        # x_upperbar += 40
-        # self.video_slider = widgets.ObjectSlider(self.upperbar, 'video_slider', (x_upperbar, 10, 580), theme_value)
-        # self.video_slider.sliderMoved.connect(self.on_video_slider_sliderMoved)
-        # self.video_slider.sliderReleased.connect(self.on_video_slider_sliderReleased)
-        
-        # x_upperbar += 590
-        # self.frameNumber_edit = widgets.ObjectLineEdit(self.upperbar, 'frameNumber_edit', (x_upperbar, 10, 100), theme_value)
-        
         # # -----------
         # # Main Window
         # # -----------
@@ -261,6 +247,7 @@ class App(QWidget):
         self.ui.gui_widgets['aboutQt_button'].move(self.ui.gui_widgets['titulo_card'].width() - 40, 8)
 
         self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 72)
+        self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 404, 32)
         self.ui.gui_widgets['frame_value_text'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
 
         self.ui.gui_widgets['video_output_card'].setGeometry(196, 144, width - 204, height - 152)
