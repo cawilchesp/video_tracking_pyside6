@@ -10,6 +10,7 @@ from components.md3_iconbutton import MD3IconButton
 from components.md3_switch import MD3Switch
 from components.md3_label import MD3Label
 from components.md3_textfield import MD3TextField
+from components.md3_slider import MD3Slider
 from components.mpl_canvas import MPLCanvas
 
 import sys
@@ -331,11 +332,14 @@ class UI(QWidget):
         self.gui_widgets['fast_button'].setEnabled(False)
         self.gui_widgets['fast_button'].clicked.connect(parent.on_fast_button_clicked)
 
-
-
-
-
-
+        self.gui_widgets['video_slider'] = MD3Slider(self.gui_widgets['video_toolbar_card'], {
+            'name': 'video_slider',
+            'position': (288, 20),
+            'theme': self.theme_value } )
+        # self.gui_widgets['video_slider'].setEnabled(False)
+        # self.gui_widgets['video_slider'].setValue(1)
+        # self.gui_widgets['video_slider'].sliderMoved.connect(self.on_video_slider_sliderMoved)
+        # self.gui_widgets['video_slider'].sliderReleased.connect(self.on_video_slider_sliderReleased)
 
         self.gui_widgets['frame_value_text'] = MD3TextField(self.gui_widgets['video_toolbar_card'], {
             'name': 'frame_value_text',
