@@ -12,6 +12,13 @@ import numpy as np
 import widgets
 from ui import UI
 import backend
+
+from dialogs.about_app import AboutApp
+
+
+
+
+
 # from object_tracker import detect
 
 
@@ -148,6 +155,8 @@ class App(QWidget):
                 self.ui.gui_widgets[key].apply_styleSheet(True)
             self.ui.gui_widgets['tema_switch_light'].set_state(True)
             self.ui.gui_widgets['tema_switch_dark'].set_state(False)
+
+            self.ui.gui_widgets['video_label']
         
             # self.ui.gui_widgets['x_t_signal_plot'].draw()
             # self.ui.gui_widgets['y_t_signal_plot'].draw()
@@ -252,6 +261,7 @@ class App(QWidget):
 
         self.ui.gui_widgets['video_output_card'].setGeometry(196, 144, width - 204, height - 152)
         self.ui.gui_widgets['video_output_card'].title.resize(width - 204, 32)
+        self.ui.gui_widgets['video_label'].setGeometry(8, 48, self.ui.gui_widgets['video_output_card'].width() - 16, self.ui.gui_widgets['video_output_card'].height() - 56)
         
         # self.ui.gui_widgets['left_foot_card'].setGeometry(196, int(80 + (height * 0.5)), int((width - 436) / 3), int(height - (88 + (height * 0.5))))
         # self.ui.gui_widgets['left_foot_card'].title.resize(self.ui.gui_widgets['left_foot_card'].width() - 16, 32)
