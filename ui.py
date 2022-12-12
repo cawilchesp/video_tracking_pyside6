@@ -247,7 +247,6 @@ class UI(QWidget):
             'name': 'classes_menu',
             'position': (8, 48),
             'size': (164, 32),
-            'options': self.source_options,
             'language': self.language_value,
             'theme': self.theme_value } )
         self.gui_widgets['classes_menu'].textActivated.connect(parent.on_classes_menu_textActivated)
