@@ -250,15 +250,22 @@ class App(QWidget):
 
     def on_source_add_button_clicked(self) -> None:
         source = self.ui.gui_widgets['source_menu'].currentText()
-        if source == 'Archivo de Video' or source == 'Video File':
+
+        if source == 'Webcam':
+            source_file = 0
+            self.ui.gui_widgets['source_icon'].set_icon('webcam', self.theme_value)
+            self.ui.gui_widgets['filename_value'].setText('')
+        elif source == 'Archivo de Video' or source == 'Video File':
             source_file = QtWidgets.QFileDialog.getOpenFileName(None,
                 'Seleccione el archivo de video', self.default_path,
                 'Archivos de Video (*.mp4 *.avi *.mov)')[0]
+            self.ui.gui_widgets['source_icon'].set_icon('file_video', self.theme_value)
+            self.ui.gui_widgets['filename_value'].setText(source_file)
 
+        if source_file is not None:
             source_properties = open_video(source_file)
 
             self.ui.gui_widgets['source_value'].setText(source)
-            self.ui.gui_widgets['filename_value'].setText(source_file)
             self.ui.gui_widgets['width_value'].setText(f"{source_properties['width']}")
             self.ui.gui_widgets['height_value'].setText(f"{source_properties['height']}")
             self.ui.gui_widgets['count_value'].setText(f"{source_properties['frame_count']}")
