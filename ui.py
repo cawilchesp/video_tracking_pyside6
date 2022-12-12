@@ -124,7 +124,7 @@ class UI(QWidget):
         # -----------
         self.gui_widgets['source_card'] = MD3Card(parent, { 
             'name': 'source_card',
-            'position': (8, 64), 
+            'position': (8, self.gui_widgets['titulo_card'].y() + self.gui_widgets['titulo_card'].height() + 8), 
             'size': (180, 128), 
             'theme': self.theme_value, 
             'labels': ('Origen del Video', 'Video Source'), 
@@ -153,8 +153,8 @@ class UI(QWidget):
         # ----------------
         self.gui_widgets['info_card'] = MD3Card(parent, { 
             'name': 'info_card',
-            'position': (8, 200), 
-            'size': (180, 216), 
+            'position': (8, self.gui_widgets['source_card'].y() + self.gui_widgets['source_card'].height() + 8), 
+            'size': (180, 248), 
             'theme': self.theme_value, 
             'labels': ('Información', 'Information'), 
             'language': self.language_value } )
@@ -216,16 +216,32 @@ class UI(QWidget):
             'theme': self.theme_value,
             'language': self.language_value } )
 
+        self.gui_widgets['count_icon'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'count_icon',
+            'position': (8, 176),
+            'type': 'icon',
+            'icon': 'number',
+            'theme': self.theme_value } )
+
+        self.gui_widgets['count_value'] = MD3Label(self.gui_widgets['info_card'], {
+            'name': 'count_value', 
+            'position': (48, 184),
+            'width': 124,
+            'type': 'subtitle',
+            'labels': ('Número de Cuadros', 'Frame Count'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
+
         self.gui_widgets['fps_icon'] = MD3Label(self.gui_widgets['info_card'], {
             'name': 'fps_icon', 
-            'position': (8, 176),
+            'position': (8, 208),
             'type': 'icon',
             'icon': 'fps',
             'theme': self.theme_value } )
 
         self.gui_widgets['fps_value'] = MD3Label(self.gui_widgets['info_card'], {
             'name': 'fps_value', 
-            'position': (48, 184), 
+            'position': (48, 216), 
             'width': 124,
             'type': 'subtitle',
             'labels': ('CPS', 'FPS'),
@@ -237,7 +253,7 @@ class UI(QWidget):
         # ------------
         self.gui_widgets['classes_card'] = MD3Card(parent, { 
             'name': 'classes_card',
-            'position': (8, 424), 
+            'position': (8, self.gui_widgets['info_card'].y() + self.gui_widgets['info_card'].height() + 8), 
             'size': (180, 128), 
             'theme': self.theme_value, 
             'labels': ('Anotaciones', 'Annotations'), 
@@ -336,10 +352,10 @@ class UI(QWidget):
             'name': 'video_slider',
             'position': (288, 20),
             'theme': self.theme_value } )
-        # self.gui_widgets['video_slider'].setEnabled(False)
-        # self.gui_widgets['video_slider'].setValue(1)
-        # self.gui_widgets['video_slider'].sliderMoved.connect(self.on_video_slider_sliderMoved)
-        # self.gui_widgets['video_slider'].sliderReleased.connect(self.on_video_slider_sliderReleased)
+        self.gui_widgets['video_slider'].setEnabled(False)
+        self.gui_widgets['video_slider'].setValue(1)
+        self.gui_widgets['video_slider'].sliderMoved.connect(parent.on_video_slider_sliderMoved)
+        # self.gui_widgets['video_slider'].sliderReleased.connect(parent.on_video_slider_sliderReleased)
 
         self.gui_widgets['frame_value_text'] = MD3TextField(self.gui_widgets['video_toolbar_card'], {
             'name': 'frame_value_text',
@@ -364,98 +380,4 @@ class UI(QWidget):
         self.gui_widgets['video_label'] = MD3VideoLabel(self.gui_widgets['video_output_card'], {
             'name': 'video_label',
             'theme': self.theme_value } )
-        
-
-
-
-        
-        # # ---------------
-        # # Card Mesomorphy
-        # # ---------------
-        # self.gui_widgets['mesomorph_card'] = MD3Card(parent, { 
-        #     'name': 'mesomorph_card',
-        #     'size': (208, 468), 
-        #     'theme': self.theme_value, 
-        #     'labels': ('Mesomorfismo', 'Mesomorphy'),
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['altura_meso_label'] = MD3Label(self.gui_widgets['mesomorph_card'], {
-        #     'name': 'altura_meso_label',
-        #     'position': (8, 48),
-        #     'width': self.gui_widgets['mesomorph_card'].width() - 16,
-        #     'type': 'subtitle',
-        #     'labels': ('Altura (cm)', 'Height (cm)'),
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['altura_meso_value_label'] = MD3Label(self.gui_widgets['mesomorph_card'], {
-        #     'name': 'altura_meso_value_label',
-        #     'position': (8, 68),
-        #     'width': self.gui_widgets['mesomorph_card'].width() - 16,
-        #     'align': 'center',
-        #     'type': 'value',
-        #     'color': '255, 255, 255' if self.theme_value else '0, 0, 0',
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['humero_text'] = MD3TextField(self.gui_widgets['mesomorph_card'], {
-        #     'name': 'humero_text',
-        #     'position': (8, 108),
-        #     'width': self.gui_widgets['mesomorph_card'].width() - 16,
-        #     'labels': ('Diámetro Húmero (cm)', 'Humerus Diameter (cm)'),
-        #     'regular_expression': self.regExp3,
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-        # # self.gui_widgets['humero_text'].text_field.textEdited.connect(parent.on_humero_text_textEdited)
-
-        # self.gui_widgets['femur_text'] = MD3TextField(self.gui_widgets['mesomorph_card'], {
-        #     'name': 'femur_text',
-        #     'position': (8, 168),
-        #     'width': self.gui_widgets['mesomorph_card'].width() - 16,
-        #     'labels': ('Diámetro Fémur (cm)', 'Femur Diameter (cm)'),
-        #     'regular_expression': self.regExp3,
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-        # # self.gui_widgets['femur_text'].text_field.textEdited.connect(parent.on_femur_text_textEdited)
-
-        # self.gui_widgets['biceps_text'] = MD3TextField(self.gui_widgets['mesomorph_card'], {
-        #     'name': 'biceps_text',
-        #     'position': (8, 228),
-        #     'width': self.gui_widgets['mesomorph_card'].width() - 16,
-        #     'labels': ('Perímetro Bíceps (cm)', 'Biceps Perimeter (cm)'),
-        #     'regular_expression': self.regExp3,
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-        # # self.gui_widgets['biceps_text'].text_field.textEdited.connect(parent.on_biceps_text_textEdited)
-
-        # self.gui_widgets['tricipital_text'] = MD3TextField(self.gui_widgets['mesomorph_card'], {
-        #     'name': 'tricipital_text',
-        #     'position': (8, 288),
-        #     'width': self.gui_widgets['mesomorph_card'].width() - 16,
-        #     'labels': ('Pliegue Tricipital (cm)', 'Tricipital Fold (cm)'),
-        #     'regular_expression': self.regExp3,
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-        # # self.gui_widgets['tricipital_text'].text_field.textEdited.connect(parent.on_tricipital_text_textEdited)
-
-        # self.gui_widgets['pantorrilla_perimetro_text'] = MD3TextField(self.gui_widgets['mesomorph_card'], {
-        #     'name': 'pantorrilla_perimetro_text',
-        #     'position': (8, 348),
-        #     'width': self.gui_widgets['mesomorph_card'].width() - 16,
-        #     'labels': ('Perímetro Pantorrilla (cm)', 'Calf Perimeter (cm)'),
-        #     'regular_expression': self.regExp3,
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-        # # self.gui_widgets['pantorrilla_perimetro_text'].text_field.textEdited.connect(parent.on_pantorrilla_perimetro_text_textEdited)
-
-        # self.gui_widgets['pantorrilla_pliegue_text'] = MD3TextField(self.gui_widgets['mesomorph_card'], {
-        #     'name': 'pantorrilla_pliegue_text',
-        #     'position': (8, 408),
-        #     'width': self.gui_widgets['mesomorph_card'].width() - 16,
-        #     'labels': ('Pliegue Pantorrilla (cm)', 'Calf Fold (cm)'),
-        #     'regular_expression': self.regExp3,
-        #     'theme': self.theme_value,
-        #     'language': self.language_value } )
-        # # self.gui_widgets['pantorrilla_pliegue_text'].text_field.textEdited.connect(parent.on_pantorrilla_pliegue_text_textEdited)
-
         
