@@ -9,15 +9,12 @@ import psycopg2
 import cv2
 import numpy as np
 
-import widgets
 from ui import UI
+
 import backend
 
+from backend import open_video, convert_cv_qt
 from dialogs.about_app import AboutApp
-
-
-
-
 
 # from object_tracker import detect
 
@@ -107,14 +104,6 @@ class App(QWidget):
         self.ui = UI(self)
 
 
-        
-        # # -----------
-        # # Main Window
-        # # -----------
-        # self.video_label = QtWidgets.QLabel(self)
-        # self.video_label.setGeometry(QtCore.QRect(210, 60, 1280, 720))
-        # self.video_label.setFrameStyle(QtWidgets.QFrame.Shape.Box)
-
     # -----
     # Title
     # -----
@@ -156,12 +145,6 @@ class App(QWidget):
             self.ui.gui_widgets['tema_switch_light'].set_state(True)
             self.ui.gui_widgets['tema_switch_dark'].set_state(False)
         
-            # self.ui.gui_widgets['x_t_signal_plot'].draw()
-            # self.ui.gui_widgets['y_t_signal_plot'].draw()
-            # self.ui.gui_widgets['left_foot_plot'].draw()
-            # self.ui.gui_widgets['center_plot'].draw()
-            # self.ui.gui_widgets['right_foot_plot'].draw()
-
             self.settings.setValue('theme', f'{True}')
             self.theme_value = eval(self.settings.value('theme'))
 
@@ -183,12 +166,6 @@ class App(QWidget):
                 self.ui.gui_widgets[key].apply_styleSheet(False)
             self.ui.gui_widgets['tema_switch_light'].set_state(False)
             self.ui.gui_widgets['tema_switch_dark'].set_state(True)
-
-            # self.ui.gui_widgets['x_t_signal_plot'].draw()
-            # self.ui.gui_widgets['y_t_signal_plot'].draw()
-            # self.ui.gui_widgets['left_foot_plot'].draw()
-            # self.ui.gui_widgets['center_plot'].draw()
-            # self.ui.gui_widgets['right_foot_plot'].draw()
     
             self.settings.setValue('theme', f'{False}')
             self.theme_value = eval(self.settings.value('theme'))
@@ -223,9 +200,9 @@ class App(QWidget):
     #             QtWidgets.QMessageBox.critical(self, 'Data Error', 'No information on the database was given')
 
 
-    # def on_manual_button_clicked(self) -> None:
-    #     """ Manual button to open manual window """
-    #     return 0
+    def on_manual_button_clicked(self) -> None:
+        """ Manual button to open manual window """
+        return 0
 
 
     def on_about_button_clicked(self) -> None:
@@ -261,26 +238,6 @@ class App(QWidget):
         self.ui.gui_widgets['video_output_card'].title.resize(width - 204, 32)
         self.ui.gui_widgets['video_label'].setGeometry(8, 48, self.ui.gui_widgets['video_output_card'].width() - 16, self.ui.gui_widgets['video_output_card'].height() - 56)
         
-        # self.ui.gui_widgets['left_foot_card'].setGeometry(196, int(80 + (height * 0.5)), int((width - 436) / 3), int(height - (88 + (height * 0.5))))
-        # self.ui.gui_widgets['left_foot_card'].title.resize(self.ui.gui_widgets['left_foot_card'].width() - 16, 32)
-        # self.ui.gui_widgets['left_foot_plot'].setGeometry(8, 48, self.ui.gui_widgets['left_foot_card'].width()-16, self.ui.gui_widgets['left_foot_card'].height()-96)
-        # self.ui.gui_widgets['left_ellipse_button'].setGeometry(8, self.ui.gui_widgets['left_foot_card'].height()- 40, 32, 32)
-        # self.ui.gui_widgets['left_hull_button'].setGeometry(40, self.ui.gui_widgets['left_foot_card'].height()- 40, 32, 32)
-        # self.ui.gui_widgets['left_pca_button'].setGeometry(72, self.ui.gui_widgets['left_foot_card'].height()- 40, 32, 32)
-        
-        # self.ui.gui_widgets['center_card'].setGeometry(int(204 + ((width - 436) / 3)), int(80 + (height * 0.5)), int((width - 436) / 3), int(height - (88 + (height * 0.5))))
-        # self.ui.gui_widgets['center_card'].title.resize(self.ui.gui_widgets['center_card'].width() - 16, 32)
-        # self.ui.gui_widgets['center_plot'].setGeometry(8, 48, self.ui.gui_widgets['center_card'].width()-16, self.ui.gui_widgets['center_card'].height() - 96)
-        
-        # self.ui.gui_widgets['right_foot_card'].setGeometry(int(212 + (2 * (width - 436) / 3)), int(80 + (height * 0.5)), int((width - 436) / 3), int(height - (88 + (height * 0.5))))
-        # self.ui.gui_widgets['right_foot_card'].title.resize(self.ui.gui_widgets['right_foot_card'].width() - 16, 32)
-        # self.ui.gui_widgets['right_foot_plot'].setGeometry(8, 48, self.ui.gui_widgets['right_foot_card'].width()-16, self.ui.gui_widgets['right_foot_card'].height() - 96)
-        
-        # self.ui.gui_widgets['parameters_XT_card'].setGeometry(width - 216, 64, 208, 128)
-        # self.ui.gui_widgets['parameters_YT_card'].setGeometry(width - 216, 200, 208, 128)
-        # self.ui.gui_widgets['parameters_XY_card'].setGeometry(width - 216, 336, 208, 128)
-        # self.ui.gui_widgets['areas_card'].setGeometry(width - 216, 472, 208, 128) 
-
         return super().resizeEvent(a0)
 
 
@@ -288,11 +245,31 @@ class App(QWidget):
     # Source
     # ------
     def on_source_menu_textActivated(self, source: str) -> None:
-        return 0
+        self.ui.gui_widgets['source_add_button'].setEnabled(True)
 
 
     def on_source_add_button_clicked(self) -> None:
-        return 0
+        source = self.ui.gui_widgets['source_menu'].currentText()
+        if source == 'Archivo de Video' or source == 'Video File':
+            source_file = QtWidgets.QFileDialog.getOpenFileName(None,
+                'Seleccione el archivo de video', self.default_path,
+                'Archivos de Video (*.mp4 *.avi *.mov)')[0]
+
+            source_properties = open_video(source_file)
+
+            self.ui.gui_widgets['source_value'].setText(source)
+            self.ui.gui_widgets['filename_value'].setText(source_file)
+            self.ui.gui_widgets['width_value'].setText(f"{source_properties['width']}")
+            self.ui.gui_widgets['height_value'].setText(f"{source_properties['height']}")
+            self.ui.gui_widgets['count_value'].setText(f"{source_properties['frame_count']}")
+            self.ui.gui_widgets['fps_value'].setText(f"{source_properties['fps']:.2f}")
+
+            self.ui.gui_widgets['video_slider'].setEnabled(True)
+            self.ui.gui_widgets['video_slider'].setMaximum(source_properties['frame_count'])
+
+            # Presentación del frame 0
+            self.ui.gui_widgets['video_label'].setPixmap(source_properties['first_frame'])
+            self.ui.gui_widgets['frame_value_text'].text_field.setText('0')
 
 
     # -------
@@ -343,7 +320,7 @@ class App(QWidget):
 
 
     def on_video_slider_sliderMoved(self):
-        self.frameNumber_edit.setText(str(self.video_slider.value()))
+        self.ui.gui_widgets['frame_value_text'].text_field.setText(str(self.ui.gui_widgets['video_slider'].value()))
 
 
     def on_video_slider_sliderReleased(self):
