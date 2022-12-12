@@ -155,8 +155,6 @@ class App(QWidget):
                 self.ui.gui_widgets[key].apply_styleSheet(True)
             self.ui.gui_widgets['tema_switch_light'].set_state(True)
             self.ui.gui_widgets['tema_switch_dark'].set_state(False)
-
-            self.ui.gui_widgets['video_label']
         
             # self.ui.gui_widgets['x_t_signal_plot'].draw()
             # self.ui.gui_widgets['y_t_signal_plot'].draw()
