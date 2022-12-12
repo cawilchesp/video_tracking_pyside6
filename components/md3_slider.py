@@ -122,3 +122,8 @@ class MD3Slider(QtWidgets.QSlider):
                 f'QSlider#{self.name}::sub-page:disabled {{'
                 f'background: {disabled_color};'
                 f'}}' )
+
+
+    def language_text(self, language: int) -> None:
+            """ Change language of switch text """
+            return 0
