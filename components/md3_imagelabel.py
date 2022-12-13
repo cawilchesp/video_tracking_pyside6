@@ -46,7 +46,7 @@ images_path = f'{current_path}/icons'
 # ------
 # Labels
 # ------
-class MD3VideoLabel(QtWidgets.QLabel):
+class MD3ImageLabel(QtWidgets.QLabel):
     def __init__(self, parent, attributes: dict) -> None:
         """ Material Design 3 Component: Label
 
@@ -68,7 +68,7 @@ class MD3VideoLabel(QtWidgets.QLabel):
         -------
         None
         """
-        super(MD3VideoLabel, self).__init__(parent)
+        super(MD3ImageLabel, self).__init__(parent)
 
         self.attributes = attributes
 
