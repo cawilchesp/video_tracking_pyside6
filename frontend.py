@@ -13,7 +13,7 @@ from ui import UI
 
 import backend
 
-from backend import open_video, convert_cv_qt
+from backend import open_video
 from dialogs.about_app import AboutApp
 
 # from object_tracker import detect
@@ -39,20 +39,7 @@ from dialogs.about_app import AboutApp
 
 
 
-# # --------
-# # Settings
-# # --------
-# settings = QSettings(f'{sys.path[0]}/settings.ini', QSettings.Format.IniFormat)
-# language_value = int(settings.value('language'))
-# theme_value = int(settings.value('theme'))
-# color_value = settings.value('color')
 
-# idioma_dict = {0: ('Español', 'Spanish'), 1: ('Inglés', 'English')}
-# tema_dict = {0: ('Oscuro', 'Dark'), 1: ('Claro', 'Light')}
-# main_style_dict = {
-#     0: 'background-color: rgb(59,66,83); color: rgb(255,255,255)',
-#     1: 'background-color: rgb(229,233,240); color: rgb(0,0,0)'
-# }
 
 # palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
 
