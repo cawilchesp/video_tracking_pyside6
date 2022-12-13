@@ -11,8 +11,7 @@ from components.md3_switch import MD3Switch
 from components.md3_label import MD3Label
 from components.md3_textfield import MD3TextField
 from components.md3_slider import MD3Slider
-from components.md3_videolabel import MD3VideoLabel
-from components.mpl_canvas import MPLCanvas
+from components.md3_imagelabel import MD3ImageLabel
 
 import sys
 
@@ -377,7 +376,7 @@ class UI(QWidget):
             'labels': ('Salida del Video','Video Output'), 
             'language': self.language_value } )
         
-        self.gui_widgets['video_label'] = MD3VideoLabel(self.gui_widgets['video_output_card'], {
+        self.gui_widgets['video_label'] = MD3ImageLabel(self.gui_widgets['video_output_card'], {
             'name': 'video_label',
             'theme': self.theme_value } )
         
