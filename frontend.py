@@ -217,14 +217,16 @@ class App(QWidget):
         self.ui.gui_widgets['about_button'].move(self.ui.gui_widgets['titulo_card'].width() - 80, 8)
         self.ui.gui_widgets['aboutQt_button'].move(self.ui.gui_widgets['titulo_card'].width() - 40, 8)
 
-        self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 72)
+        self.ui.gui_widgets['video_toolbar_card'].resize(width - 412, 72)
         self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 404, 32)
         self.ui.gui_widgets['frame_value_text'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
 
-        self.ui.gui_widgets['video_output_card'].setGeometry(196, 144, width - 204, height - 152)
+        self.ui.gui_widgets['video_output_card'].setGeometry(196, 144, width - 412, height - 152)
         self.ui.gui_widgets['video_output_card'].title.resize(width - 204, 32)
         self.ui.gui_widgets['video_label'].setGeometry(8, 48, self.ui.gui_widgets['video_output_card'].width() - 16, self.ui.gui_widgets['video_output_card'].height() - 56)
         
+        self.ui.gui_widgets['yolor_deepsort_card'].move(self.ui.gui_widgets['video_toolbar_card'].x() + self.ui.gui_widgets['video_toolbar_card'].width() + 8, self.ui.gui_widgets['titulo_card'].y() + self.ui.gui_widgets['titulo_card'].height() + 8)
+
         return super().resizeEvent(a0)
 
 
