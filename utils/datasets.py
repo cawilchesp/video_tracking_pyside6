@@ -1,6 +1,5 @@
 # Dataset utils and dataloaders
 
-from encodings import normalize_encoding
 import glob
 import math
 import os
@@ -199,7 +198,7 @@ class LoadImages:  # for inference
 
             self.frame += 1
             # print('video %g/%g (%g/%g) %s: ' % (self.count + 1, self.nf, self.frame, self.nframes, path), end='')
-            print(f'Frame ({self.frame}/{self.nframes}): ')
+            print('video %g/%g (%g/%g): ' % (self.count + 1, self.nf, self.frame, self.nframes), end='')
 
         else:
             # Read image
@@ -288,10 +287,6 @@ class LoadStreams:  # multiple IP or RTSP cameras
         self.mode = 'images'
         self.img_size = img_size
 
-        self.w = None
-        self.h = None
-        self.fps = None
-
         if os.path.isfile(sources):
             with open(sources, 'r') as f:
                 sources = [x.strip() for x in f.read().splitlines() if len(x.strip())]
@@ -306,12 +301,12 @@ class LoadStreams:  # multiple IP or RTSP cameras
             print('%g/%g: %s... ' % (i + 1, n, s), end='')
             cap = cv2.VideoCapture(eval(s) if s.isnumeric() else s)
             assert cap.isOpened(), 'Failed to open %s' % s
-            self.w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-            self.h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-            self.fps = cap.get(cv2.CAP_PROP_FPS) % 100
+            w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            fps = cap.get(cv2.CAP_PROP_FPS) % 100
             _, self.imgs[i] = cap.read()  # guarantee first frame
             thread = Thread(target=self.update, args=([i, cap]), daemon=True)
-            print(' success (%gx%g at %.2f FPS).' % (self.w, self.h, self.fps))
+            print(' success (%gx%g at %.2f FPS).' % (w, h, fps))
             thread.start()
         print('')  # newline
 

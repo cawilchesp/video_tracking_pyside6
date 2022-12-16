@@ -99,7 +99,6 @@ class MD3ImageLabel(QtWidgets.QLabel):
         
         self.setStyleSheet(f'QLabel#{self.name} {{ '
                 f'border: 1px solid {color};'
-                f'border-radius: 12px;'
                 f'background-color: {background_color};'
                 f'}}' )
 
