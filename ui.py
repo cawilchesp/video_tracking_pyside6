@@ -280,8 +280,7 @@ class UI(QWidget):
         # ------------------
         self.gui_widgets['video_toolbar_card'] = MD3Card(parent, {
             'name': 'video_toolbar_card',
-            'position': (196, 64), 
-            'size': (width-204, 72),
+            'position': (196, self.gui_widgets['titulo_card'].y() + self.gui_widgets['titulo_card'].height() + 8), 
             'theme': self.theme_value } )
 
         self.gui_widgets['slow_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
@@ -380,3 +379,38 @@ class UI(QWidget):
             'name': 'video_label',
             'theme': self.theme_value } )
         
+        # ----------------------
+        # Card YOLOR - Deep SORT
+        # ----------------------
+        self.gui_widgets['yolor_deepsort_card'] = MD3Card(parent, { 
+            'name': 'yolor_deepsort_card',
+            'size': (200, 600),
+            'theme': self.theme_value, 
+            'labels': ('YOLOR - Deep SORT', 'YOLOR - Deep SORT'), 
+            'language': self.language_value } )
+    
+
+        # Menú: seleccionar el modelo cfg y weights
+        # '--cfg', type=str, default='cfg/yolor_p6.cfg', help='*.cfg path')
+        # '--weights', nargs='+', type=str, default='yolor_p6.pt', help='model.pt path(s)')
+        
+        
+        # '--img-size', type=int, default=1280, help='inference size (pixels)')
+        
+        
+        # '--device', default='cpu', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
+        
+        
+        # '--names', type=str, default='data/coco.names', help='*.cfg path')
+        
+        
+        # '--view-img', action='store_true', help='display results')
+        
+        
+        # '--save-img', action='store_true', help='save result video')
+        
+        
+        # '--frame-save', type=int, default=300, help='save every # frames (fixed cameras)')
+        
+        
+        # '--trailslen', type=int, default=64, help='trail size')
