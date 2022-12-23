@@ -37,6 +37,26 @@ class UI(QWidget):
             2: ('Archivo de Video', 'Video File')
         }
 
+        self.model_options = {
+            0: ('yolor_p6', 'yolor_p6'),
+            1: ('yolor_w6', 'yolor_w6')
+        }
+
+        self.size_options = {
+            0: ('640', '640'),
+            1: ('1280', '1280')
+        }
+
+        self.gpu_options = {
+            0: ('CPU', 'CPU'),
+            1: ('GPU', 'GPU')
+        }
+
+        self.names_options = {
+            0: ('coco.names', 'coco.names'),
+            1: ('drones.names', 'drones.names')
+        }
+
         self.gui_widgets = {}
 
         # -----------
@@ -384,33 +404,129 @@ class UI(QWidget):
         # ----------------------
         self.gui_widgets['yolor_deepsort_card'] = MD3Card(parent, { 
             'name': 'yolor_deepsort_card',
-            'size': (200, 600),
+            'size': (200, 468),
             'theme': self.theme_value, 
             'labels': ('YOLOR - Deep SORT', 'YOLOR - Deep SORT'), 
             'language': self.language_value } )
     
+        self.gui_widgets['model_label'] = MD3Label(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'model_label', 
+            'position': (8, 48), 
+            'width': self.gui_widgets['yolor_deepsort_card'].width() - 16,
+            'type': 'subtitle',
+            'labels': ('Modelo', 'Model'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
+        
+        self.gui_widgets['model_menu'] = MD3Menu(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'model_menu',
+            'position': (8, 68),
+            'size': (self.gui_widgets['yolor_deepsort_card'].width() - 16, 32),
+            'options': self.model_options,
+            'language': self.language_value,
+            'theme': self.theme_value } )
+        self.gui_widgets['model_menu'].setCurrentIndex(0)
 
-        # Menú: seleccionar el modelo cfg y weights
-        # '--cfg', type=str, default='cfg/yolor_p6.cfg', help='*.cfg path')
-        # '--weights', nargs='+', type=str, default='yolor_p6.pt', help='model.pt path(s)')
+        self.gui_widgets['size_label'] = MD3Label(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'size_label', 
+            'position': (8, 108), 
+            'width': self.gui_widgets['yolor_deepsort_card'].width() - 16,
+            'type': 'subtitle',
+            'labels': ('Tamaño de Inferencia', 'Inference Size'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
+
+        self.gui_widgets['size_menu'] = MD3Menu(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'size_menu',
+            'position': (8, 128),
+            'size': (self.gui_widgets['yolor_deepsort_card'].width() - 16, 32),
+            'options': self.size_options,
+            'language': self.language_value,
+            'theme': self.theme_value } )
+        self.gui_widgets['size_menu'].setCurrentIndex(1)
+
+        self.gui_widgets['gpu_label'] = MD3Label(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'gpu_label', 
+            'position': (8, 168), 
+            'width': self.gui_widgets['yolor_deepsort_card'].width() - 16,
+            'type': 'subtitle',
+            'labels': ('Uso de GPU', 'GPU Usage'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
+
+        self.gui_widgets['gpu_menu'] = MD3Menu(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'gpu_menu',
+            'position': (8, 188),
+            'size': (self.gui_widgets['yolor_deepsort_card'].width() - 16, 32),
+            'options': self.gpu_options,
+            'language': self.language_value,
+            'theme': self.theme_value } )
+        self.gui_widgets['gpu_menu'].setCurrentIndex(1)
+
+        self.gui_widgets['names_label'] = MD3Label(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'names_label', 
+            'position': (8, 228), 
+            'width': self.gui_widgets['yolor_deepsort_card'].width() - 16,
+            'type': 'subtitle',
+            'labels': ('Archivo .names', 'File .names'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
+
+        self.gui_widgets['names_menu'] = MD3Menu(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'names_menu',
+            'position': (8, 248),
+            'size': (self.gui_widgets['yolor_deepsort_card'].width() - 16, 32),
+            'options': self.names_options,
+            'language': self.language_value,
+            'theme': self.theme_value } )
+        self.gui_widgets['names_menu'].setCurrentIndex(0)
+
+        self.gui_widgets['save_image_label'] = MD3Label(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'save_image_label', 
+            'position': (8, 288),
+            'width': self.gui_widgets['yolor_deepsort_card'].width() - 16,
+            'type': 'subtitle',
+            'labels': ('Guardar Imagen', 'Save Image'),
+            'theme': self.theme_value,
+            'language': self.language_value } )
+
+        self.gui_widgets['save_switch_off'] = MD3Switch(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'save_switch_off',
+            'position': (8, 308),
+            'side': 'left',
+            'icons': ('circle_L.png', 'none.png'),
+            'state': False,
+            'language': self.language_value,
+            'theme': self.theme_value } )
+        self.gui_widgets['save_switch_off'].clicked.connect(parent.on_save_switch_off_clicked)
+
+        self.gui_widgets['save_switch_on'] = MD3Switch(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'save_switch_on',
+            'position': (34, 308),
+            'side': 'right',
+            'icons': ('circle_checked_L.png', 'none.png'),
+            'state': True,
+            'language': self.language_value,
+            'theme': self.theme_value } )
+        self.gui_widgets['save_switch_on'].clicked.connect(parent.on_save_switch_on_clicked)
+
+        self.gui_widgets['frame_save_text'] = MD3TextField(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'frame_save_text',
+            'position': (8, 348),
+            'width': self.gui_widgets['yolor_deepsort_card'].width() - 16,
+            'labels': ('Guardar Cada # Cuadros', 'Save Every # Frames'),
+            'regular_expression': self.regExp1,
+            'theme': self.theme_value,
+            'language': self.language_value } )
+        self.gui_widgets['frame_save_text'].text_field.setText('0')
+
+        self.gui_widgets['trail_text'] = MD3TextField(self.gui_widgets['yolor_deepsort_card'], {
+            'name': 'trail_text',
+            'position': (8, 408),
+            'width': self.gui_widgets['yolor_deepsort_card'].width() - 16,
+            'labels': ('Longitud de Trayectoria', 'Trail Length'),
+            'regular_expression': self.regExp1,
+            'theme': self.theme_value,
+            'language': self.language_value } )
+        self.gui_widgets['trail_text'].text_field.setText('64')
         
-        
-        # '--img-size', type=int, default=1280, help='inference size (pixels)')
-        
-        
-        # '--device', default='cpu', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
-        
-        
-        # '--names', type=str, default='data/coco.names', help='*.cfg path')
-        
-        
-        # '--view-img', action='store_true', help='display results')
-        
-        
-        # '--save-img', action='store_true', help='save result video')
-        
-        
-        # '--frame-save', type=int, default=300, help='save every # frames (fixed cameras)')
-        
-        
-        # '--trailslen', type=int, default=64, help='trail size')
