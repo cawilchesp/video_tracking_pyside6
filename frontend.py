@@ -244,7 +244,6 @@ class App(QWidget):
             self.ui.gui_widgets['frame_value_text'].text_field.setText('0')
 
             # YOLOR - DeepSORT Settings
-            
             yolor_options = {
                 'cfg': self.ui.gui_widgets['model_configuration_menu'].currentText(),
                 'weights': self.ui.gui_widgets['model_weights_menu'].currentText(),
@@ -265,6 +264,9 @@ class App(QWidget):
                 'show_trajectories': True,
                 'save_video': True if self.ui.gui_widgets['save_switch_on'].isChecked() else False
             }
+            # presentar video en Label
+            # detección solo en imágenes
+            # tomar frame del video y sacar frame procesado
 
             yolor = YOLOR_DEEPSORT(yolor_options, video_options)
             yolor.detect()
