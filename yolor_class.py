@@ -30,7 +30,7 @@ class YOLOR_DEEPSORT:
             # -----------------
             # YOLOR Options
             model_cfg = f'{yolor_path}/yolor/cfg/{yolor_options["cfg"]}'
-            weights = f'{yolor_path}/weights/{yolor_options["weights"]}'
+            weights = f'{yolor_path}/yolor/weights/{yolor_options["weights"]}'
             inference_size = yolor_options['inference_size']
             class_names_file = f'{yolor_path}/yolor/data/{yolor_options["names_file"]}'
             use_gpu = yolor_options['use_gpu']
