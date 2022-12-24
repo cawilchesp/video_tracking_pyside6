@@ -244,30 +244,26 @@ class App(QWidget):
             self.ui.gui_widgets['frame_value_text'].text_field.setText('0')
 
             # YOLOR - DeepSORT Settings
-            self.ui.gui_widgets['save_switch_off'].isChecked()
-            self.ui.gui_widgets['save_switch_on'].isChecked()
-            self.ui.gui_widgets['frame_save_text'].text_field.text()
-            self.ui.gui_widgets['trail_text'].text_field.text()
-
+            
             yolor_options = {
-                'cfg': self.ui.gui_widgets['model_configuration_menu'].currentIndex(),
-                'weights': self.ui.gui_widgets['model_weights_menu'].currentIndex(),
-                'names_file': self.ui.gui_widgets['names_menu'].currentIndex(),
-                'inference_size': int(self.ui.gui_widgets['size_menu'].currentIndex()),
-                'use_gpu': True if self.ui.gui_widgets['gpu_menu'].currentIndex() == 'GPU' else False
+                'cfg': self.ui.gui_widgets['model_configuration_menu'].currentText(),
+                'weights': self.ui.gui_widgets['model_weights_menu'].currentText(),
+                'names_file': self.ui.gui_widgets['names_menu'].currentText(),
+                'inference_size': int(self.ui.gui_widgets['size_menu'].currentText()),
+                'use_gpu': True if self.ui.gui_widgets['gpu_menu'].currentText() == 'GPU' else False
             }
 
             video_options = {
                 'source': source_file,
                 'output': "D:\Data\Videos_Bogotá\ouput",
                 'view_image': True,
-                'save_text': True,
-                'frame_save': 300,
-                'trail': 64,
+                'save_text': True if self.ui.gui_widgets['save_switch_on'].isChecked() else False,
+                'frame_save': int(self.ui.gui_widgets['frame_save_text'].text_field.text()),
+                'trail': int(self.ui.gui_widgets['trail_text'].text_field.text()),
                 'class_filter': [0,1,2,3,5,7], # Based on coco.names
                 'show_boxes': True,
                 'show_trajectories': True,
-                'save_video': True
+                'save_video': True if self.ui.gui_widgets['save_switch_on'].isChecked() else False
             }
 
             yolor = YOLOR_DEEPSORT(yolor_options, video_options)
