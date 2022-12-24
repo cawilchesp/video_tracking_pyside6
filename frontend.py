@@ -244,11 +244,6 @@ class App(QWidget):
             self.ui.gui_widgets['frame_value_text'].text_field.setText('0')
 
             # YOLOR - DeepSORT Settings
-            
-            
-            
-            
-            
             self.ui.gui_widgets['save_switch_off'].isChecked()
             self.ui.gui_widgets['save_switch_on'].isChecked()
             self.ui.gui_widgets['frame_save_text'].text_field.text()
