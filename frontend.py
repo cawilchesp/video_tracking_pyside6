@@ -16,34 +16,10 @@ import backend
 from backend import open_video
 from dialogs.about_app import AboutApp
 
-# from object_tracker import detect
+from yolor_class import YOLOR_DEEPSORT
 
 
 
-# import torch
-# import torch.backends.cudnn as cudnn
-
-# from utils.datasets import LoadStreams, LoadImages
-# from utils.general import non_max_suppression, scale_coords
-# from utils.torch_utils import select_device, time_synchronized
-
-# from models.models import *
-# from utils.datasets import *
-# from utils.general import *
-
-# from deep_sort_pytorch.utils.parser import get_config
-# from deep_sort_pytorch.deep_sort import DeepSort
-# from collections import deque
-
-
-
-
-
-
-
-# palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
-
-# data_deque = {}
 
 
 # # -------------
@@ -268,15 +244,44 @@ class App(QWidget):
             self.ui.gui_widgets['frame_value_text'].text_field.setText('0')
 
             # YOLOR - DeepSORT Settings
-            self.ui.gui_widgets['model_menu'].currentIndex()
-            self.ui.gui_widgets['model_menu'].currentIndex()
-            self.ui.gui_widgets['size_menu'].currentIndex()
-            self.ui.gui_widgets['gpu_menu'].currentIndex()
-            self.ui.gui_widgets['names_menu'].currentIndex()
+            
+            
+            
+            
+            
             self.ui.gui_widgets['save_switch_off'].isChecked()
             self.ui.gui_widgets['save_switch_on'].isChecked()
             self.ui.gui_widgets['frame_save_text'].text_field.text()
             self.ui.gui_widgets['trail_text'].text_field.text()
+
+            yolor_options = {
+                'cfg': self.ui.gui_widgets['model_configuration_menu'].currentIndex(),
+                'weights': self.ui.gui_widgets['model_weights_menu'].currentIndex(),
+                'names_file': self.ui.gui_widgets['names_menu'].currentIndex(),
+                'inference_size': int(self.ui.gui_widgets['size_menu'].currentIndex()),
+                'use_gpu': True if self.ui.gui_widgets['gpu_menu'].currentIndex() == 'GPU' else False
+            }
+
+            video_options = {
+                'source': source_file,
+                'output': "D:\Data\Videos_Bogotá\ouput",
+                'view_image': True,
+                'save_text': True,
+                'frame_save': 300,
+                'trail': 64,
+                'class_filter': [0,1,2,3,5,7], # Based on coco.names
+                'show_boxes': True,
+                'show_trajectories': True,
+                'save_video': True
+            }
+
+            yolor = YOLOR_DEEPSORT(yolor_options, video_options)
+            yolor.detect()
+
+
+
+
+
 
 
     # -------
@@ -358,6 +363,7 @@ class App(QWidget):
         if state: 
             self.ui.gui_widgets['save_switch_on'].set_state(False)
             self.ui.gui_widgets['save_switch_off'].set_state(True)
+
 
     def on_save_switch_on_clicked(self, state: bool) -> None:
         """ Image Save On switch control to change components stylesheet
