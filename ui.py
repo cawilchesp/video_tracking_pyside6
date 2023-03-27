@@ -12,6 +12,7 @@ from components.md3_label import MD3Label
 from components.md3_textfield import MD3TextField
 from components.md3_slider import MD3Slider
 from components.md3_imagelabel import MD3ImageLabel
+from components.md3_segmentedbutton import MD3SegmentedButton
 
 import sys
 
@@ -98,23 +99,40 @@ class UI(QWidget):
         self.gui_widgets['idioma_menu'].setCurrentIndex(self.language_value)
         self.gui_widgets['idioma_menu'].currentIndexChanged.connect(parent.on_idioma_menu_currentIndexChanged)
 
-        self.gui_widgets['tema_switch_light'] = MD3Switch(self.gui_widgets['titulo_card'], {
+        self.gui_widgets['tema_switch_light'] = MD3SegmentedButton(self.gui_widgets['titulo_card'], {
             'name': 'tema_switch_light',
-            'side': 'left',
-            'icons': ('light_mode_L.png', 'none.png'),
+            'location': 'left',
+            'icon': 'light_mode_L.png',
             'state': self.theme_value,
             'language': self.language_value,
             'theme': self.theme_value } )
-        self.gui_widgets['tema_switch_light'].clicked.connect(parent.on_tema_switch_light_clicked)
 
-        self.gui_widgets['tema_switch_dark'] = MD3Switch(self.gui_widgets['titulo_card'], {
-            'name': 'tema_switch_dark',
-            'side': 'right',
-            'icons': ('dark_mode_L.png', 'none.png'),
-            'state': not self.theme_value,
-            'language': self.language_value,
-            'theme': self.theme_value } )
-        self.gui_widgets['tema_switch_dark'].clicked.connect(parent.on_tema_switch_dark_clicked)
+
+
+
+
+
+
+
+
+
+        # self.gui_widgets['tema_switch_light'] = MD3Switch(self.gui_widgets['titulo_card'], {
+        #     'name': 'tema_switch_light',
+        #     'side': 'left',
+        #     'icons': ('light_mode_L.png', 'none.png'),
+        #     'state': self.theme_value,
+        #     'language': self.language_value,
+        #     'theme': self.theme_value } )
+        # self.gui_widgets['tema_switch_light'].clicked.connect(parent.on_tema_switch_light_clicked)
+
+        # self.gui_widgets['tema_switch_dark'] = MD3Switch(self.gui_widgets['titulo_card'], {
+        #     'name': 'tema_switch_dark',
+        #     'side': 'right',
+        #     'icons': ('dark_mode_L.png', 'none.png'),
+        #     'state': not self.theme_value,
+        #     'language': self.language_value,
+        #     'theme': self.theme_value } )
+        # self.gui_widgets['tema_switch_dark'].clicked.connect(parent.on_tema_switch_dark_clicked)
 
         self.gui_widgets['database_button'] = MD3IconButton(self.gui_widgets['titulo_card'], {
             'name': 'database_button',
