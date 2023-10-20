@@ -208,18 +208,23 @@ class MainWindow(QMainWindow):
     def on_person_button_clicked(self) -> None:
         return None
     
+
     def on_bicycle_button_clicked(self) -> None:
         return None
     
+
     def on_car_button_clicked(self) -> None:
         return None
     
+
     def on_motorcycle_button_clicked(self) -> None:
         return None
     
+
     def on_bus_button_clicked(self) -> None:
         return None
     
+
     def on_truck_button_clicked(self) -> None:
         return None
 
@@ -255,19 +260,23 @@ class MainWindow(QMainWindow):
         return None
 
 
-    def on_video_slider_sliderMoved(self):
+    def on_video_slider_sliderMoved(self) -> None:
         self.ui.gui_widgets['frame_value_textfield'].text_field.setText(str(self.ui.gui_widgets['video_slider'].value()))
 
 
-    def on_video_slider_sliderReleased(self):
-        # backend.set_PTZ(self.pan_edit.text(), self.tilt_edit.text(), self.zoom_edit.text(), 
-        #                 self.ipaddress_combobox.currentText(), self.user_edit.text(), 
-        #                 self.password_edit.text())
+    def on_video_slider_sliderReleased(self) -> None:
         return None
 
 
-    def on_frame_value_textfield_returnPressed(self):
+    def on_frame_value_textfield_returnPressed(self) -> None:
         self.ui.gui_widgets['video_slider'].setSliderPosition(int(self.ui.gui_widgets['frame_value_textfield'].text_field.text()))
+
+
+
+
+
+
+
 
 
     # -----------------
