@@ -1,54 +1,19 @@
 """
-PyQt Video label component adapted to follow Material Design 3 guidelines
+PySide6 Video label component adapted to follow Material Design 3 guidelines
 
 
 """
 
-from PyQt6 import QtGui, QtWidgets, QtCore
-from PyQt6.QtCore import Qt
+from PySide6 import QtWidgets
 
-import sys
+from components.style_color import colors
 
-
-light = {
-    'background': '#3785F5',
-    'on_background': '#000000',
-    'surface': '#FFFFFF',
-    'on_surface': '#000000',
-    'primary': '#3785F5',
-    'on_primary': '#000000',
-    'secondary': '#7FB0F5',
-    'on_secondary': '#000000',
-    'disable': '#B2B2B2',
-    'on_disable': '#000000',
-    'error': '#B3261E',
-    'on_error': '#FFB4AB'
-}
-
-dark = {
-    'background': '#3B4253',
-    'on_background': '#E5E9F0',
-    'surface': '#2E3441',
-    'on_surface': '#E5E9F0',
-    'primary': '#7FB0F5',
-    'on_primary': '#000000',
-    'secondary': '#3785F5',
-    'on_secondary': '#000000',
-    'disable': '#B2B2B2',
-    'on_disable': '#000000',
-    'error': 'B3261E',
-    'on_error': '#FFB4AB'
-}
-
-current_path = sys.path[0].replace("\\","/")
-images_path = f'{current_path}/icons'
-
-# ------
-# Labels
-# ------
+# -----------
+# Image Label
+# -----------
 class MD3ImageLabel(QtWidgets.QLabel):
     def __init__(self, parent, attributes: dict) -> None:
-        """ Material Design 3 Component: Label
+        """ Material Design 3 Component: Image Label
 
         Parameters
         ----------
@@ -56,12 +21,13 @@ class MD3ImageLabel(QtWidgets.QLabel):
             name: str
                 Widget name
             position: tuple
-                Card position
+                Label position
                 (x, y) -> x, y: upper left corner
-            width: tuple
-                Card width
+            size: tuple
+                Label size
+                (w, h) -> w: width, h: height
             theme: bool
-                App theme ('item', 'value', 'icon', 'field')
+                App theme
                 True: Light theme, False: Dark theme
         
         Returns
@@ -71,38 +37,30 @@ class MD3ImageLabel(QtWidgets.QLabel):
         super(MD3ImageLabel, self).__init__(parent)
 
         self.attributes = attributes
+        self.parent = parent
 
         self.name = attributes['name']
         self.setObjectName(self.name)
 
         x, y = attributes['position'] if 'position' in attributes else (8,8)
-        w = attributes['width'] if 'width' in attributes else 32
-        self.setGeometry(x, y, w, 32)
+        w, h = attributes['size'] if 'size' in attributes else (96, 96)
+        self.setGeometry(x, y, w, h)
         
         self.setFrameStyle(QtWidgets.QFrame.Shape.Box)
 
-        self.apply_styleSheet(attributes['theme'])
+        self.setThemeStyle(attributes['theme'])
     
 
-    def apply_styleSheet(self, theme: bool) -> None:
+    def setThemeStyle(self, theme: bool) -> None:
         """ Apply theme style sheet to component """
-        if 'icon' in self.attributes:
-            if theme: self.setPixmap(QtGui.QIcon(f'{images_path}/{self.attributes["icon"]}_L.png').pixmap(24))
-            else: self.setPixmap(QtGui.QIcon(f'{images_path}/{self.attributes["icon"]}_D.png').pixmap(24))
-
-        if theme:
-            background_color = light["surface"]
-            color = light["on_surface"]
-        else:
-            background_color = dark["surface"]
-            color = dark["on_surface"]
+        
+        if self.parent.attributes['type'] == 'filled':
+            background_color = colors(theme, 'surface_tint')
+        elif self.parent.attributes['type'] == 'outlined':
+            background_color = colors(theme, 'background')
+        border_color = colors(theme, 'outline')
         
         self.setStyleSheet(f'QLabel#{self.name} {{ '
-                f'border: 1px solid {color};'
+                f'border: 1px solid {border_color};'
                 f'background-color: {background_color};'
                 f'}}' )
-
-
-    def language_text(self, language: int) -> None:
-        """ Change language of title text """
-        return 0
