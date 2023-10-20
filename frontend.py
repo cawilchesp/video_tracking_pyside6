@@ -1,57 +1,32 @@
-from PyQt6 import QtGui, QtWidgets, QtCore
-from PyQt6.QtWidgets import QWidget, QApplication, QStyle
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt, QThread, QSettings
+"""
+Main
+
+This file contains main UI class and methods to control components operations.
+"""
+
+from PySide6 import QtGui, QtWidgets
+from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtCore import QSettings
+from PySide6.QtGui import QPixmap
 
 import sys
 import pathlib
-import psycopg2
 import cv2
 import numpy as np
 
-from ui import UI
+from main_ui import UI
 
 import backend
-
 from backend import open_video
 from dialogs.about_app import AboutApp
 
-from yolor_class import YOLOR_DEEPSORT
 
 
 
 
-
-# # -------------
-# # Base de Datos
-# # -------------
-# connection = psycopg2.connect(user='postgres',
-#                               password='ecf406Carolina',
-#                               host='localhost',
-#                               port='5432',
-#                               database='video_annotator')
-# cursor = connection.cursor()
-
-# cursor.execute("""CREATE TABLE IF NOT EXISTS videos (
-#                 id serial PRIMARY KEY,
-#                 name VARCHAR(128) NOT NULL,
-#                 path VARCHAR(128) UNIQUE NOT NULL,
-#                 width INT NOT NULL,
-#                 height INT NOT NULL,
-#                 frame_count INT NOT NULL,
-#                 fps FLOAT NOT NULL,
-#                 is_calibrated BOOLEAN NOT NULL,
-#                 matrix VARCHAR(128) NOT NULL
-#                 )""")
-# connection.commit()
-
-# cursor.execute('SELECT * FROM videos')
-# recent_videos = cursor.fetchall()
-# connection.close()
-
-
-class App(QWidget):
+class MainWindow(QMainWindow):
     def __init__(self):
+        """ UI main application """
         super().__init__()
         # --------
         # Settings
@@ -61,16 +36,16 @@ class App(QWidget):
         self.theme_value = eval(self.settings.value('theme'))
         self.default_path = self.settings.value('default_path')
 
-        # ----------------
-        # Generación de UI
-        # ----------------
+        # ---
+        # GUI
+        # ---
         self.ui = UI(self)
 
 
-    # -----
-    # Title
-    # -----
-    def on_idioma_menu_currentIndexChanged(self, index: int) -> None:
+    # ---------------
+    # Title Functions
+    # ---------------
+    def on_language_changed(self, index: int) -> None:
         """ Language menu control to change components text language
         
         Parameters
@@ -82,90 +57,58 @@ class App(QWidget):
         -------
         None
         """
-        for key, value in self.ui.gui_widgets.items():
-            self.ui.gui_widgets[key].language_text(index)
+        for key in self.ui.gui_widgets.keys():
+            if hasattr(self.ui.gui_widgets[key], 'setLanguage'):
+                self.ui.gui_widgets[key].setLanguage(index)
 
         self.settings.setValue('language', str(index))
         self.language_value = int(self.settings.value('language'))
 
 
-
-    def on_tema_switch_light_clicked(self, state: bool) -> None:
-        """ Dark Theme switch control to change components stylesheet
+    def on_light_theme_clicked(self, state: bool) -> None:
+        """ Light theme segmented control to change components stylesheet
         
         Parameters
         ----------
         state: bool
-            State of theme switch control
+            State of light theme segmented control
         
         Returns
         -------
         None
         """
         if state: 
-            for key, value in self.ui.gui_widgets.items():
-                self.ui.gui_widgets[key].apply_styleSheet(True)
-            self.ui.gui_widgets['tema_switch_light'].set_state(True)
-            self.ui.gui_widgets['tema_switch_dark'].set_state(False)
-        
+            for key in self.ui.gui_widgets.keys():
+                self.ui.gui_widgets[key].setThemeStyle(True)
+            self.ui.gui_widgets['dark_theme_button'].setState(False, True)
+
             self.settings.setValue('theme', f'{True}')
             self.theme_value = eval(self.settings.value('theme'))
+        
+        self.ui.gui_widgets['light_theme_button'].setState(True, True)
 
 
-    def on_tema_switch_dark_clicked(self, state: bool) -> None:
-        """ Light Theme switch control to change components stylesheet
+    def on_dark_theme_clicked(self, state: bool) -> None:
+        """ Dark theme segmented control to change components stylesheet
         
         Parameters
         ----------
         state: bool
-            State of theme switch control
+            State of dark theme segmented control
         
         Returns
         -------
         None
         """
         if state: 
-            for key, value in self.ui.gui_widgets.items():
-                self.ui.gui_widgets[key].apply_styleSheet(False)
-            self.ui.gui_widgets['tema_switch_light'].set_state(False)
-            self.ui.gui_widgets['tema_switch_dark'].set_state(True)
-    
+            for key in self.ui.gui_widgets.keys():
+                self.ui.gui_widgets[key].setThemeStyle(False)
+            self.ui.gui_widgets['light_theme_button'].setState(False, False)
+
             self.settings.setValue('theme', f'{False}')
             self.theme_value = eval(self.settings.value('theme'))
 
-
-    # def on_database_button_clicked(self) -> None:
-    #     """ Database button to configure the database """
-    #     self.db_info = database.Database()
-    #     self.db_info.exec()
-        
-    #     if self.db_info.database_data:
-    #         self.patientes_list = backend.create_db('pacientes')
-    #         self.estudios_list = backend.create_db('estudios')
-
-    #         for data in self.patientes_list:
-    #             self.pacientes_menu.addItem(str(data[4]))
-    #         self.pacientes_menu.setCurrentIndex(-1)
-
-    #         self.pacientes_menu.setEnabled(True)
-    #         self.paciente_add_button.setEnabled(True)
-    #         self.paciente_edit_button.setEnabled(True)
-    #         self.paciente_del_button.setEnabled(True)
-
-    #         if self.language_value == 0:
-    #             QtWidgets.QMessageBox.information(self, 'Datos Guardados', 'Base de datos configurada')
-    #         elif self.language_value == 1:
-    #             QtWidgets.QMessageBox.information(self, 'Data Saved', 'Database configured')
-    #     else:
-    #         if self.language_value == 0:
-    #             QtWidgets.QMessageBox.critical(self, 'Error de Datos', 'No se dio información de la base de datos')
-    #         elif self.language_value == 1:
-    #             QtWidgets.QMessageBox.critical(self, 'Data Error', 'No information on the database was given')
-
-
-    def on_manual_button_clicked(self) -> None:
-        """ Manual button to open manual window """
-        return 0
+        self.ui.gui_widgets['dark_theme_button'].setState(True, False)
 
 
     def on_about_button_clicked(self) -> None:
@@ -174,34 +117,28 @@ class App(QWidget):
         self.about_app.exec()
 
 
-    def on_aboutQt_button_clicked(self) -> None:
-        """ About Qt button to open about Qt window dialog """
-        backend.about_qt_dialog(self, self.language_value)
-
-
     def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:
         """ Resize event to control size and position of app components """
         width = self.geometry().width()
         height = self.geometry().height()
 
-        self.ui.gui_widgets['titulo_card'].resize(width - 16, 48)
-        self.ui.gui_widgets['idioma_menu'].move(self.ui.gui_widgets['titulo_card'].width() - 300, 8)
-        self.ui.gui_widgets['tema_switch_light'].move(self.ui.gui_widgets['titulo_card'].width() - 220, 8)
-        self.ui.gui_widgets['tema_switch_dark'].move(self.ui.gui_widgets['titulo_card'].width() - 194, 8)
-        self.ui.gui_widgets['database_button'].move(self.ui.gui_widgets['titulo_card'].width() - 160, 8)
-        self.ui.gui_widgets['manual_button'].move(self.ui.gui_widgets['titulo_card'].width() - 120, 8)
-        self.ui.gui_widgets['about_button'].move(self.ui.gui_widgets['titulo_card'].width() - 80, 8)
-        self.ui.gui_widgets['aboutQt_button'].move(self.ui.gui_widgets['titulo_card'].width() - 40, 8)
+        self.ui.gui_widgets['title_bar_card'].resize(width - 16, 48)
+        self.ui.gui_widgets['language_menu'].move(width - 224, 8)
+        self.ui.gui_widgets['light_theme_button'].move(width - 144, 8)
+        self.ui.gui_widgets['dark_theme_button'].move(width - 104, 8)
+        self.ui.gui_widgets['about_button'].move(width - 56, 8)
 
-        self.ui.gui_widgets['video_toolbar_card'].resize(width - 412, 72)
+        self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
         self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 404, 32)
-        self.ui.gui_widgets['frame_value_text'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
-
-        self.ui.gui_widgets['video_output_card'].setGeometry(196, 144, width - 412, height - 152)
-        self.ui.gui_widgets['video_output_card'].title.resize(width - 204, 32)
-        self.ui.gui_widgets['video_label'].setGeometry(8, 48, self.ui.gui_widgets['video_output_card'].width() - 16, self.ui.gui_widgets['video_output_card'].height() - 56)
+        self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
+        self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 148)
+        self.ui.gui_widgets['video_label'].resize(self.ui.gui_widgets['video_output_card'].width() - 16, self.ui.gui_widgets['video_output_card'].height() - 56)
         
-        self.ui.gui_widgets['yolor_deepsort_card'].move(self.ui.gui_widgets['video_toolbar_card'].x() + self.ui.gui_widgets['video_toolbar_card'].width() + 8, self.ui.gui_widgets['titulo_card'].y() + self.ui.gui_widgets['titulo_card'].height() + 8)
+        
+        # self.ui.gui_widgets['parameters_XT_card'].move(width - 216, 64)
+        # self.ui.gui_widgets['parameters_YT_card'].move(width - 216, 200)
+        # self.ui.gui_widgets['parameters_XY_card'].move(width - 216, 336)
+        # self.ui.gui_widgets['areas_card'].move(width - 216, 472)
 
         return super().resizeEvent(a0)
 
@@ -209,28 +146,16 @@ class App(QWidget):
     # ------
     # Source
     # ------
-    def on_source_menu_textActivated(self, source: str) -> None:
-        self.ui.gui_widgets['source_add_button'].setEnabled(True)
-
-
     def on_source_add_button_clicked(self) -> None:
-        source = self.ui.gui_widgets['source_menu'].currentText()
-
-        if source == 'Webcam':
-            source_file = 0
-            self.ui.gui_widgets['source_icon'].set_icon('webcam', self.theme_value)
-            self.ui.gui_widgets['filename_value'].setText('')
-        elif source == 'Archivo de Video' or source == 'Video File':
-            source_file = QtWidgets.QFileDialog.getOpenFileName(None,
-                'Seleccione el archivo de video', self.default_path,
-                'Archivos de Video (*.mp4 *.avi *.mov)')[0]
-            self.ui.gui_widgets['source_icon'].set_icon('file_video', self.theme_value)
-            self.ui.gui_widgets['filename_value'].setText(source_file)
+        source_file = QtWidgets.QFileDialog.getOpenFileName(None,
+            'Seleccione el archivo de video', self.default_path,
+            'Archivos de Video (*.mp4 *.avi *.mov)')[0]
+        self.ui.gui_widgets['source_icon'].setIconLabel('file_video', self.theme_value)
+        self.ui.gui_widgets['filename_value'].setText(source_file)
 
         if source_file is not None:
             source_properties = open_video(source_file)
 
-            self.ui.gui_widgets['source_value'].setText(source)
             self.ui.gui_widgets['width_value'].setText(f"{source_properties['width']}")
             self.ui.gui_widgets['height_value'].setText(f"{source_properties['height']}")
             self.ui.gui_widgets['count_value'].setText(f"{source_properties['frame_count']}")
@@ -241,35 +166,35 @@ class App(QWidget):
 
             # Presentación del frame 0
             self.ui.gui_widgets['video_label'].setPixmap(source_properties['first_frame'])
-            self.ui.gui_widgets['frame_value_text'].text_field.setText('0')
+            self.ui.gui_widgets['frame_value_textfield'].text_field.setText('0')
 
-            # YOLOR - DeepSORT Settings
-            yolor_options = {
-                'cfg': self.ui.gui_widgets['model_configuration_menu'].currentText(),
-                'weights': self.ui.gui_widgets['model_weights_menu'].currentText(),
-                'names_file': self.ui.gui_widgets['names_menu'].currentText(),
-                'inference_size': int(self.ui.gui_widgets['size_menu'].currentText()),
-                'use_gpu': True if self.ui.gui_widgets['gpu_menu'].currentText() == 'GPU' else False
-            }
+            # # YOLOR - DeepSORT Settings
+            # yolor_options = {
+            #     'cfg': self.ui.gui_widgets['model_configuration_menu'].currentText(),
+            #     'weights': self.ui.gui_widgets['model_weights_menu'].currentText(),
+            #     'names_file': self.ui.gui_widgets['names_menu'].currentText(),
+            #     'inference_size': int(self.ui.gui_widgets['size_menu'].currentText()),
+            #     'use_gpu': True if self.ui.gui_widgets['gpu_menu'].currentText() == 'GPU' else False
+            # }
 
-            video_options = {
-                'source': source_file,
-                'output': "D:\Data\Videos_Bogotá\ouput",
-                'view_image': True,
-                'save_text': True if self.ui.gui_widgets['save_switch_on'].isChecked() else False,
-                'frame_save': int(self.ui.gui_widgets['frame_save_text'].text_field.text()),
-                'trail': int(self.ui.gui_widgets['trail_text'].text_field.text()),
-                'class_filter': [0,1,2,3,5,7], # Based on coco.names
-                'show_boxes': True,
-                'show_trajectories': True,
-                'save_video': True if self.ui.gui_widgets['save_switch_on'].isChecked() else False
-            }
-            # presentar video en Label
-            # detección solo en imágenes
-            # tomar frame del video y sacar frame procesado
+            # video_options = {
+            #     'source': source_file,
+            #     'output': "D:\Data\Videos_Bogotá\ouput",
+            #     'view_image': True,
+            #     'save_text': True if self.ui.gui_widgets['save_switch_on'].isChecked() else False,
+            #     'frame_save': int(self.ui.gui_widgets['frame_save_text'].text_field.text()),
+            #     'trail': int(self.ui.gui_widgets['trail_text'].text_field.text()),
+            #     'class_filter': [0,1,2,3,5,7], # Based on coco.names
+            #     'show_boxes': True,
+            #     'show_trajectories': True,
+            #     'save_video': True if self.ui.gui_widgets['save_switch_on'].isChecked() else False
+            # }
+            # # presentar video en Label
+            # # detección solo en imágenes
+            # # tomar frame del video y sacar frame procesado
 
-            yolor = YOLOR_DEEPSORT(yolor_options, video_options)
-            yolor.detect()
+            # yolor = YOLOR_DEEPSORT(yolor_options, video_options)
+            # yolor.detect()
 
 
 
@@ -280,62 +205,69 @@ class App(QWidget):
     # -------
     # Classes
     # -------
-    def on_classes_menu_textActivated(self, class_name: str) -> None:
-        return 0
-
-
-    def on_color_button_clicked(self) -> None:
-        selected_color = QtWidgets.QColorDialog.getColor()
-        color = f'{selected_color.red()}, {selected_color.green()}, {selected_color.blue()}'
-        # self.color_button.style_sheet(theme_value, color)
-        # settings.setValue('color', color)
-        
-        return 0
+    def on_person_button_clicked(self) -> None:
+        return None
+    
+    def on_bicycle_button_clicked(self) -> None:
+        return None
+    
+    def on_car_button_clicked(self) -> None:
+        return None
+    
+    def on_motorcycle_button_clicked(self) -> None:
+        return None
+    
+    def on_bus_button_clicked(self) -> None:
+        return None
+    
+    def on_truck_button_clicked(self) -> None:
+        return None
 
 
     # -------------
     # Video Toolbar
     # -------------
     def on_slow_button_clicked(self) -> None:
-        return 0
+        return None
 
 
     def on_backFrame_button_clicked(self) -> None:
-        return 0
+        return None
 
 
     def on_reverse_button_clicked(self) -> None:
-        return 0
+        return None
 
 
     def on_pause_button_clicked(self) -> None:
-        return 0
+        return None
 
 
     def on_play_button_clicked(self) -> None:
-        return 0
+        return None
 
 
     def on_frontFrame_button_clicked(self) -> None:
-        return 0
+        return None
 
 
     def on_fast_button_clicked(self) -> None:
-        return 0
+        return None
 
 
     def on_video_slider_sliderMoved(self):
-        self.ui.gui_widgets['frame_value_text'].text_field.setText(str(self.ui.gui_widgets['video_slider'].value()))
+        self.ui.gui_widgets['frame_value_textfield'].text_field.setText(str(self.ui.gui_widgets['video_slider'].value()))
 
 
     def on_video_slider_sliderReleased(self):
         # backend.set_PTZ(self.pan_edit.text(), self.tilt_edit.text(), self.zoom_edit.text(), 
         #                 self.ipaddress_combobox.currentText(), self.user_edit.text(), 
         #                 self.password_edit.text())
-        return 0
+        return None
 
 
-
+    def on_frame_value_textfield_returnPressed(self):
+        self.ui.gui_widgets['video_slider'].setSliderPosition(int(self.ui.gui_widgets['frame_value_textfield'].text_field.text()))
 
 
     # -----------------
@@ -474,6 +406,6 @@ class App(QWidget):
 
 if __name__=="__main__":
     app = QApplication(sys.argv)
-    a = App()
-    a.show()
+    window = MainWindow()
+    window.show()
     sys.exit(app.exec())
