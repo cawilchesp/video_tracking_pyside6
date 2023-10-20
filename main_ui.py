@@ -427,6 +427,7 @@ class UI(QWidget):
         self.gui_widgets['video_label'] = MD3ImageLabel(self.gui_widgets['video_output_card'], {
             'name': 'video_label',
             'position': (8, 48),
+            'scaled_image': True,
             'theme': self.theme_value } )
         
         # # ----------------------
