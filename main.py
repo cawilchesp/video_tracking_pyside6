@@ -15,13 +15,14 @@ import supervision as sv
 import sys
 import pathlib
 import yaml
+from collections import deque
 
 import cv2
 
 from main_ui import UI
 from dialogs.about_app import AboutApp
 
-from tools.annotators import box_annotations, mask_annotations
+from tools.annotators import box_annotations, mask_annotations, track_annotations
 from tools.write_csv import csv_detections_list, write_csv
 
 # For debugging
@@ -68,10 +69,18 @@ class MainWindow(QMainWindow):
             'truck': [False, 7]
         }
 
+        # object tracks
+        self.track_deque = {}
+
         # ---------------------
         # YOLOv8 Initialization
         # ---------------------
-        self.model = YOLO('weights/yolov8x.pt')
+        self.yolov8_model = YOLO('weights/yolov8m-seg.pt')
+
+        # -----------------------
+        # Initialize Byte Tracker
+        # -----------------------
+        self.byte_tracker = sv.ByteTrack()
 
 
         # ---
@@ -333,12 +342,12 @@ class MainWindow(QMainWindow):
     # Functions
     # ---------
     def convert_cv_qt(self, cv_img):
-            """Convert from an opencv image to QPixmap"""
-            rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
-            h, w, ch = rgb_image.shape
-            bytes_per_line = ch * w
-            convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format.Format_RGB888)
-            return QPixmap.fromImage(convert_to_qt_format)
+        """Convert from an opencv image to QPixmap"""
+        rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
+        h, w, ch = rgb_image.shape
+        bytes_per_line = ch * w
+        convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format.Format_RGB888)
+        return QPixmap.fromImage(convert_to_qt_format)
 
 
     def draw_frame(self):
@@ -349,24 +358,37 @@ class MainWindow(QMainWindow):
         class_filter = [ value[1] for value in self.class_options.values() if value[0] ]
         
         # Run YOLOv8 inference
-        results = self.model(
+        results = self.yolov8_model(
             source=image,
             imgsz=640,
             conf=0.5,
             device=0,
             agnostic_nms=True,
             classes=class_filter,
-            # retina_masks=True,
+            retina_masks=True,
             verbose=False
         )[0]
 
         detections = sv.Detections.from_ultralytics(results)
 
-        # Visualization
-        labels = [f"{results.names[class_id]} - {score:.2f}" for _, _, score, class_id, _ in detections]
+        tracks = self.byte_tracker.update_with_detections(detections)
+
+        for track in tracks:
+            if track[4] not in self.track_deque:
+                self.track_deque[track[4]] = deque(maxlen=64)
+
+        # Draw labels
+        labels = [f"{results.names[class_id]} - {tracker_id}" for _, _, _, class_id, tracker_id in tracks]
 
         # Draw boxes
-        annotated_image = box_annotations(annotated_image, detections, labels)
+        annotated_image = box_annotations(annotated_image, tracks, labels)
+
+        # Draw masks
+        # if tracks.mask is not None:
+        annotated_image = mask_annotations(annotated_image, tracks)
+        
+        # Draw tracks
+        annotated_image = track_annotations(annotated_image, tracks, self.track_deque, 'centroid')
 
         qt_image = self.convert_cv_qt(annotated_image)
         self.ui.gui_widgets['video_label'].setPixmap(qt_image)
