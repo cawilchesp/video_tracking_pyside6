@@ -1,7 +1,4 @@
-from PySide6 import QtGui, QtWidgets, QtCore
-from PySide6.QtWidgets import QWidget, QApplication
-from PySide6.QtCore import QSettings, Qt, QRegularExpression
-from PySide6.QtGui import QRegularExpressionValidator
+from PySide6.QtWidgets import QWidget
 
 from components.md3_window import MD3Window
 from components.md3_card import MD3Card
@@ -15,6 +12,7 @@ from components.md3_imagelabel import MD3ImageLabel
 from components.md3_segmentedbutton import MD3SegmentedButton
 
 import sys
+import yaml
 
 
 class UI(QWidget):
@@ -24,9 +22,12 @@ class UI(QWidget):
         # --------
         # Settings
         # --------
-        self.settings = QSettings(f'{sys.path[0]}/settings.ini', QSettings.Format.IniFormat)
-        self.language_value = int(self.settings.value('language'))
-        self.theme_value = eval(self.settings.value('theme'))
+        with open('settings.yaml', 'r') as file:
+            self.config = yaml.safe_load(file)
+
+        self.language_value = int(self.config['LANGUAGE'])
+        self.theme_value = self.config['THEME']
+        self.default_folder = self.config['FOLDER']
 
         
 
