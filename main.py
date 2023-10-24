@@ -12,20 +12,17 @@ from PySide6.QtGui import QPixmap
 from ultralytics import YOLO
 import supervision as sv
 
-import yaml
 import sys
 import pathlib
+import yaml
+
 import cv2
-import numpy as np
 
 from main_ui import UI
-
 from dialogs.about_app import AboutApp
 
-from tools.print_info import print_video_info, step_message
 from tools.annotators import box_annotations, mask_annotations
 from tools.write_csv import csv_detections_list, write_csv
-
 
 # For debugging
 from icecream import ic
@@ -38,18 +35,22 @@ class MainWindow(QMainWindow):
         # --------
         # Settings
         # --------
-        with open('settings.yaml', 'r') as file:
+        self.settings_file = 'settings.yaml'
+        with open(self.settings_file, 'r') as file:
             self.config = yaml.safe_load(file)
 
+        self.default_folder = self.config['FOLDER']
         self.language_value = int(self.config['LANGUAGE'])
         self.theme_value = self.config['THEME']
-        self.default_folder = self.config['FOLDER']
 
         # ---------
         # Variables
         # ---------
         self.cap = None
-        self.source_properties = None
+        self.video_width = None
+        self.video_height = None
+        self.video_total_frames = None
+        self.video_fps = None
         self.aspect_ratio = 1.0
 
         self.timer_play = None
@@ -57,7 +58,6 @@ class MainWindow(QMainWindow):
 
         self.time_step = 0
         self.frame_number = 0
-        self.speed_multiplier = 1
 
         self.class_options = {
             'person': [False, 0],
@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
         # ---------------------
         # YOLOv8 Initialization
         # ---------------------
-        self.model = YOLO('weights/yolov8n.pt')
+        self.model = YOLO('weights/yolov8x.pt')
 
 
         # ---
@@ -101,7 +101,7 @@ class MainWindow(QMainWindow):
         
         self.language_value = index
         self.config['LANGUAGE'] = index
-        with open('settings.yaml', 'w') as file:
+        with open(self.settings_file, 'w') as file:
             yaml.dump(self.config, file)
 
 
@@ -124,7 +124,7 @@ class MainWindow(QMainWindow):
 
             self.theme_value = True
             self.config['THEME'] = True
-            with open('settings.yaml', 'w') as file:
+            with open(self.settings_file, 'w') as file:
                 yaml.dump(self.config, file)            
         
         self.ui.gui_widgets['light_theme_button'].setState(True, True)
@@ -149,7 +149,7 @@ class MainWindow(QMainWindow):
 
             self.theme_value = False
             self.config['THEME'] = False
-            with open('settings.yaml', 'w') as file:
+            with open(self.settings_file, 'w') as file:
                 yaml.dump(self.config, file)   
 
         self.ui.gui_widgets['dark_theme_button'].setState(True, False)
@@ -173,59 +173,85 @@ class MainWindow(QMainWindow):
         self.ui.gui_widgets['about_button'].move(width - 56, 8)
 
         self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
-        self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 404, 32)
+        self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
         self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
+
         self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 148)
-        self.ui.gui_widgets['video_label'].resize((self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio, self.ui.gui_widgets['video_output_card'].height() - 56)
+
+        frame_width = (self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio
+        frame_height = self.ui.gui_widgets['video_output_card'].height() - 56
+        if frame_width > self.ui.gui_widgets['video_output_card'].width() - 16:
+            frame_width = self.ui.gui_widgets['video_output_card'].width() - 16
+            frame_height = frame_width / self.aspect_ratio
+        self.ui.gui_widgets['video_label'].resize(frame_width, frame_height)
 
         return super().resizeEvent(a0)
+    
+
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        if self.cap.isOpened():
+            self.cap.release()
+
+        return super().closeEvent(a0)
 
 
     # ------
     # Source
     # ------
     def on_source_add_button_clicked(self) -> None:
-        source_file = QtWidgets.QFileDialog.getOpenFileName(None,
-            'Seleccione el archivo de video', self.default_folder,
-            'Archivos de Video (*.mp4 *.avi *.mov)')[0]
-        self.ui.gui_widgets['source_icon'].setIconLabel('file_video', self.theme_value)
-        self.ui.gui_widgets['filename_value'].setText(source_file)
-
+        source_file = QtWidgets.QFileDialog.getOpenFileName(
+            None,
+            'Seleccione el archivo de video',
+            self.default_folder,
+            'Archivos de Video (*.mp4 *.avi *.mov)'
+        )[0]
+        
         if source_file is not None:
             # Save folder in settings
             self.config['FOLDER'] = str(pathlib.Path(source_file).parent)
-            with open('settings.yaml', 'w') as file:
+            with open(self.settings_file, 'w') as file:
                 yaml.dump(self.config, file)
 
             # Open video
             self.cap = cv2.VideoCapture(source_file)
-            self.source_properties = self.open_video()
-            self.time_step = int(1000 / self.source_properties['fps'])
+            if self.cap.isOpened():
+                _, image = self.cap.read()
 
-            # Timers
-            self.timer_play = QTimer()
-            self.timer_play.timeout.connect(self.play_forward)
-            self.timer_reverse = QTimer()
-            self.timer_reverse.timeout.connect(self.play_backward)
+                # Video properties
+                self.video_width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+                self.video_height = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+                self.video_total_frames = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+                self.video_fps = float(self.cap.get(cv2.CAP_PROP_FPS))
+                
+                self.aspect_ratio = float(self.video_width / self.video_height)
+                self.time_step = int(1000 / self.video_fps)
 
-            # Write results in GUI
-            self.ui.gui_widgets['size_value'].setText(f"{self.source_properties['width']} X {self.source_properties['height']}")
-            self.ui.gui_widgets['total_frames_value'].setText(f"{self.source_properties['total_frames']}")
-            self.ui.gui_widgets['fps_value'].setText(f"{self.source_properties['fps']:.2f}")
+                # Timers
+                self.timer_play = QTimer()
+                self.timer_play.timeout.connect(self.play_forward)
+                self.timer_reverse = QTimer()
+                self.timer_reverse.timeout.connect(self.play_backward)
 
-            self.ui.gui_widgets['video_slider'].setEnabled(True)
-            self.ui.gui_widgets['video_slider'].setMaximum(self.source_properties['total_frames'])
+                # Write results in GUI
+                self.ui.gui_widgets['source_icon'].setIconLabel('file_video', self.theme_value)
+                self.ui.gui_widgets['filename_value'].setText(f"{pathlib.Path(source_file).name}")
+                self.ui.gui_widgets['size_value'].setText(f"{int(self.video_width)} X {int(self.video_height)}")
+                self.ui.gui_widgets['total_frames_value'].setText(f"{self.video_total_frames}")
+                self.ui.gui_widgets['fps_value'].setText(f"{self.video_fps:.2f}")
 
-            # Showing first frame
-            self.ui.gui_widgets['video_label'].setPixmap(self.source_properties['first_frame'])
-            self.ui.gui_widgets['frame_value_textfield'].text_field.setText(f"{self.frame_number}")
-            
-            # Frame aspect ratio
-            self.ui.gui_widgets['video_label'].resize((self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio, self.ui.gui_widgets['video_output_card'].height() - 56)
+                self.ui.gui_widgets['video_slider'].setEnabled(True)
+                self.ui.gui_widgets['video_slider'].setMaximum(self.video_total_frames)
+
+                # Showing first frame
+                self.ui.gui_widgets['video_label'].setPixmap(self.convert_cv_qt(image))
+                self.ui.gui_widgets['frame_value_textfield'].text_field.setText(f"{self.frame_number}")
+                
+                # Frame aspect ratio
+                self.ui.gui_widgets['video_label'].resize((self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio, self.ui.gui_widgets['video_output_card'].height() - 56)
+            else:
+                print('Error opening video stream or file')
 
 
-            
-            
     # -------
     # Classes
     # -------
@@ -262,56 +288,45 @@ class MainWindow(QMainWindow):
     # -------------
     # Video Toolbar
     # -------------
-    def on_slow_button_clicked(self) -> None:
-        return None
-
-
     def on_backFrame_button_clicked(self) -> None:
-        return None
+        if self.timer_play.isActive(): self.timer_play.stop()
+        if self.timer_reverse.isActive(): self.timer_reverse.stop()
+        self.play_backward()
 
 
     def on_reverse_button_clicked(self) -> None:
-        if self.timer_play.isActive():
-            self.timer_play.stop()
+        if self.timer_play.isActive(): self.timer_play.stop()
         self.timer_reverse.start(self.time_step)
 
 
     def on_pause_button_clicked(self) -> None:
-        if self.timer_play.isActive():
-            self.timer_play.stop()
-        else:
-            self.timer_reverse.stop()
+        self.timer_play.stop() if self.timer_play.isActive() else self.timer_reverse.stop()
 
 
     def on_play_button_clicked(self) -> None:
-        if self.timer_reverse.isActive():
-            self.timer_reverse.stop()
+        if self.timer_reverse.isActive(): self.timer_reverse.stop()
         self.timer_play.start(self.time_step)
 
 
     def on_frontFrame_button_clicked(self) -> None:
-        return None
-
-
-    def on_fast_button_clicked(self) -> None:
-        return None
+        if self.timer_play.isActive(): self.timer_play.stop()
+        if self.timer_reverse.isActive(): self.timer_reverse.stop()
+        self.play_forward()
 
 
     def on_video_slider_sliderMoved(self) -> None:
-        self.ui.gui_widgets['frame_value_textfield'].text_field.setText(str(self.ui.gui_widgets['video_slider'].value()))
-
+        self.frame_number = self.ui.gui_widgets['video_slider'].value()
+        self.ui.gui_widgets['frame_value_textfield'].text_field.setText(f"{self.frame_number}")
+        
 
     def on_video_slider_sliderReleased(self) -> None:
-        return None
+        self.draw_frame()
 
 
     def on_frame_value_textfield_returnPressed(self) -> None:
-        self.ui.gui_widgets['video_slider'].setSliderPosition(int(self.ui.gui_widgets['frame_value_textfield'].text_field.text()))
-
-
-
-
-
+        self.frame_number = int(self.ui.gui_widgets['frame_value_textfield'].text_field.text())
+        self.ui.gui_widgets['video_slider'].setSliderPosition(self.frame_number)
+        self.draw_frame()
 
 
     # ---------
@@ -324,26 +339,6 @@ class MainWindow(QMainWindow):
             bytes_per_line = ch * w
             convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format.Format_RGB888)
             return QPixmap.fromImage(convert_to_qt_format)
-
-
-    def open_video(self) -> dict:
-        if not self.cap.isOpened():
-            print('Error opening video stream or file')
-            return 0
-
-        _, image = self.cap.read()
-
-        video_properties = {
-            'width': int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-            'height': int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
-            'total_frames': int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT)),
-            'fps': float(self.cap.get(cv2.CAP_PROP_FPS)),
-            'first_frame': self.convert_cv_qt(image)
-        }
-
-        self.aspect_ratio = float(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH) / self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
-        return video_properties
 
 
     def draw_frame(self):
@@ -378,8 +373,8 @@ class MainWindow(QMainWindow):
 
 
     def play_forward(self):
-        if (self.frame_number <= self.source_properties['total_frames']):
-            self.frame_number = self.frame_number + self.speed_multiplier
+        if (self.frame_number <= self.video_total_frames):
+            self.frame_number += 1
             self.draw_frame()
 
             self.ui.gui_widgets['video_slider'].setValue(self.frame_number)
@@ -388,7 +383,7 @@ class MainWindow(QMainWindow):
 
     def play_backward(self):
         if (self.frame_number > 0):
-            self.frame_number = self.frame_number - self.speed_multiplier
+            self.frame_number -= 1
             self.draw_frame()
 
             self.ui.gui_widgets['video_slider'].setValue(self.frame_number)
