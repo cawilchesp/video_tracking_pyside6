@@ -75,7 +75,7 @@ class MainWindow(QMainWindow):
         # ---------------------
         # YOLOv8 Initialization
         # ---------------------
-        self.yolov8_model = YOLO('weights/yolov8m-seg.pt')
+        self.yolov8_model = YOLO('weights/yolov8m.pt')
 
         # -----------------------
         # Initialize Byte Tracker
@@ -384,8 +384,8 @@ class MainWindow(QMainWindow):
         annotated_image = box_annotations(annotated_image, tracks, labels)
 
         # Draw masks
-        # if tracks.mask is not None:
-        annotated_image = mask_annotations(annotated_image, tracks)
+        if detections.mask is not None:
+            annotated_image = mask_annotations(annotated_image, detections)
         
         # Draw tracks
         annotated_image = track_annotations(annotated_image, tracks, self.track_deque, 'centroid')
