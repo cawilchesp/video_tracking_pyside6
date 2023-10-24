@@ -1,7 +1,6 @@
-from PySide6 import QtWidgets, QtGui
-from PySide6.QtCore import Qt, QSettings
+from PySide6 import QtWidgets
 
-import sys
+import yaml
 
 from components.md3_window import MD3Window
 from components.md3_card import MD3Card
@@ -20,26 +19,28 @@ class AboutApp(QtWidgets.QDialog):
         # --------
         # Settings
         # --------
-        self.settings = QSettings(f'{sys.path[0]}/settings.ini', QSettings.Format.IniFormat)
-        self.language_value = int(self.settings.value('language'))
-        self.theme_value = eval(self.settings.value('theme'))
+        with open('settings.yaml', 'r') as file:
+            self.config = yaml.safe_load(file)
+
+        self.language_value = int(self.config['LANGUAGE'])
+        self.theme_value = self.config['THEME']
+        self.default_folder = self.config['FOLDER']
 
         self.aboutapp_widgets = {}
 
 
-        # -----------
-        # Main Window
-        # -----------
+        # -------------
+        # Dialog Window
+        # -------------
         (width, height) = (320, 408)
         self.aboutapp_widgets['main_window'] = MD3Window( {
             'parent': self, 
             'size': (width, height),
+            'minimum_size': (width, height),
+            'maximum_size': (width, height),
             'labels': ('Acerca de...','About...'),
             'theme': self.theme_value, 
             'language': self.language_value } )
-        self.setMaximumSize(width, height)
-        self.setMinimumSize(width, height)
-
 
         # -----------
         # Card Dialog
@@ -48,8 +49,9 @@ class AboutApp(QtWidgets.QDialog):
             'name': 'aboutapp_dialog_card',
             'position': (8, 8),
             'size': (width-16, height-16),
-            'theme': self.theme_value,
+            'type': 'filled',
             'labels': ('Seguidor de Objetos en Video', 'Video Object Tracker'), 
+            'theme': self.theme_value,
             'language': self.language_value } )
 
         self.aboutapp_widgets['version_label'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
@@ -159,13 +161,13 @@ class AboutApp(QtWidgets.QDialog):
         # ---------
         self.aboutapp_widgets['ok_button'] = MD3Button(self.aboutapp_widgets['aboutapp_dialog_card'], {
             'name': 'ok_button',
-            'position': (self.aboutapp_widgets['aboutapp_dialog_card'].width() - 108, self.aboutapp_widgets['aboutapp_dialog_card'].height() - 40),
+            'position': (width - 124, height - 56),
             'width': 100,
             'type': 'text',
             'labels': ('Aceptar', 'Ok'),
             'theme': self.theme_value,
-            'language': self.language_value } )
-        self.aboutapp_widgets['ok_button'].clicked.connect(self.on_ok_button_clicked)
+            'language': self.language_value,
+            'clicked': self.on_ok_button_clicked } )
 
 
     def on_ok_button_clicked(self):
