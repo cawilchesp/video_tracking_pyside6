@@ -206,9 +206,10 @@ class MainWindow(QMainWindow):
     
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
-        self.timer_play.stop() if self.timer_play.isActive() else self.timer_reverse.stop()
-        if self.cap.isOpened():
-            self.cap.release()
+        if self.timer_play is not None and self.timer_reverse is not None and self.cap is not None:
+            self.timer_play.stop() if self.timer_play.isActive() else self.timer_reverse.stop()
+            if self.cap.isOpened():
+                self.cap.release()
 
         return super().closeEvent(a0)
 
