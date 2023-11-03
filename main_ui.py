@@ -5,7 +5,6 @@ from components.md3_card import MD3Card
 from components.md3_menu import MD3Menu
 from components.md3_iconbutton import MD3IconButton
 from components.md3_chip import MD3Chip
-from components.md3_switch import MD3Switch
 from components.md3_label import MD3Label
 from components.md3_textfield import MD3TextField
 from components.md3_slider import MD3Slider
@@ -321,4 +320,3 @@ class UI(QWidget):
         self.gui_widgets['video_label'] = MD3ImageLabel(self.gui_widgets['video_output_card'], {
             'position': (8, 48),
             'scaled_image': True } )
-        
