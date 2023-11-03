@@ -72,16 +72,9 @@ class MainWindow(QMainWindow):
         # object tracks
         self.track_deque = {}
 
-        # ---------------------
-        # YOLOv8 Initialization
-        # ---------------------
-        # self.yolov8_model = YOLO('weights/yolov8m.pt')
-
-        # -----------------------
-        # Initialize Byte Tracker
-        # -----------------------
-        # self.byte_tracker = sv.ByteTrack()
-
+        # Detector and Tracker
+        self.yolov8_model = None
+        self.byte_tracker = None
 
         # ---
         # GUI
@@ -140,8 +133,8 @@ class MainWindow(QMainWindow):
             self.ui.gui_widgets['dark_theme_button'].set_state(False, self.theme_color)
 
             # Save settings
-            self.theme_value = True
-            self.config['THEME'] = True
+            self.theme_style = True
+            self.config['THEME_STYLE'] = True
             with open(self.settings_file, 'w') as file:
                 yaml.dump(self.config, file)            
         
@@ -171,8 +164,8 @@ class MainWindow(QMainWindow):
             self.ui.gui_widgets['light_theme_button'].set_state(False, self.theme_color)
 
             # Save settings
-            self.theme_value = False
-            self.config['THEME'] = False
+            self.theme_style = False
+            self.config['THEME_STYLE'] = False
             with open(self.settings_file, 'w') as file:
                 yaml.dump(self.config, file)   
 
@@ -213,6 +206,7 @@ class MainWindow(QMainWindow):
     
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.timer_play.stop() if self.timer_play.isActive() else self.timer_reverse.stop()
         if self.cap.isOpened():
             self.cap.release()
 
@@ -236,6 +230,12 @@ class MainWindow(QMainWindow):
             with open(self.settings_file, 'w') as file:
                 yaml.dump(self.config, file)
 
+            # YOLOv8 Initialization
+            self.yolov8_model = YOLO('weights/yolov8m.pt')
+
+            # Initialize Byte Tracker
+            self.byte_tracker = sv.ByteTrack()
+
             # Open video
             self.cap = cv2.VideoCapture(source_file)
             if self.cap.isOpened():
@@ -257,7 +257,7 @@ class MainWindow(QMainWindow):
                 self.timer_reverse.timeout.connect(self.play_backward)
 
                 # Write results in GUI
-                self.ui.gui_widgets['source_icon'].setIconLabel('file_video', self.theme_value)
+                self.ui.gui_widgets['source_icon'].set_icon_label('file_video', self.theme_color)
                 self.ui.gui_widgets['filename_value'].setText(f"{pathlib.Path(source_file).name}")
                 self.ui.gui_widgets['size_value'].setText(f"{int(self.video_width)} X {int(self.video_height)}")
                 self.ui.gui_widgets['total_frames_value'].setText(f"{self.video_total_frames}")
