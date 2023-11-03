@@ -3,7 +3,6 @@ Main
 
 This file contains main UI class and methods to control components operations.
 """
-
 from PySide6 import QtGui, QtWidgets
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtCore import QTimer
@@ -42,7 +41,8 @@ class MainWindow(QMainWindow):
 
         self.default_folder = self.config['FOLDER']
         self.language_value = int(self.config['LANGUAGE'])
-        self.theme_value = self.config['THEME']
+        self.theme_style = self.config['THEME_STYLE']
+        self.theme_color = self.config['THEME_COLOR']
 
         # ---------
         # Variables
@@ -75,18 +75,21 @@ class MainWindow(QMainWindow):
         # ---------------------
         # YOLOv8 Initialization
         # ---------------------
-        self.yolov8_model = YOLO('weights/yolov8m.pt')
+        # self.yolov8_model = YOLO('weights/yolov8m.pt')
 
         # -----------------------
         # Initialize Byte Tracker
         # -----------------------
-        self.byte_tracker = sv.ByteTrack()
+        # self.byte_tracker = sv.ByteTrack()
 
 
         # ---
         # GUI
         # ---
         self.ui = UI(self)
+        theme_file = f"themes/{self.theme_color}_light_theme.qss" if self.theme_style else f"themes/{self.theme_color}_dark_theme.qss"
+        with open(theme_file, "r") as theme_qss:
+            self.setStyleSheet(theme_qss.read())
 
 
     # ---------------
@@ -106,7 +109,7 @@ class MainWindow(QMainWindow):
         """
         for key in self.ui.gui_widgets.keys():
             if hasattr(self.ui.gui_widgets[key], 'setLanguage'):
-                self.ui.gui_widgets[key].setLanguage(index)
+                self.ui.gui_widgets[key].set_language(index)
         
         self.language_value = index
         self.config['LANGUAGE'] = index
@@ -177,22 +180,22 @@ class MainWindow(QMainWindow):
 
         self.ui.gui_widgets['title_bar_card'].resize(width - 16, 48)
         self.ui.gui_widgets['language_menu'].move(width - 224, 8)
-        self.ui.gui_widgets['light_theme_button'].move(width - 144, 8)
-        self.ui.gui_widgets['dark_theme_button'].move(width - 104, 8)
-        self.ui.gui_widgets['about_button'].move(width - 56, 8)
+        # self.ui.gui_widgets['light_theme_button'].move(width - 144, 8)
+        # self.ui.gui_widgets['dark_theme_button'].move(width - 104, 8)
+        # self.ui.gui_widgets['about_button'].move(width - 56, 8)
 
-        self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
-        self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
-        self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
+        # self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
+        # self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
+        # self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
 
-        self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 148)
+        # self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 148)
 
-        frame_width = (self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio
-        frame_height = self.ui.gui_widgets['video_output_card'].height() - 56
-        if frame_width > self.ui.gui_widgets['video_output_card'].width() - 16:
-            frame_width = self.ui.gui_widgets['video_output_card'].width() - 16
-            frame_height = frame_width / self.aspect_ratio
-        self.ui.gui_widgets['video_label'].resize(frame_width, frame_height)
+        # frame_width = (self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio
+        # frame_height = self.ui.gui_widgets['video_output_card'].height() - 56
+        # if frame_width > self.ui.gui_widgets['video_output_card'].width() - 16:
+        #     frame_width = self.ui.gui_widgets['video_output_card'].width() - 16
+        #     frame_height = frame_width / self.aspect_ratio
+        # self.ui.gui_widgets['video_label'].resize(frame_width, frame_height)
 
         return super().resizeEvent(a0)
     
