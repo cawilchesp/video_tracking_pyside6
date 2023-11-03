@@ -108,7 +108,7 @@ class MainWindow(QMainWindow):
         None
         """
         for key in self.ui.gui_widgets.keys():
-            if hasattr(self.ui.gui_widgets[key], 'setLanguage'):
+            if hasattr(self.ui.gui_widgets[key], 'set_language'):
                 self.ui.gui_widgets[key].set_language(index)
         
         self.language_value = index
@@ -129,17 +129,23 @@ class MainWindow(QMainWindow):
         -------
         None
         """
-        if state: 
-            for key in self.ui.gui_widgets.keys():
-                self.ui.gui_widgets[key].setThemeStyle(True)
-            self.ui.gui_widgets['dark_theme_button'].setState(False, True)
+        if state:
+            with open(f"themes/{self.theme_color}_light_theme.qss", "r") as theme_qss:
+                self.setStyleSheet(theme_qss.read())
 
+            for key in self.ui.gui_widgets.keys():
+                if hasattr(self.ui.gui_widgets[key], 'set_state'):
+                    self.ui.gui_widgets[key].set_state(self.ui.gui_widgets[key].isChecked(), self.theme_color)
+
+            self.ui.gui_widgets['dark_theme_button'].set_state(False, self.theme_color)
+
+            # Save settings
             self.theme_value = True
             self.config['THEME'] = True
             with open(self.settings_file, 'w') as file:
                 yaml.dump(self.config, file)            
         
-        self.ui.gui_widgets['light_theme_button'].setState(True, True)
+        self.ui.gui_widgets['light_theme_button'].set_state(True, self.theme_color)
 
 
     def on_dark_theme_clicked(self, state: bool) -> None:
@@ -154,17 +160,23 @@ class MainWindow(QMainWindow):
         -------
         None
         """
-        if state: 
-            for key in self.ui.gui_widgets.keys():
-                self.ui.gui_widgets[key].setThemeStyle(False)
-            self.ui.gui_widgets['light_theme_button'].setState(False, False)
+        if state:
+            with open(f"themes/{self.theme_color}_dark_theme.qss", "r") as theme_qss:
+                self.setStyleSheet(theme_qss.read())
 
+            for key in self.ui.gui_widgets.keys():
+                if hasattr(self.ui.gui_widgets[key], 'set_state'):
+                    self.ui.gui_widgets[key].set_state(self.ui.gui_widgets[key].isChecked(), self.theme_color)
+
+            self.ui.gui_widgets['light_theme_button'].set_state(False, self.theme_color)
+
+            # Save settings
             self.theme_value = False
             self.config['THEME'] = False
             with open(self.settings_file, 'w') as file:
                 yaml.dump(self.config, file)   
 
-        self.ui.gui_widgets['dark_theme_button'].setState(True, False)
+        self.ui.gui_widgets['dark_theme_button'].set_state(True, self.theme_color)
 
 
     def on_about_button_clicked(self) -> None:
@@ -180,22 +192,22 @@ class MainWindow(QMainWindow):
 
         self.ui.gui_widgets['title_bar_card'].resize(width - 16, 48)
         self.ui.gui_widgets['language_menu'].move(width - 224, 8)
-        # self.ui.gui_widgets['light_theme_button'].move(width - 144, 8)
-        # self.ui.gui_widgets['dark_theme_button'].move(width - 104, 8)
-        # self.ui.gui_widgets['about_button'].move(width - 56, 8)
+        self.ui.gui_widgets['light_theme_button'].move(width - 144, 8)
+        self.ui.gui_widgets['dark_theme_button'].move(width - 104, 8)
+        self.ui.gui_widgets['about_button'].move(width - 56, 8)
 
-        # self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
-        # self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
-        # self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
+        self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
+        self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
+        self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
 
-        # self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 148)
+        self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 148)
 
-        # frame_width = (self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio
-        # frame_height = self.ui.gui_widgets['video_output_card'].height() - 56
-        # if frame_width > self.ui.gui_widgets['video_output_card'].width() - 16:
-        #     frame_width = self.ui.gui_widgets['video_output_card'].width() - 16
-        #     frame_height = frame_width / self.aspect_ratio
-        # self.ui.gui_widgets['video_label'].resize(frame_width, frame_height)
+        frame_width = (self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio
+        frame_height = self.ui.gui_widgets['video_output_card'].height() - 56
+        if frame_width > self.ui.gui_widgets['video_output_card'].width() - 16:
+            frame_width = self.ui.gui_widgets['video_output_card'].width() - 16
+            frame_height = frame_width / self.aspect_ratio
+        self.ui.gui_widgets['video_label'].resize(frame_width, frame_height)
 
         return super().resizeEvent(a0)
     
@@ -267,35 +279,29 @@ class MainWindow(QMainWindow):
     # -------
     # Classes
     # -------
-    def on_person_switch_clicked(self, state: bool) -> None:
+    def on_person_chip_clicked(self, state: bool) -> None:
         self.class_options['person'][0] = state
-        self.ui.gui_widgets['person_on_switch'].setState(state, self.theme_value)
-        self.ui.gui_widgets['person_off_switch'].setState(state, self.theme_value)
+        self.ui.gui_widgets['person_chip'].set_state(state, self.theme_color)
 
-    def on_bicycle_switch_clicked(self, state: bool) -> None:
+    def on_bicycle_chip_clicked(self, state: bool) -> None:
         self.class_options['bicycle'][0] = state
-        self.ui.gui_widgets['bicycle_on_switch'].setState(state, self.theme_value)
-        self.ui.gui_widgets['bicycle_off_switch'].setState(state, self.theme_value)
+        self.ui.gui_widgets['bicycle_chip'].set_state(state, self.theme_color)
     
-    def on_car_switch_clicked(self, state: bool) -> None:
+    def on_car_chip_clicked(self, state: bool) -> None:
         self.class_options['car'][0] = state
-        self.ui.gui_widgets['car_on_switch'].setState(state, self.theme_value)
-        self.ui.gui_widgets['car_off_switch'].setState(state, self.theme_value)
+        self.ui.gui_widgets['car_chip'].set_state(state, self.theme_color)
 
-    def on_motorcycle_switch_clicked(self, state: bool) -> None:
+    def on_motorcycle_chip_clicked(self, state: bool) -> None:
         self.class_options['motorcycle'][0] = state
-        self.ui.gui_widgets['motorcycle_on_switch'].setState(state, self.theme_value)
-        self.ui.gui_widgets['motorcycle_off_switch'].setState(state, self.theme_value)
+        self.ui.gui_widgets['motorcycle_chip'].set_state(state, self.theme_color)
  
-    def on_bus_switch_clicked(self, state: bool) -> None:
+    def on_bus_chip_clicked(self, state: bool) -> None:
         self.class_options['bus'][0] = state
-        self.ui.gui_widgets['bus_on_switch'].setState(state, self.theme_value)
-        self.ui.gui_widgets['bus_off_switch'].setState(state, self.theme_value)
+        self.ui.gui_widgets['bus_chip'].set_state(state, self.theme_color)
 
-    def on_truck_switch_clicked(self, state: bool) -> None:
+    def on_truck_chip_clicked(self, state: bool) -> None:
         self.class_options['truck'][0] = state
-        self.ui.gui_widgets['truck_on_switch'].setState(state, self.theme_value)
-        self.ui.gui_widgets['truck_off_switch'].setState(state, self.theme_value)
+        self.ui.gui_widgets['truck_chip'].set_state(state, self.theme_color)
 
     # -------------
     # Video Toolbar
