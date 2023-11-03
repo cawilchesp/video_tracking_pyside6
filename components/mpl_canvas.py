@@ -1,13 +1,9 @@
 """
 Matplotlib canvas component for plotting signals
 
-
 """
-
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
-
-from components.style_color import colors
 
 # -----------------
 # MatPlotLib Canvas
