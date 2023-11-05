@@ -10,6 +10,7 @@ from components.md3_textfield import MD3TextField
 from components.md3_slider import MD3Slider
 from components.md3_imagelabel import MD3ImageLabel
 from components.md3_segmentedbutton import MD3SegmentedButton
+from components.md3_divider import MD3Divider
 
 import yaml
 
@@ -46,18 +47,13 @@ class UI(QWidget):
             'language': self.language_value } )
 
         # ----------
-        # Card Title
+        # Options
         # ----------
-        self.gui_widgets['title_bar_card'] = MD3Card(parent, {
-            'position': (8, 8),
-            'type': 'outlined',
-            'language': self.language_value } )
+        self.gui_widgets['options_divider'] = MD3Divider(parent, {
+            'length': 180,
+            'shape': 'horizontal' } )
 
-
-        # # # Espacio para título de la aplicación, logo, etc.
-
-        
-        self.gui_widgets['language_menu'] = MD3Menu(self.gui_widgets['title_bar_card'], {
+        self.gui_widgets['language_menu'] = MD3Menu(parent, {
             'width': 72,
             'type': 'outlined',
             'options': {0: ('ESP', 'SPA'), 1: ('ING', 'ENG')},
@@ -65,7 +61,7 @@ class UI(QWidget):
             'language': self.language_value,
             'index_changed': parent.on_language_changed } )
 
-        self.gui_widgets['light_theme_button'] = MD3SegmentedButton(self.gui_widgets['title_bar_card'], {
+        self.gui_widgets['light_theme_button'] = MD3SegmentedButton(parent, {
             'width': 40,
             'icon': 'light_mode',
             'check_icon': False,
@@ -75,7 +71,7 @@ class UI(QWidget):
             'language': self.language_value,
             'clicked': parent.on_light_theme_clicked } )
 
-        self.gui_widgets['dark_theme_button'] = MD3SegmentedButton(self.gui_widgets['title_bar_card'], {
+        self.gui_widgets['dark_theme_button'] = MD3SegmentedButton(parent, {
             'width': 40,
             'icon': 'dark_mode',
             'check_icon': False,
@@ -85,7 +81,7 @@ class UI(QWidget):
             'language': self.language_value,
             'clicked': parent.on_dark_theme_clicked } )
         
-        self.gui_widgets['about_button'] = MD3IconButton(self.gui_widgets['title_bar_card'], {
+        self.gui_widgets['about_button'] = MD3IconButton(parent, {
             'type': 'filled',
             'icon': 'mail',
             'theme_color': self.theme_color,
@@ -95,7 +91,7 @@ class UI(QWidget):
         # Card Source
         # -----------
         self.gui_widgets['source_card'] = MD3Card(parent, {
-            'position': (8, 64),
+            'position': (8, 8),
             'size': (180, 88),
             'type': 'outlined',
             'titles': ('Origen del Video', 'Video Source'),
@@ -112,7 +108,7 @@ class UI(QWidget):
         # Card Information
         # ----------------
         self.gui_widgets['info_card'] = MD3Card(parent, {
-            'position': (8, 160),
+            'position': (8, 104),
             'size': (180, 176),
             'type': 'outlined',
             'titles': ('Información', 'Information'),
@@ -178,7 +174,7 @@ class UI(QWidget):
         # Card Classes
         # ------------
         self.gui_widgets['classes_card'] = MD3Card(parent, {
-            'position': (8, 344), 
+            'position': (8, 288), 
             'size': (180, 288),
             'type': 'outlined',
             'titles': ('Clases', 'Classes'),
@@ -248,7 +244,7 @@ class UI(QWidget):
         # Card Video Toolbar
         # ------------------
         self.gui_widgets['video_toolbar_card'] = MD3Card(parent, {
-            'position': (196, 64),
+            'position': (196, 8),
             'type': 'outlined',
             'language': self.language_value } )
 
@@ -312,7 +308,7 @@ class UI(QWidget):
         # Card Video Image
         # ----------------
         self.gui_widgets['video_output_card'] = MD3Card(parent, {
-            'position': (196, 140),
+            'position': (196, 84),
             'type': 'outlined',
             'titles': ('Salida del Video','Video Output'),
             'language': self.language_value } )
