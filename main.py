@@ -183,17 +183,17 @@ class MainWindow(QMainWindow):
         width = self.geometry().width()
         height = self.geometry().height()
 
-        self.ui.gui_widgets['title_bar_card'].resize(width - 16, 48)
-        self.ui.gui_widgets['language_menu'].move(width - 224, 8)
-        self.ui.gui_widgets['light_theme_button'].move(width - 144, 8)
-        self.ui.gui_widgets['dark_theme_button'].move(width - 104, 8)
-        self.ui.gui_widgets['about_button'].move(width - 56, 8)
+        self.ui.gui_widgets['options_divider'].move(8, height - 89)
+        self.ui.gui_widgets['language_menu'].move(8, height - 80)
+        self.ui.gui_widgets['light_theme_button'].move(8, height - 40)
+        self.ui.gui_widgets['dark_theme_button'].move(48, height - 40)
+        self.ui.gui_widgets['about_button'].move(96, height - 40)
 
         self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
         self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
         self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
 
-        self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 148)
+        self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 92)
 
         frame_width = (self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio
         frame_height = self.ui.gui_widgets['video_output_card'].height() - 56
@@ -422,7 +422,7 @@ class MainWindow(QMainWindow):
             self.ui.gui_widgets['frame_value_textfield'].text_field.setText(f"{self.frame_number}")
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
