@@ -47,15 +47,17 @@ class MD3Button(QPushButton):
 
         self.attributes = attributes
         self.parent = parent
+
         x, y = attributes['position'] if 'position' in attributes else (8,8)
         w = attributes['width'] if 'width' in attributes else 32
         self.setGeometry(x, y, w, 32)
         self.setEnabled(attributes['enabled']) if 'enabled' in attributes else True
-
+        
         if 'icon' in self.attributes:
             self.set_icon(attributes['theme_color'], attributes['icon'])
+        if 'labels' in self.attributes:
+            self.set_language(attributes['language'])
         self.setProperty(attributes['type'], True)
-        self.set_language(attributes['language'])
 
         self.clicked.connect(attributes['clicked'])
 
