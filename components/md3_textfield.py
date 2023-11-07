@@ -3,7 +3,7 @@ PySide6 Text Field component adapted to follow Material Design 3 guidelines
 
 """
 from PySide6.QtWidgets import QFrame, QLineEdit, QLabel
-from PySide6.QtGui import QIcon, QFont, QRegularExpressionValidator
+from PySide6.QtGui import QFont, QRegularExpressionValidator
 from PySide6.QtCore import QRegularExpression, Qt
 
 from icon_color import icon_color
