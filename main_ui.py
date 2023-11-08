@@ -2,14 +2,14 @@ from PySide6.QtWidgets import QWidget
 
 from components.md3_window import MD3Window
 from components.md3_card import MD3Card
+from components.md3_button import MD3Button
 from components.md3_menu import MD3Menu
-from components.md3_iconbutton import MD3IconButton
 from components.md3_chip import MD3Chip
 from components.md3_label import MD3Label
 from components.md3_textfield import MD3TextField
 from components.md3_slider import MD3Slider
 from components.md3_imagelabel import MD3ImageLabel
-from components.md3_segmentedbutton import MD3SegmentedButton
+from components.md3_themebutton import MD3ThemeButton
 from components.md3_divider import MD3Divider
 
 import yaml
@@ -61,27 +61,13 @@ class UI(QWidget):
             'language': self.language_value,
             'index_changed': parent.on_language_changed } )
 
-        self.gui_widgets['light_theme_button'] = MD3SegmentedButton(parent, {
-            'width': 40,
-            'icon': 'light_mode',
-            'check_icon': False,
-            'location': 'left',
+        self.gui_widgets['theme_button'] = MD3ThemeButton(parent, {
+            'type': 'filled',
             'state': self.theme_style,
             'theme_color': self.theme_color,
-            'language': self.language_value,
-            'clicked': parent.on_light_theme_clicked } )
-
-        self.gui_widgets['dark_theme_button'] = MD3SegmentedButton(parent, {
-            'width': 40,
-            'icon': 'dark_mode',
-            'check_icon': False,
-            'location': 'right',
-            'state': not self.theme_style,
-            'theme_color': self.theme_color,
-            'language': self.language_value,
-            'clicked': parent.on_dark_theme_clicked } )
+            'clicked': parent.on_theme_clicked } )
         
-        self.gui_widgets['about_button'] = MD3IconButton(parent, {
+        self.gui_widgets['about_button'] = MD3Button(parent, {
             'type': 'filled',
             'icon': 'mail',
             'theme_color': self.theme_color,
@@ -97,7 +83,7 @@ class UI(QWidget):
             'titles': ('Origen del Video', 'Video Source'),
             'language': self.language_value } )
         
-        self.gui_widgets['source_add_button'] = MD3IconButton(self.gui_widgets['source_card'], {
+        self.gui_widgets['source_add_button'] = MD3Button(self.gui_widgets['source_card'], {
             'position': (140, 48),
             'type': 'filled',
             'icon': 'new',
@@ -248,7 +234,7 @@ class UI(QWidget):
             'type': 'outlined',
             'language': self.language_value } )
 
-        self.gui_widgets['backFrame_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+        self.gui_widgets['backFrame_button'] = MD3Button(self.gui_widgets['video_toolbar_card'], {
             'position': (8, 20),
             'type': 'filled',
             'icon': 'step_backward', 
@@ -256,7 +242,7 @@ class UI(QWidget):
             'theme_color': self.theme_color,
             'clicked': parent.on_backFrame_button_clicked } )
 
-        self.gui_widgets['reverse_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+        self.gui_widgets['reverse_button'] = MD3Button(self.gui_widgets['video_toolbar_card'], {
             'position': (48, 20),
             'type': 'filled',
             'icon': 'reverse', 
@@ -264,7 +250,7 @@ class UI(QWidget):
             'theme_color': self.theme_color,
             'clicked': parent.on_reverse_button_clicked } )
 
-        self.gui_widgets['pause_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+        self.gui_widgets['pause_button'] = MD3Button(self.gui_widgets['video_toolbar_card'], {
             'position': (88, 20),
             'type': 'filled',
             'icon': 'pause', 
@@ -272,7 +258,7 @@ class UI(QWidget):
             'theme_color': self.theme_color,
             'clicked': parent.on_pause_button_clicked } )
 
-        self.gui_widgets['play_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+        self.gui_widgets['play_button'] = MD3Button(self.gui_widgets['video_toolbar_card'], {
             'position': (128, 20),
             'type': 'filled',
             'icon': 'play', 
@@ -280,7 +266,7 @@ class UI(QWidget):
             'theme_color': self.theme_color,
             'clicked': parent.on_play_button_clicked } )
 
-        self.gui_widgets['frontFrame_button'] = MD3IconButton(self.gui_widgets['video_toolbar_card'], {
+        self.gui_widgets['frontFrame_button'] = MD3Button(self.gui_widgets['video_toolbar_card'], {
             'position': (168, 20),
             'type': 'filled',
             'icon': 'step_forward', 
