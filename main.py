@@ -110,66 +110,22 @@ class MainWindow(QMainWindow):
             yaml.dump(self.config, file)
 
 
-    def on_light_theme_clicked(self, state: bool) -> None:
-        """ Light theme segmented control to change components stylesheet
-        
-        Parameters
-        ----------
-        state: bool
-            State of light theme segmented control
-        
-        Returns
-        -------
-        None
-        """
-        if state:
-            with open(f"themes/{self.theme_color}_light_theme.qss", "r") as theme_qss:
-                self.setStyleSheet(theme_qss.read())
-
-            for key in self.ui.gui_widgets.keys():
-                if hasattr(self.ui.gui_widgets[key], 'set_state'):
-                    self.ui.gui_widgets[key].set_state(self.ui.gui_widgets[key].isChecked(), self.theme_color)
-
-            self.ui.gui_widgets['dark_theme_button'].set_state(False, self.theme_color)
-
-            # Save settings
-            self.theme_style = True
-            self.config['THEME_STYLE'] = True
-            with open(self.settings_file, 'w') as file:
-                yaml.dump(self.config, file)            
-        
-        self.ui.gui_widgets['light_theme_button'].set_state(True, self.theme_color)
-
-
-    def on_dark_theme_clicked(self, state: bool) -> None:
+    def on_theme_clicked(self) -> None:
         """ Dark theme segmented control to change components stylesheet
         
-        Parameters
-        ----------
-        state: bool
-            State of dark theme segmented control
-        
-        Returns
-        -------
-        None
         """
-        if state:
-            with open(f"themes/{self.theme_color}_dark_theme.qss", "r") as theme_qss:
-                self.setStyleSheet(theme_qss.read())
+        state = not self.theme_style
+        theme = 'light' if state else 'dark'
+        theme_qss_file = f"themes/{self.theme_color}_{theme}_theme.qss"
+        with open(theme_qss_file, "r") as theme_qss:
+            self.setStyleSheet(theme_qss.read())
+        self.ui.gui_widgets['theme_button'].set_state(state, self.theme_color)
 
-            for key in self.ui.gui_widgets.keys():
-                if hasattr(self.ui.gui_widgets[key], 'set_state'):
-                    self.ui.gui_widgets[key].set_state(self.ui.gui_widgets[key].isChecked(), self.theme_color)
-
-            self.ui.gui_widgets['light_theme_button'].set_state(False, self.theme_color)
-
-            # Save settings
-            self.theme_style = False
-            self.config['THEME_STYLE'] = False
-            with open(self.settings_file, 'w') as file:
-                yaml.dump(self.config, file)   
-
-        self.ui.gui_widgets['dark_theme_button'].set_state(True, self.theme_color)
+        # Save settings
+        self.theme_style = state
+        self.config['THEME_STYLE'] = state
+        with open(self.settings_file, 'w') as file:
+            yaml.dump(self.config, file)
 
 
     def on_about_button_clicked(self) -> None:
@@ -183,11 +139,10 @@ class MainWindow(QMainWindow):
         width = self.geometry().width()
         height = self.geometry().height()
 
-        self.ui.gui_widgets['options_divider'].move(8, height - 89)
-        self.ui.gui_widgets['language_menu'].move(8, height - 80)
-        self.ui.gui_widgets['light_theme_button'].move(8, height - 40)
-        self.ui.gui_widgets['dark_theme_button'].move(48, height - 40)
-        self.ui.gui_widgets['about_button'].move(96, height - 40)
+        self.ui.gui_widgets['options_divider'].move(8, height - 49)
+        self.ui.gui_widgets['language_menu'].move(8, height - 40)
+        self.ui.gui_widgets['theme_button'].move(88, height - 40)
+        self.ui.gui_widgets['about_button'].move(128, height - 40)
 
         self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
         self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
