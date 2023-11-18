@@ -80,14 +80,15 @@ class MainWindow(QMainWindow):
         # GUI
         # ---
         self.ui = UI(self)
-        theme_file = f"themes/{self.theme_color}_light_theme.qss" if self.theme_style else f"themes/{self.theme_color}_dark_theme.qss"
-        with open(theme_file, "r") as theme_qss:
+        theme = 'light' if self.theme_style else 'dark'
+        theme_qss_file = f"themes/{self.theme_color}_{theme}_theme.qss"
+        with open(theme_qss_file, "r") as theme_qss:
             self.setStyleSheet(theme_qss.read())
 
 
-    # ---------------
-    # Title Functions
-    # ---------------
+    # -----------------
+    # Options Functions
+    # -----------------
     def on_language_changed(self, index: int) -> None:
         """ Language menu control to change components text language
         
