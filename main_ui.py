@@ -46,9 +46,9 @@ class UI(QWidget):
             'labels': ('Seguidor de Objetos en Video', 'Video Object Tracker'),
             'language': self.language_value } )
 
-        # ----------
+        # -------
         # Options
-        # ----------
+        # -------
         self.gui_widgets['options_divider'] = MD3Divider(parent, {
             'length': 180,
             'shape': 'horizontal' } )
