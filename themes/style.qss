@@ -1,0 +1,1022 @@
+/* Window */
+QWidget {
+    background-color: @background_full;
+}
+
+/* Card */
+UI_Card {
+    border-width: 0px;
+    border-radius: 8px;
+    background-color: @background_card;
+}
+
+/* Labels */
+UI_Label {
+    border-width: 0px;
+    background-color: transparent;
+    color: @text_active;
+    padding: 0px;
+}
+UI_IconLabel {
+    border-width: 0px;
+    background-color: transparent;
+    padding: 4px;
+}
+UI_ColorLabel {
+    border-width: 2px;
+    border-style: solid;
+    border-color: @theme_active;
+    border-radius: 4px;
+    padding: 0px;
+}
+
+/* Button */
+UI_Button {
+    border-radius: 4px;
+    margin: 4px;
+    icon-size: 24px;
+}
+UI_Button[type=standard] {
+    background-color: @background_widget;
+    color: @text_active;
+}
+UI_Button[type=accent] {
+    background-color: @theme_active;
+    color: @background_full;
+}
+UI_Button[type=outlined] {
+    border-width: 2px;
+    border-style: solid;
+    border-color: @theme_active;
+    background-color: transparent;
+    color: @theme_active;
+}
+UI_Button[type=hyperlink] {
+    background-color: transparent;
+    color: @theme_active;
+}
+UI_Button:hover {
+    background-color: @background_hover;
+}
+UI_Button:hover[type=accent] {
+    background-color: @theme_hover;
+}
+UI_Button:disabled {
+    background-color: @background_disable;
+    color: @text_disable;
+}
+UI_Button:disabled[type=outlined] {
+    border-color: @text_disable;
+}
+
+UI_ToggleButton {
+    border-radius: 4px;
+    background-color: @background_widget;
+    color: @text_active;
+    margin: 4px;
+    icon-size: 24px;
+}
+UI_ToggleButton:checked {
+    background-color: @theme_active;
+    color: @background_full;
+}
+UI_ToggleButton:hover {
+    background-color: @background_hover;
+}
+UI_ToggleButton:checked:hover {
+    background-color: @theme_hover;
+}
+UI_ToggleButton:disabled {
+    background-color: @background_disable;
+    color: @text_disable;
+}
+
+UI_ThemeButton {
+    border-width: 0px;
+    border-radius: 4px;
+    background-color: @theme_active;
+    color: @background_full;
+    margin: 4px;
+    icon-size: 24px;
+}
+UI_ThemeButton:hover {
+    background-color: @theme_hover;
+}
+UI_ThemeButton:disabled {
+    background-color: @background_disable;
+    color: @text_disable;
+}
+
+UI_DropDownButton {
+    border-radius: 4px;
+    background-color: @background_widget;
+    color: @text_active;
+    padding-left: 12px;
+    padding-right: 40px;
+    margin: 4px;
+    icon-size: 24px;
+}
+UI_DropDownButton:disabled {
+    background-color: @background_disable;
+    color: @text_disable;
+}
+UI_DropDownButton::menu-button {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32;
+    height: 22;
+    right: 4px;
+    background-color: transparent;
+}
+UI_DropDownButton::menu-button:hover {
+    background-color: @background_hover;
+}
+UI_DropDownButton::menu-arrow {
+    width: 20px;
+    height: 20px;
+    image: url(icons/@chevron_down);
+}
+UI_DropDownButton QMenu {
+    border-width: 4px;
+    border-style: solid;
+    border-color: @background_widget;
+    border-radius: 8px;
+    background-color: @background_card;
+}
+UI_DropDownButton QMenu::item {
+    background-color: @background_widget;
+    color: @text_active;
+    height: 32px;
+    padding-left: 12px;
+}
+UI_DropDownButton QMenu::item::selected {
+    border-color: @background_widget;
+    border-radius: 4px;
+    background-color: @background_hover;
+    padding-left: 12px;
+}
+UI_DropDownButton QMenu::icon {
+    padding-left: 12px;
+}
+
+/* Check Box */
+UI_CheckBox {
+    background-color: transparent;
+    color: @text_active;
+    margin: 4px;
+    icon-size: 24px;
+}
+UI_CheckBox:disabled {
+    background-color: @background_disable;
+    color: @text_disable;
+}
+UI_CheckBox::indicator {
+    border-width: 1px;
+    border-style: solid;
+    border-color: @text_active;
+    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+}
+UI_CheckBox::indicator:unchecked {
+    background-color: @background_card;
+}
+UI_CheckBox::indicator:unchecked:hover {
+    background-color: @background_hover;
+}
+UI_CheckBox::indicator:checked {
+    background-color: @theme_active;
+    image: url(icons/@done);
+}
+UI_CheckBox::indicator:checked:hover {
+    background-color: @theme_hover;
+}
+UI_CheckBox::indicator:indeterminate {
+    background-color: @theme_active;
+    image: url(icons/@minus);
+}
+UI_CheckBox::indicator:indeterminate:hover {
+    background-color: @theme_hover;
+}
+
+/* Combo Box */
+UI_ComboBox {
+    border-width: 0px;
+    border-radius: 4px;
+    padding-left: 12px;
+    padding-right: 4px;
+    background-color: @background_widget;
+    color: @text_active;
+    margin: 4px;
+}
+UI_ComboBox:editable {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: @theme_active;
+}
+UI_ComboBox:disabled {
+    background-color: @background_disable;
+    color: @text_disable;
+}
+UI_ComboBox::drop-down {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32;
+    height: 22;
+    right: 4px;
+    background-color: transparent
+}
+UI_ComboBox::drop-down:hover {
+    background-color: @background_hover;
+}
+UI_ComboBox::down-arrow {
+    width: 16;
+    height: 16;
+    image: url(icons/@chevron_down);
+}
+UI_ComboBox QListView {
+    color: @text_active;
+    margin: 0px;
+    outline: 0px;
+}
+UI_ComboBox QListView:active {
+    border-width: 4px;
+    border-style: solid;
+    border-color: @background_card;
+    border-radius: 10px;
+    background-color: @background_widget;
+    margin: -4px;
+}
+UI_ComboBox QListView::item {
+    height: 32;
+}
+UI_ComboBox QListView::item:selected {
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-left-color: @theme_active;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    background-color: @background_hover;
+    color: @text_active;
+    margin: 4px;
+}
+UI_ComboBox QListView::item:!selected {
+    border-width: 4px;
+    border-style: solid;
+    border-color: @background_widget;
+    background-color: @background_widget;
+    margin: 4px;
+}
+
+/* Radio Button */
+UI_RadioButton {
+    background-color: transparent;
+    color: @text_active;
+    margin: 4px;
+    icon-size: 24px;
+}
+UI_RadioButton:disabled {
+    background-color: @background_disable;
+    color: @text_disable;
+}
+UI_RadioButton::indicator {
+    border-width: 1px;
+    border-style: solid;
+    border-color: @text_active;
+    border-radius: 10px;
+    width: 18px;
+    height: 18px;
+}
+UI_RadioButton::indicator:unchecked {
+    background-color: @background_card;
+}
+UI_RadioButton::indicator:unchecked:hover {
+    background-color: @background_hover;
+}
+UI_RadioButton::indicator:checked {
+    border-width: 4px;
+    border-style: solid;
+    border-color: @theme_active;
+    border-radius: 10px;
+    width: 12px;
+    height: 12px;
+}
+UI_RadioButton::indicator:checked:hover {
+    border-width: 3px;
+    border-style: solid;
+    border-color: @theme_active;
+    border-radius: 10px;
+    width: 14px;
+    height: 14px;
+}
+
+/* Slider */
+UI_Slider { 
+    background-color: transparent;
+    margin: 4px;
+}
+UI_Slider::groove:horizontal {
+    background: @theme_active;
+    height: 4px;
+}
+UI_Slider::groove:vertical {
+    background: @theme_active;
+    width: 4px;
+}
+UI_Slider::handle {
+    border-width: 5px;
+    border-style: solid;
+    border-color: @border_handle;
+    border-radius: 10px;
+    background-color: @theme_active;
+    width: 10px;
+    height: 10px;
+    margin: -8px;
+}
+UI_Slider::handle:hover {
+    border-width: 3px;
+    border-style: solid;
+    border-color: @border_handle;
+    border-radius: 10px;
+    background-color: @theme_active;
+    width: 14px;
+    height: 14px;
+    margin: -8px;
+}
+UI_Slider::handle:disabled {
+    background-color: @background_widget
+}
+UI_Slider::add-page:horizontal {
+    background: @slider_page;
+}
+UI_Slider::sub-page:vertical {
+    background: @slider_page;
+}
+UI_Slider::add-page:vertical {
+    background: @theme_active;
+}
+UI_Slider::sub-page:horizontal {
+    background: @theme_active;
+}
+UI_Slider::add-page:disabled {
+    background: @background_hover;
+}
+UI_Slider::sub-page:disabled {
+    background: @background_hover;
+}
+
+/* Switch */
+UI_Switch {
+    background-color: transparent;
+}
+UI_Switch QToolButton {
+    background-color: transparent;
+    color: @text_active;
+    padding-bottom: 0px
+}
+UI_Switch QToolButton:hover {
+    font-size: 14px;
+}
+UI_Switch QToolButton[side=left] {
+    border-width: 1px;
+    border-style: solid;
+    border-color: @text_active;
+    border-right-width: 0px;
+    border-top-left-radius: 10;
+    border-bottom-left-radius: 10;
+}
+UI_Switch QToolButton[side=right] {
+    border-width: 1px;
+    border-style: solid;
+    border-color: @text_active;
+    border-left-width: 0px;
+    border-top-right-radius: 10;
+    border-bottom-right-radius: 10;
+}
+UI_Switch QToolButton:checked {
+    background-color: @theme_active;
+}
+UI_Switch QToolButton:disabled {
+    background-color: @background_disable;
+}
+
+/* Text Boxes */
+UI_TextBox {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: @theme_active;
+    border-radius: 4px;
+    padding-left: 10px;
+    background-color: @background_widget;
+    color: @text_active;
+    margin: 4px;
+}
+UI_TextBox:!focus {
+    border-bottom-color: @slider_page;
+}
+
+UI_PasswordBox {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: @theme_active;
+    border-radius: 4px;
+    padding-left: 10px;
+    background-color: @background_widget;
+    color: @text_active;
+    margin: 4px;
+}
+UI_PasswordBox:!focus {
+    border-bottom-color: @slider_page;
+}
+
+UI_EmailBox {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: @theme_active;
+    border-radius: 4px;
+    padding-left: 10px;
+    background-color: @background_widget;
+    color: @text_active;
+    margin: 4px;
+}
+UI_EmailBox:!focus {
+    border-bottom-color: @slider_page;
+}
+
+UI_IpAddressBox {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: @theme_active;
+    border-radius: 4px;
+    padding-left: 10px;
+    background-color: @background_widget;
+    color: @text_active;
+    margin: 4px;
+}
+UI_IpAddressBox:!focus {
+    border-bottom-color: @slider_page;
+}
+
+/* Number Boxes */
+UI_NumberBox {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: @theme_active;
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 40px;
+    background-color: @background_widget;
+    color: @text_active;
+    margin: 4px;
+}
+UI_NumberBox:!focus {
+    border-bottom-color: @slider_page;
+}
+UI_NumberBox::up-button {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32px;
+    height: 22px;
+    right: 36px;
+    background-color: transparent
+}
+UI_NumberBox::up-button:hover {
+    background-color: @background_hover;
+}
+UI_NumberBox::up-arrow {
+    width: 16px;
+    height: 16px;
+    image: url(icons/@chevron_up)
+}
+UI_NumberBox::down-button {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32px;
+    height: 22px;
+    right: 4px;
+    background-color: transparent
+}
+UI_NumberBox::down-button:hover {
+    background-color: @background_hover;
+}
+UI_NumberBox::down-arrow {
+    width: 16px;
+    height: 16px;
+    image: url(icons/@chevron_down)
+}
+
+UI_FloatBox {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: @theme_active;
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 40px;
+    background-color: @background_widget;
+    color: @text_active;
+    margin: 4px;
+}
+UI_FloatBox:!focus {
+    border-bottom-color: @slider_page;
+}
+UI_FloatBox::up-button {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32px;
+    height: 22px;
+    right: 36px;
+    background-color: transparent
+}
+UI_FloatBox::up-button:hover {
+    background-color: @background_hover;
+}
+UI_FloatBox::up-arrow {
+    width: 16px;
+    height: 16px;
+    image: url(icons/@chevron_up);
+}
+UI_FloatBox::down-button {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32px;
+    height: 22px;
+    right: 4px;
+    background-color: transparent
+}
+UI_FloatBox::down-button:hover {
+    background-color: @background_hover;
+}
+UI_FloatBox::down-arrow {
+    width: 16px;
+    height: 16px;
+    image: url(icons/@chevron_down);
+}
+
+/* Date Pickers */
+UI_DateEdit {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: @theme_active;
+    border-radius: 4px;
+    padding-left: 10px;
+    background-color: @background_widget;
+    color: @text_active;
+    margin: 4px;
+}
+UI_DateEdit:!focus {
+    border-bottom-color: @slider_page;
+}
+UI_DateEdit::drop-down {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32px;
+    height: 22px;
+    right: 4px;
+    background-color: transparent
+}
+UI_DateEdit::down-arrow {
+    image: url(icons/@calendar);
+    width: 16;
+    height: 16
+}
+
+UI_TimeEdit {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: @theme_active;
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 40px;
+    background-color: @background_widget;
+    color: @text_active;
+    margin: 4px;
+}
+UI_TimeEdit:!focus {
+    border-bottom-color: @slider_page;
+}
+UI_TimeEdit::up-button {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32px;
+    height: 22px;
+    right: 36px;
+    background-color: transparent
+}
+UI_TimeEdit::up-button:hover {
+    background-color: @background_hover
+}
+UI_TimeEdit::up-arrow {
+    width: 16px;
+    height: 16px;
+    image: url(icons/@chevron_up)
+}
+UI_TimeEdit::down-button {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32px;
+    height: 22px;
+    right: 4px;
+    background-color: transparent
+}
+UI_TimeEdit::down-button:hover {
+    background-color: @background_hover
+}
+UI_TimeEdit::down-arrow {
+    width: 16px;
+    height: 16px;
+    image: url(icons/@chevron_down)
+}
+
+/* Calendar */
+UI_CalendarView QWidget {
+    border-width: 2px;
+    border-style: solid;
+    border-color: @background_widget;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+UI_CalendarView QWidget#qt_calendar_navigationbar {
+    border-width: 2px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    background-color: @background_widget;
+    color: @text_active;
+}
+UI_CalendarView QToolButton#qt_calendar_prevmonth {
+    border-radius: 6px;
+    background-color: transparent;
+    width: 29px;
+    height: 29px;
+    margin-top: 9px;
+    margin-bottom: 9px;
+    margin-left: 4px;
+    qproperty-icon: url(icons/@chevron_left);
+}
+UI_CalendarView QToolButton#qt_calendar_prevmonth:hover {
+    background-color: @background_hover;
+}
+UI_CalendarView QToolButton#qt_calendar_nextmonth {
+    border-radius: 6px;
+    background-color: transparent;
+    width: 29px;
+    height: 29px;
+    margin-top: 9px;
+    margin-bottom: 9px;
+    margin-right: 4px;
+    qproperty-icon: url(icons/@chevron_right)
+}
+UI_CalendarView QToolButton#qt_calendar_nextmonth:hover {
+    background-color: @background_hover;
+}
+UI_CalendarView QToolButton#qt_calendar_monthbutton {
+    border-radius: 6px;
+    background-color: transparent;
+    color: @text_active;
+    width: 77px;
+    height: 29px;
+    margin-top: 9px;
+    margin-bottom: 9px;
+    padding-left: 12px;
+    padding-right: 30px
+}
+UI_CalendarView QToolButton#qt_calendar_monthbutton:hover{
+    background-color: @background_hover;
+}
+UI_CalendarView QToolButton#qt_calendar_monthbutton::menu-indicator {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 22px;
+    height: 22px;
+    right: 4px;
+    background-color: transparent;
+    image: url(icons/@chevron_down);
+}
+UI_CalendarView QToolButton#qt_calendar_monthbutton::menu-indicator:hover {
+    background-color: @border_handle;
+}
+UI_CalendarView QMenu {
+    border-width: 4px;
+    border-style: solid;
+    border-color: @background_widget;
+    border-radius: 8px;
+    background-color: @background_card;
+    margin: 4px;
+}
+UI_CalendarView QMenu::item {
+    background-color: @background_widget;
+    color: @text_active;
+    width: 90px;
+    height: 32px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+UI_CalendarView QMenu::item::selected {
+    border-color: @background_widget;
+    border-radius: 4px;
+    background-color: @background_hover;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+UI_CalendarView QToolButton#qt_calendar_yearbutton {
+    border-radius: 6px;
+    background-color: transparent;
+    color: @text_active;
+    width: 113px;
+    height: 29px;
+    margin-top: 9px;
+    margin-bottom: 9px;
+}
+UI_CalendarView QToolButton#qt_calendar_yearbutton:hover{
+    background-color: @background_hover;
+}
+UI_CalendarView QSpinBox#qt_calendar_yearedit {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: @theme_active;
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 30px;
+    background-color: @background_widget;
+    color: @text_active;
+    height: 29px;
+    margin-top: 9px;
+    margin-bottom: 9px;
+}
+UI_CalendarView QSpinBox#qt_calendar_yearedit:!focus {
+    border-bottom-color: @slider_page;
+}
+UI_CalendarView QSpinBox#qt_calendar_yearedit::up-button {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32px;
+    height: 22px;
+    right: 36px;
+    background-color: transparent;
+}
+UI_CalendarView QSpinBox#qt_calendar_yearedit::up-button:hover {
+    background-color: @background_hover;
+}
+UI_CalendarView QSpinBox#qt_calendar_yearedit::up-arrow {
+    width: 16px;
+    height: 16px;
+    image: url(icons/@chevron_up);
+}
+UI_CalendarView QSpinBox#qt_calendar_yearedit::down-button {
+    border-radius: 4px;
+    subcontrol-origin: border;
+    subcontrol-position: center right;
+    width: 32px;
+    height: 22px;
+    right: 4px;
+    background-color: transparent;
+}
+UI_CalendarView QSpinBox#qt_calendar_yearedit::down-button:hover {
+    background-color: @background_hover;
+}
+UI_CalendarView QSpinBox#qt_calendar_yearedit::down-arrow {
+    width: 16px;
+    height: 16px;
+    image: url(icons/@chevron_down)
+}
+UI_CalendarView QTableView {
+    background-color: @background_widget;
+    color: @text_active;
+    outline: 0px
+}
+UI_CalendarView QTableView::item:selected {
+    border-radius: 20px;
+    background-color: @theme_active;
+    color: @background_full;
+}
+UI_CalendarView QTableView::item:focus {
+    border-radius: 20px;
+    background-color: @theme_active;
+    color: @background_full;
+}
+UI_CalendarView QAbstractItemView:!enabled {
+    color: @slider_page;
+}
+
+UI_DatePicker {
+    background-color: transparent;
+    color: @text_active;
+}
+UI_DatePicker UI_ComboBox {
+    border-width: 1px;
+    border-style: solid;
+    border-color: @slider_page;
+}
+UI_DatePicker UI_ComboBox#datepicker_day_button {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+UI_DatePicker UI_ComboBox#datepicker_month_button {
+    border-radius: 0px;
+}
+UI_DatePicker UI_ComboBox#datepicker_year_button {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+UI_TimePicker {
+    background-color: transparent;
+    color: @text_active;
+}
+UI_TimePicker UI_ComboBox {
+    border-width: 1px;
+    border-style: solid;
+    border-color: @slider_page;
+}
+UI_TimePicker UI_ComboBox#timepicker_hour_button {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+UI_TimePicker UI_ComboBox#timepicker_minute_button {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+/* Divider  */
+UI_Divider {
+    border-width: 1px;
+    border-style: solid;
+    border-color: @border_handle
+}
+
+/* Scroll Bar */
+QScrollBar {
+    background-color: @background_hover;
+}
+QScrollBar:horizontal {
+    height: 12px;
+    margin: 0px 12px 0px 12px;
+}
+QScrollBar:vertical {
+    width: 12px;
+    margin: 12px 0px 12px 0px;
+}
+QScrollBar::handle {
+    border-radius: 1px;
+    background-color: @text_active;
+}
+QScrollBar::handle:horizontal {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+QScrollBar::handle:vertical {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+QScrollBar::handle:hover {
+    border-radius: 3px;
+    background-color: @text_active;
+}
+QScrollBar::handle:horizontal:hover {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+QScrollBar::handle:vertical:hover {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+QScrollBar::sub-line {
+    background-color: @background_hover;
+    width: 12px;
+    height: 12px;
+}
+QScrollBar::sub-line:horizontal {
+    border-top-right-radius:6px;
+    border-bottom-right-radius:6px;
+    image: url(icons/@chevron_right);
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+QScrollBar::sub-line:vertical {
+    border-top-left-radius:6px;
+    border-top-right-radius:6px;
+    image: url(icons/@chevron_up);
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+QScrollBar::sub-page {
+    background-color: @background_hover;
+}
+QScrollBar::add-line {
+    background-color: @background_hover;
+    width: 12px;
+    height: 12px;
+}
+QScrollBar::add-line:horizontal {
+    border-top-left-radius:6px;
+    border-bottom-left-radius:6px;
+    image: url(icons/@chevron_left);
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+QScrollBar::add-line:vertical {
+    border-bottom-left-radius:6px;
+    border-bottom-right-radius:6px;
+    image: url(icons/@chevron_down);
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+QScrollBar::add-page {
+    background-color: @background_hover;
+}
+
+UI_Chart {
+    border-radius: 8px;
+    background-color: @background_widget;
+    color: @text_active;
+}
+
+
+
+
+
+
+ /* Info Message Dialog 
+InfoMessageApp QLabel#dialog_title {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    padding: 8
+}
+
+InfoMessageApp QLabel#dialog_message {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    padding: 8
+}
+
+InfoMessageApp QPushButton {
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 10
+}
+
+InfoMessageApp[error=true] QLabel#dialog_title {
+    background-color: hsl(348, 86%, 61%);
+    color: hsl(348, 86%, 96%)
+}
+
+InfoMessageApp[error=true] QLabel#dialog_message {
+    background-color: hsl(348, 86%, 96%);
+    color: hsl(348, 86%, 43%)
+}
+
+InfoMessageApp[error=true] QPushButton {
+    background-color: hsl(348, 86%, 43%);
+}
+
+InfoMessageApp[error=true] QPushButton:hover {
+    background-color: hsl(348, 86%, 28%);
+}
+
+InfoMessageApp[warning=true] QLabel#dialog_title {
+    background-color: hsl(44, 100%, 77%);
+    color: hsl(44, 100%, 32%)
+}
+
+InfoMessageApp[warning=true] QLabel#dialog_message {
+    background-color: hsl(44, 100%, 96%);
+    color: hsl(44, 100%, 32%)
+}
+
+InfoMessageApp[warning=true] QPushButton {
+    background-color: hsl(44, 100%, 32%);
+}
+
+InfoMessageApp[warning=true] QPushButton:hover {
+    background-color: hsl(44, 100%, 20%);
+}
+
+InfoMessageApp[success=true] QLabel#dialog_title {
+    background-color: hsl(153, 53%, 53%);
+    color: hsl(153, 53%, 96%)
+}
+
+InfoMessageApp[success=true] QLabel#dialog_message {
+    background-color: hsl(153, 53%, 96%);
+    color: hsl(153, 53%, 31%)
+}
+
+InfoMessageApp[success=true] QPushButton {
+    background-color: hsl(153, 53%, 31%);
+}
+
+InfoMessageApp[success=true] QPushButton:hover {
+    background-color: hsl(153, 53%, 20%);
+} */
