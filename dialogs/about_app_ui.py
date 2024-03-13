@@ -1,16 +1,13 @@
 from PySide6.QtWidgets import QDialog
 
-from components.md3_window import MD3Window
-from components.md3_card import MD3Card
-from components.md3_label import MD3Label
-from components.md3_button import MD3Button
+from components.ui_window import UI_Window
+from components.ui_card import UI_Card
+from components.ui_label import UI_Label, UI_IconLabel
+from components.ui_button import UI_Button
 
 import yaml
 
 
-# ----------------
-# About App Dialog
-# ----------------
 class AboutAppUI(QDialog):
     def __init__(self, parent):
         """ About Me Dialog """
@@ -19,136 +16,156 @@ class AboutAppUI(QDialog):
         # --------
         # Settings
         # --------
-        with open('settings.yaml', 'r') as file:
+        self.settings_file = 'settings.yaml'
+        with open(self.settings_file, 'r') as file:
             self.config = yaml.safe_load(file)
 
-        self.language_value = int(self.config['LANGUAGE'])
+        self.language_value = self.config['LANGUAGE']
         self.theme_style = self.config['THEME_STYLE']
         self.theme_color = self.config['THEME_COLOR']
 
         self.aboutapp_widgets = {}
 
-
         # -------------
         # Dialog Window
         # -------------
         (width, height) = (320, 408)
-        self.aboutapp_widgets['main_window'] = MD3Window( {
-            'parent': parent,
-            'size': (width, height),
-            'minimum_size': (width, height),
-            'maximum_size': (width, height),
-            'labels': ('Acerca de...','About...'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['main_window'] = UI_Window(
+            parent=parent, 
+            size=(width, height),
+            minimum_size=(width, height),
+            maximum_size=(width, height),
+            titles=('Acerca de...','About...'),
+            language=self.language_value
+        )
 
         # -----------
         # Card Dialog
         # -----------
-        self.aboutapp_widgets['aboutapp_dialog_card'] = MD3Card(parent, {
-            'position': (8, 8),
-            'size': (width-16, height-16),
-            'type': 'outlined',
-            'titles': ('Seguidor de Objetos en Video', 'Video Object Tracker'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['aboutapp_dialog_card'] = UI_Card(
+            parent=parent,
+            position=(16, 16),
+            size=(width-32, height-32)
+        )
 
-        self.aboutapp_widgets['version_label'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (8, 48),
-            'width': width - 32,
-            'type': 'subtitle',
-            'align': 'left',
-            'labels': ('Versión: 1.0', 'Version: 1.0'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['aboutapp_dialog_label'] = UI_Label(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(8, 8),
+            width=width - 48,
+            align='left',
+            font_size=16,
+            texts=('Extracción de Señales', 'Signal Extraction'),
+            language=self.language_value
+        )
 
-        self.aboutapp_widgets['developed_label'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (8, 96), 
-            'width': width - 32,
-            'type': 'subtitle',
-            'align': 'left',
-            'labels': ('Desarrollado por:', 'Developed by:'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['version_label'] = UI_Label(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(8, 48),
+            width=width - 48,
+            align='left',
+            texts=('Versión: 1.0', 'Version: 1.0'),
+            language=self.language_value
+        )
 
-        self.aboutapp_widgets['person_icon'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (8, 144),
-            'type': 'icon',
-            'icon': 'user',
-            'theme_color': self.theme_color } )
+        self.aboutapp_widgets['developed_label'] = UI_Label(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(8, 80),
+            width=width - 48,
+            align='left',
+            texts=('Desarrollado por:', 'Developed by:'),
+            language=self.language_value
+        )
+        
+        self.aboutapp_widgets['name_icon'] = UI_IconLabel(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(8, 112),
+            icon_name='account'
+        )
 
-        self.aboutapp_widgets['name_label'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (48, 152), 
-            'width': width - 80,
-            'type': 'subtitle',
-            'align': 'left',
-            'labels': ('Carlos Andrés Wilches Pérez', 'Carlos Andrés Wilches Pérez'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['name_label'] = UI_Label(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(48, 112), 
+            width=width - 88,
+            align='left',
+            texts=('Carlos Andrés Wilches Pérez', 'Carlos Andrés Wilches Pérez'),
+            language=self.language_value
+        )
 
-        self.aboutapp_widgets['profession_icon'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (8, 174),
-            'type': 'icon',
-            'icon': 'school',
-            'theme_color': self.theme_color } )
+        self.aboutapp_widgets['profession_icon'] = UI_IconLabel(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(8, 144),
+            icon_name='school'
+        )
 
-        self.aboutapp_widgets['profession_1_label'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (48, 182), 
-            'width': width - 80,
-            'type': 'subtitle',
-            'align': 'left',
-            'labels': ('Ingeniero Electrónico, BSc. MSc. PhD.', 'Electronic Engineer, BSc. MSc. PhD.'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['profession1_label'] = UI_Label(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(48, 144), 
+            width=width - 88,
+            align='left',
+            texts=('Ingeniero Electrónico, BSc. MSc. PhD.', 'Electronic Engineer, BSc. MSc. PhD.'),
+            language=self.language_value
+        )
 
-        self.aboutapp_widgets['profession_2_label'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (48, 206), 
-            'width': width - 80,
-            'type': 'subtitle',
-            'align': 'left',
-            'labels': ('Universidad Nacional de Colombia', 'Nacional University of Colombia'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['profession_2_label'] = UI_Label(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(48, 176), 
+            width=width - 88,
+            align='left',
+            texts=('Universidad Nacional de Colombia', 'Nacional University of Colombia'),
+            language=self.language_value
+        )
 
-        self.aboutapp_widgets['profession_3_label'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (48, 238), 
-            'width': width - 80,
-            'type': 'subtitle',
-            'align': 'left',
-            'labels': ('Maestría en Ingeniería Electrónica', 'Master in Electronic Engineering'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['profession_3_label'] = UI_Label(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(48, 208), 
+            width=width - 88,
+            align='left',
+            texts=('Maestría en Ingeniería Electrónica', 'Master in Electronic Engineering'),
+            language=self.language_value
+        )
 
-        self.aboutapp_widgets['profession_4_label'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (48, 262), 
-            'width': width - 80,
-            'type': 'subtitle',
-            'align': 'left',
-            'labels': ('Doctor en Ingeniería', 'Doctor in Engineering'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['profession_4_label'] = UI_Label(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(48, 240), 
+            width=width - 88,
+            align='left',
+            texts=('Doctor en Ingeniería', 'Doctor in Engineering'),
+            language=self.language_value
+        )
 
-        self.aboutapp_widgets['profession_5_label'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (48, 286), 
-            'width': width - 80,
-            'type': 'subtitle',
-            'align': 'left',
-            'labels': ('Pontificia Universidad Javeriana', 'Xaverian Pontifical University'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['profession_5_label'] = UI_Label(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(48, 272), 
+            width=width - 88,
+            align='left',
+            texts=('Pontificia Universidad Javeriana', 'Xaverian Pontifical University'),
+            language=self.language_value
+        )
 
-        self.aboutapp_widgets['email_icon'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (8, 310),
-            'type': 'icon',
-            'icon': 'mail',
-            'theme_color': self.theme_color } )
+        self.aboutapp_widgets['email_icon'] = UI_IconLabel(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(8, 304),
+            icon_name='email',
+        )
 
-        self.aboutapp_widgets['email_label'] = MD3Label(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (48, 318), 
-            'width': width - 80,
-            'type': 'subtitle',
-            'align': 'left',
-            'labels': ('cawilchesp@outlook.com', 'cawilchesp@outlook.com'),
-            'language': self.language_value } )
+        self.aboutapp_widgets['email_label'] = UI_Label(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(48, 304), 
+            width=width - 88,
+            align='left',
+            texts=('cawilchesp@outlook.com', 'cawilchesp@outlook.com'),
+            language=self.language_value
+        )
 
         # ---------
         # Button Ok
         # ---------
-        self.aboutapp_widgets['ok_button'] = MD3Button(self.aboutapp_widgets['aboutapp_dialog_card'], {
-            'position': (width - 124, height - 56),
-            'width': 100,
-            'type': 'standard',
-            'labels': ('Aceptar', 'Ok'),
-            'theme_color': self.theme_color,
-            'language': self.language_value,
-            'clicked': parent.on_ok_button_clicked } )
+        self.aboutapp_widgets['ok_button'] = UI_Button(
+            parent=self.aboutapp_widgets['aboutapp_dialog_card'],
+            position=(width - 136, height - 76),
+            width=100,
+            type='accent',
+            texts=('Aceptar', 'Ok'),
+            language=self.language_value,
+            clicked_signal=parent.on_ok_button_clicked
+        )
