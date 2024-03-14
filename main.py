@@ -1,24 +1,31 @@
-"""
-Main
-
-This file contains main UI class and methods to control components operations.
-"""
 from PySide6 import QtGui, QtWidgets
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtCore import QTimer
 from PySide6.QtGui import QPixmap
 
+from components.ui_button import UI_Button, UI_ThemeButton, UI_ToggleButton, UI_DropDownButton
+from components.ui_checkbox import UI_CheckBox
+from components.ui_radiobutton import UI_RadioButton
+from components.ui_switch import UI_Switch
+from components.ui_text import UI_PasswordBox
+from components.ui_label import UI_IconLabel
+from components.ui_datetimepicker import UI_CalendarView
+from components.ui_combobox import UI_ComboBox
+
 from ultralytics import YOLO
 import supervision as sv
+
+from themes.colors import dark_colors, light_colors, theme_colors, icons
 
 import sys
 import pathlib
 import yaml
+from typing import Union
 from collections import deque
 
 import cv2
 
-from main_ui import UI
+from main_ui import Main_UI
 from dialogs.about_app import AboutApp
 
 from tools.annotators import box_annotations, mask_annotations, track_annotations
@@ -40,7 +47,7 @@ class MainWindow(QMainWindow):
             self.config = yaml.safe_load(file)
 
         self.default_folder = self.config['FOLDER']
-        self.language_value = int(self.config['LANGUAGE'])
+        self.language_value = self.config['LANGUAGE']
         self.theme_style = self.config['THEME_STYLE']
         self.theme_color = self.config['THEME_COLOR']
 
@@ -76,21 +83,39 @@ class MainWindow(QMainWindow):
         self.yolov8_model = None
         self.byte_tracker = None
 
-        # ---
-        # GUI
-        # ---
-        self.ui = UI(self)
-        theme = 'light' if self.theme_style else 'dark'
-        theme_qss_file = f"themes/{self.theme_color}_{theme}_theme.qss"
-        with open(theme_qss_file, "r") as theme_qss:
-            self.setStyleSheet(theme_qss.read())
+        # ----------------
+        # Generación de UI
+        # ----------------
+        self.ui = Main_UI(self)
 
+        # -----------
+        # Apply Theme
+        # -----------
+        with open('themes/style.qss', 'r') as qss_file:
+            style_qss = qss_file.read()
+        
+        style_colors = light_colors if self.theme_style else dark_colors
+        for color_name, color_value in style_colors.items():
+            style_qss = style_qss.replace(color_name, f"hsl({color_value[0]}, {color_value[1]}%, {color_value[2]}%)")
+        
+        for color_name, color_value in theme_colors[self.theme_color].items():
+            style_qss = style_qss.replace(color_name, f"hsl({color_value[0]}, {color_value[1]}%, {color_value[2]}%)")
 
-    # -----------------
-    # Options Functions
-    # -----------------
+        for icon_name, icon_value in icons[self.theme_style].items():
+            style_qss = style_qss.replace(icon_name, icon_value)
+
+        self.setStyleSheet(style_qss)
+
+        if self.language_value == 'es':
+            self.ui.gui_widgets['language_combobox'].setCurrentIndex(0)
+        elif self.language_value == 'en':
+            self.ui.gui_widgets['language_combobox'].setCurrentIndex(1)
+
+    # ---------
+    # Functions
+    # ---------
     def on_language_changed(self, index: int) -> None:
-        """ Language menu control to change components text language
+        """ Menu control to change language of component texts
         
         Parameters
         ----------
@@ -101,26 +126,56 @@ class MainWindow(QMainWindow):
         -------
         None
         """
+        if index == 0: self.language_value = 'es'
+        elif index == 1: self.language_value = 'en'
+
         for key in self.ui.gui_widgets.keys():
-            if hasattr(self.ui.gui_widgets[key], 'set_language'):
-                self.ui.gui_widgets[key].set_language(index)
+            if key != 'language_combobox':
+                if hasattr(self.ui.gui_widgets[key], 'set_language'):
+                    self.ui.gui_widgets[key].set_language(self.language_value)
+                if isinstance(self.ui.gui_widgets[key], UI_ComboBox):
+                    self.ui.gui_widgets[key].setCurrentIndex(-1)
+            if isinstance(self.ui.gui_widgets[key], UI_DropDownButton):
+                for action in self.ui.gui_widgets[key].menu().actions():
+                    self.ui.gui_widgets[key].menu().removeAction(action)
+                self.ui.gui_widgets[key].set_actions_menu(self.theme_style, self.language_value)
         
-        self.language_value = index
-        self.config['LANGUAGE'] = index
+        self.config['LANGUAGE'] = self.language_value
         with open(self.settings_file, 'w') as file:
             yaml.dump(self.config, file)
 
 
     def on_theme_clicked(self) -> None:
-        """ Dark theme segmented control to change components stylesheet
-        
-        """
+        """ Theme toggle control """
         state = not self.theme_style
-        theme = 'light' if state else 'dark'
-        theme_qss_file = f"themes/{self.theme_color}_{theme}_theme.qss"
-        with open(theme_qss_file, "r") as theme_qss:
-            self.setStyleSheet(theme_qss.read())
-        self.ui.gui_widgets['theme_button'].set_state(state, self.theme_color)
+        style_colors = light_colors if state else dark_colors
+
+        with open('themes/style.qss', 'r') as qss_file:
+            style_qss = qss_file.read()
+        
+        for color_name, color_value in style_colors.items():
+            style_qss = style_qss.replace(color_name, f"hsl({color_value[0]}, {color_value[1]}%, {color_value[2]}%)")
+        
+        for color_name, color_value in theme_colors[self.theme_color].items():
+            style_qss = style_qss.replace(color_name, f"hsl({color_value[0]}, {color_value[1]}%, {color_value[2]}%)")
+
+        for icon_name, icon_value in icons[state].items():
+            style_qss = style_qss.replace(icon_name, icon_value)
+
+        self.setStyleSheet(style_qss)
+
+        for key in self.ui.gui_widgets.keys():
+            if isinstance(self.ui.gui_widgets[key], Union[UI_Button, UI_ThemeButton, UI_ToggleButton, UI_CheckBox, UI_RadioButton, UI_PasswordBox, UI_IconLabel]):
+                self.ui.gui_widgets[key].set_icon(state)
+            if isinstance(self.ui.gui_widgets[key], UI_DropDownButton):
+                self.ui.gui_widgets[key].set_icon(state)
+                for action in self.ui.gui_widgets[key].menu().actions():
+                    self.ui.gui_widgets[key].menu().removeAction(action)
+                self.ui.gui_widgets[key].set_actions_menu(state, self.language_value)
+            if isinstance(self.ui.gui_widgets[key], UI_CalendarView):
+                self.ui.gui_widgets[key].set_header(state)
+            if isinstance(self.ui.gui_widgets[key], UI_Switch):
+                self.ui.gui_widgets[key].set_state(state, self.ui.gui_widgets[key].state)
 
         # Save settings
         self.theme_style = state
@@ -140,23 +195,23 @@ class MainWindow(QMainWindow):
         width = self.geometry().width()
         height = self.geometry().height()
 
-        self.ui.gui_widgets['options_divider'].move(8, height - 49)
-        self.ui.gui_widgets['language_menu'].move(8, height - 40)
-        self.ui.gui_widgets['theme_button'].move(88, height - 40)
-        self.ui.gui_widgets['about_button'].move(128, height - 40)
+        self.ui.gui_widgets['options_divider'].move(16, height - 56)
+        self.ui.gui_widgets['language_combobox'].move(12, height - 52)
+        self.ui.gui_widgets['theme_button'].move(120, height - 52)
+        self.ui.gui_widgets['about_button'].move(160, height - 52)
 
-        self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
-        self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
-        self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
+        # self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
+        # self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
+        # self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
 
-        self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 92)
+        # self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 92)
 
-        frame_width = (self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio
-        frame_height = self.ui.gui_widgets['video_output_card'].height() - 56
-        if frame_width > self.ui.gui_widgets['video_output_card'].width() - 16:
-            frame_width = self.ui.gui_widgets['video_output_card'].width() - 16
-            frame_height = frame_width / self.aspect_ratio
-        self.ui.gui_widgets['video_label'].resize(frame_width, frame_height)
+        # frame_width = (self.ui.gui_widgets['video_output_card'].height() - 56) * self.aspect_ratio
+        # frame_height = self.ui.gui_widgets['video_output_card'].height() - 56
+        # if frame_width > self.ui.gui_widgets['video_output_card'].width() - 16:
+        #     frame_width = self.ui.gui_widgets['video_output_card'].width() - 16
+        #     frame_height = frame_width / self.aspect_ratio
+        # self.ui.gui_widgets['video_label'].resize(frame_width, frame_height)
 
         return super().resizeEvent(a0)
     
