@@ -37,7 +37,7 @@ class UI_Label(QLabel):
 
         self.parent = parent
         self.move(position[0], position[1])
-        # self.resize(width, 40)
+        self.resize(width, 32)
         self.setContentsMargins(0,0,0,0)
         self.theme_style = self.parent.theme_style
         self.theme_color = self.parent.theme_color
@@ -53,10 +53,10 @@ class UI_Label(QLabel):
             'right': Qt.AlignmentFlag.AlignRight
         }
         label_H_alignment = alignment_dict[align]
-        self.setAlignment(label_H_alignment | Qt.AlignmentFlag.AlignBottom)
+        self.setAlignment(label_H_alignment | Qt.AlignmentFlag.AlignVCenter)
         
         if border_color is not None:
-            self.setStyleSheet(f"UI_Label {{ border-width: 2px; border-color: {border_color} }}")
+            self.setStyleSheet(f"UI_Label {{ border-width: 2px; border-style: solid; border-color: {border_color}; border-radius: 4px }}")
 
         self.set_language(language)
         
