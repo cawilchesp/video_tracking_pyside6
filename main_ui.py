@@ -8,6 +8,7 @@ from components.ui_combobox import UI_ComboBox
 from components.ui_radiobutton import UI_RadioButton
 from components.ui_chart import UI_Chart
 from components.ui_divider import UI_Divider
+from components.ui_numberbox import UI_NumberBox, UI_FloatBox
 
 import yaml
 
@@ -31,6 +32,16 @@ class Main_UI(QWidget):
         # Variables
         # ---------
         self.gui_widgets = {}
+
+        self.model_options = {
+            0: ('YOLOv8 - medio', 'YOLOv8 - medium'),
+            1: ('YOLOv8 - grande', 'YOLOv8 - large'),
+            2: ('YOLOv8 - extragrande', 'YOLOv8 - extralarge') }
+        
+        self.device_options = {
+            0: ('0', '0'),
+            1: ('cpu', 'cpu')
+        }
 
         # -----------
         # Main Window
@@ -101,7 +112,7 @@ class Main_UI(QWidget):
         self.gui_widgets['info_card'] = UI_Card(
             parent=parent,
             position=(16, 112),
-            size=(180, 176) )
+            size=(180, 184) )
         
         self.gui_widgets['info_label'] = UI_Label(
             parent=self.gui_widgets['info_card'],
@@ -123,62 +134,100 @@ class Main_UI(QWidget):
             width=164,
             align='left',
             texts=('Nombre del archivo', 'File Name'),
-            language=self.language_value
-        )
+            language=self.language_value )
         
-        # self.gui_widgets['filename_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'position': (48, 56), 
-        #     'width': 124,
-        #     'type': 'subtitle',
-        #     'align': 'left',
-        #     'labels': ('Nombre del archivo', 'File Name'),
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['size_icon'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'position': (8, 80),
-        #     'type': 'icon',
-        #     'icon': 'size',
-        #     'theme_color': self.theme_color } )
-
-        # self.gui_widgets['size_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'position': (48, 88),
-        #     'width': 124,
-        #     'type': 'subtitle',
-        #     'align': 'left',
-        #     'labels': ('Ancho X Alto', 'Width X Height'),
-        #     'language': self.language_value } )
+        self.gui_widgets['size_value'] = UI_Label(
+            parent=self.gui_widgets['info_card'],
+            position=(48, 80),
+            width=164,
+            align='left',
+            texts=('Ancho X Alto', 'Width X Height'),
+            language=self.language_value )
         
-        # self.gui_widgets['total_frames_icon'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'position': (8, 112),
-        #     'type': 'icon',
-        #     'icon': 'number',
-        #     'theme_color': self.theme_color } )
+        self.gui_widgets['total_value'] = UI_Label(
+            parent=self.gui_widgets['info_card'],
+            position=(48, 112),
+            width=164,
+            align='left',
+            texts=('Total de Cuadros', 'Total Frames'),
+            language=self.language_value )
+        
+        self.gui_widgets['fps_value'] = UI_Label(
+            parent=self.gui_widgets['info_card'],
+            position=(48, 144),
+            width=164,
+            align='left',
+            texts=('CPS', 'FPS'),
+            language=self.language_value )
 
-        # self.gui_widgets['total_frames_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'position': (48, 120),
-        #     'width': 124,
-        #     'type': 'subtitle',
-        #     'align': 'left',
-        #     'labels': ('Total de Cuadros', 'Total Frames'),
-        #     'language': self.language_value } )
+        # ----------
+        # Card Model
+        # ----------
+        self.gui_widgets['model_card'] = UI_Card(
+            parent=parent,
+            position=(16, 304),
+            size=(180, 300) )
+        
+        self.gui_widgets['model_label'] = UI_Label(
+            parent=self.gui_widgets['model_card'],
+            position=(8, 8),
+            width=self.gui_widgets['model_card'].width() - 16,
+            align='left',
+            font_size=16,
+            texts=('Modelo', 'Model'),
+            language=self.language_value )
+        
+        self.gui_widgets['model_menu'] = UI_ComboBox(
+            parent=self.gui_widgets['model_card'],
+            position=(4, 44),
+            width=self.gui_widgets['model_card'].width() - 8,
+            options=self.model_options,
+            language=self.language_value,
+            activated_signal=parent.model_activated )
 
-        # self.gui_widgets['fps_icon'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'position': (8, 144),
-        #     'type': 'icon',
-        #     'icon': 'fps',
-        #     'theme_color': self.theme_color } )
+        self.gui_widgets['size_numberbox'] = UI_NumberBox(
+            parent=self.gui_widgets['model_card'],
+            position=(4, 84),
+            width=self.gui_widgets['model_card'].width() - 8,
+            range=(640, 640, 3840),
+            value=640,
+            value_changed_signal=parent.size_valueChanged )
+        
+        self.gui_widgets['confidence_floatbox'] = UI_FloatBox(
+            parent=self.gui_widgets['model_card'],
+            position=(4, 124),
+            width=self.gui_widgets['model_card'].width() - 8,
+            range=(0.1, 0.1, 1.0),
+            value=0.5,
+            value_changed_signal=parent.confidence_valueChanged )
+        
+        self.gui_widgets['device_menu'] = UI_ComboBox(
+            parent=self.gui_widgets['model_card'],
+            position=(4, 164),
+            width=self.gui_widgets['model_card'].width() - 8,
+            options=self.device_options,
+            language=self.language_value,
+            activated_signal=parent.device_activated )
+        
+        
 
-        # self.gui_widgets['fps_value'] = MD3Label(self.gui_widgets['info_card'], {
-        #     'position': (48, 152),
-        #     'width': 124,
-        #     'type': 'subtitle',
-        #     'align': 'left',
-        #     'labels': ('CPS', 'FPS'),
-        #     'language': self.language_value } )
 
-        # # ------------
-        # # Card Classes
-        # # ------------
+        # device=0 #combobox
+        # classes=class_filter #Classes card
+        # retina_masks=True #Switch
+
+        # Botón INICIAR INFERENCIA
+        # Es en este momento en que se carga el modelo de detección 
+        # y de seguimiento
+        # Se deben bloquear las opciones de Model Card al iniciar la inferencia
+        
+        # Botón DETENER INFERENCIA
+        # Reactiva las opciones de Model Card
+        # Reinicia la carga del modelo de detección
+
+        # ------------
+        # Card Classes
+        # ------------
         # self.gui_widgets['classes_card'] = MD3Card(parent, {
         #     'position': (8, 288), 
         #     'size': (180, 288),
