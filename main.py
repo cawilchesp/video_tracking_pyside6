@@ -54,6 +54,12 @@ class MainWindow(QMainWindow):
         # ---------
         # Variables
         # ---------
+        self.model_weights = [
+            'yolov8m.pt',
+            'yolov8l.pt',
+            'yolov8x.pt'
+        ]
+
         self.cap = None
         self.video_width = None
         self.video_height = None
@@ -287,6 +293,18 @@ class MainWindow(QMainWindow):
             else:
                 print('Error opening video stream or file')
 
+    # -----
+    # Model
+    # -----
+    def model_activated(self, index: int) -> None:
+        self.model_weights[index]
+
+    def size_valueChanged(self) -> None:
+        self.model_size = self.ui.gui_widgets['size_numberbox'].value()
+
+    def confidence_valueChanged(self) -> None:
+        self.model_confidence = self.ui.gui_widgets['confidence_floatbox'].value()
+        
 
     # -------
     # Classes
