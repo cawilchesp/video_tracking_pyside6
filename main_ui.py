@@ -212,9 +212,7 @@ class Main_UI(QWidget):
         
 
 
-        # device=0 #combobox
         # classes=class_filter #Classes card
-        # retina_masks=True #Switch
 
         # Botón INICIAR INFERENCIA
         # Es en este momento en que se carga el modelo de detección 
