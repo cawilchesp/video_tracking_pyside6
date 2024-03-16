@@ -54,11 +54,8 @@ class MainWindow(QMainWindow):
         # ---------
         # Variables
         # ---------
-        self.model_weights = [
-            'yolov8m.pt',
-            'yolov8l.pt',
-            'yolov8x.pt'
-        ]
+        self.weights_options = ['yolov8m.pt', 'yolov8l.pt', 'yolov8x.pt']
+        self.device_options = ['0', 'cpu']
 
         self.cap = None
         self.video_width = None
@@ -297,7 +294,7 @@ class MainWindow(QMainWindow):
     # Model
     # -----
     def model_activated(self, index: int) -> None:
-        self.model_weights[index]
+        self.model_weights = self.weights_options[index]
 
     def size_valueChanged(self) -> None:
         self.model_size = self.ui.gui_widgets['size_numberbox'].value()
@@ -305,6 +302,8 @@ class MainWindow(QMainWindow):
     def confidence_valueChanged(self) -> None:
         self.model_confidence = self.ui.gui_widgets['confidence_floatbox'].value()
         
+    def device_activated(self, index: int) -> None:
+        self.model_device = self.device_options[index]
 
     # -------
     # Classes
