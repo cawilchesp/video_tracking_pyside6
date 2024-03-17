@@ -203,7 +203,7 @@ class MainWindow(QMainWindow):
         self.ui.gui_widgets['theme_button'].move(120, height - 52)
         self.ui.gui_widgets['about_button'].move(160, height - 52)
 
-        # self.ui.gui_widgets['video_toolbar_card'].resize(width - 204, 68)
+        self.ui.gui_widgets['video_toolbar_card'].resize(width - 220, 48)
         # self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
         # self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
 
@@ -305,72 +305,87 @@ class MainWindow(QMainWindow):
     def device_activated(self, index: int) -> None:
         self.model_device = self.device_options[index]
 
+    def model_start_button_clicked(self) -> None:
+        print('start')
+    
+    def model_stop_button_clicked(self) -> None:
+        print('stop')
+
+    # Botón INICIAR INFERENCIA
+        # Es en este momento en que se carga el modelo de detección 
+        # y de seguimiento
+        # Se deben bloquear las opciones de Model Card al iniciar la inferencia
+        
+        # Botón DETENER INFERENCIA
+        # Reactiva las opciones de Model Card
+        # Reinicia la carga del modelo de detección
+
     # -------
     # Classes
     # -------
-    def on_person_chip_clicked(self, state: bool) -> None:
+    def person_chip_clicked(self, state: bool) -> None:
         self.class_options['person'][0] = state
         self.ui.gui_widgets['person_chip'].set_state(state, self.theme_color)
 
-    def on_bicycle_chip_clicked(self, state: bool) -> None:
+    def bicycle_chip_clicked(self, state: bool) -> None:
         self.class_options['bicycle'][0] = state
         self.ui.gui_widgets['bicycle_chip'].set_state(state, self.theme_color)
     
-    def on_car_chip_clicked(self, state: bool) -> None:
+    def car_chip_clicked(self, state: bool) -> None:
         self.class_options['car'][0] = state
         self.ui.gui_widgets['car_chip'].set_state(state, self.theme_color)
 
-    def on_motorcycle_chip_clicked(self, state: bool) -> None:
+    def motorcycle_chip_clicked(self, state: bool) -> None:
         self.class_options['motorcycle'][0] = state
         self.ui.gui_widgets['motorcycle_chip'].set_state(state, self.theme_color)
  
-    def on_bus_chip_clicked(self, state: bool) -> None:
+    def bus_chip_clicked(self, state: bool) -> None:
         self.class_options['bus'][0] = state
         self.ui.gui_widgets['bus_chip'].set_state(state, self.theme_color)
 
-    def on_truck_chip_clicked(self, state: bool) -> None:
+    def truck_chip_clicked(self, state: bool) -> None:
         self.class_options['truck'][0] = state
         self.ui.gui_widgets['truck_chip'].set_state(state, self.theme_color)
 
     # -------------
     # Video Toolbar
     # -------------
-    def on_backFrame_button_clicked(self) -> None:
+    def backFrame_button_clicked(self) -> None:
         if self.timer_play.isActive(): self.timer_play.stop()
         if self.timer_reverse.isActive(): self.timer_reverse.stop()
         self.play_backward()
 
 
-    def on_reverse_button_clicked(self) -> None:
+    def reverse_button_clicked(self) -> None:
         if self.timer_play.isActive(): self.timer_play.stop()
         self.timer_reverse.start(self.time_step)
 
 
-    def on_pause_button_clicked(self) -> None:
+    def pause_button_clicked(self) -> None:
         self.timer_play.stop() if self.timer_play.isActive() else self.timer_reverse.stop()
 
 
-    def on_play_button_clicked(self) -> None:
+    def play_button_clicked(self) -> None:
         if self.timer_reverse.isActive(): self.timer_reverse.stop()
         self.timer_play.start(self.time_step)
 
 
-    def on_frontFrame_button_clicked(self) -> None:
+    def frontFrame_button_clicked(self) -> None:
         if self.timer_play.isActive(): self.timer_play.stop()
         if self.timer_reverse.isActive(): self.timer_reverse.stop()
         self.play_forward()
 
 
-    def on_video_slider_sliderMoved(self) -> None:
+    def video_slider_sliderMoved(self) -> None:
         self.frame_number = self.ui.gui_widgets['video_slider'].value()
         self.ui.gui_widgets['frame_value_textfield'].text_field.setText(f"{self.frame_number}")
         
 
-    def on_video_slider_sliderReleased(self) -> None:
+    def video_slider_sliderReleased(self) -> None:
         self.draw_frame()
 
 
-    def on_frame_value_textfield_returnPressed(self) -> None:
+    def frame_value_textfield_returnPressed(self) -> None:
         self.frame_number = int(self.ui.gui_widgets['frame_value_textfield'].text_field.text())
         self.ui.gui_widgets['video_slider'].setSliderPosition(self.frame_number)
         self.draw_frame()
