@@ -166,7 +166,7 @@ class Main_UI(QWidget):
         self.gui_widgets['model_card'] = UI_Card(
             parent=parent,
             position=(16, 304),
-            size=(180, 300) )
+            size=(180, 248) )
         
         self.gui_widgets['model_label'] = UI_Label(
             parent=self.gui_widgets['model_card'],
@@ -209,19 +209,95 @@ class Main_UI(QWidget):
             language=self.language_value,
             activated_signal=parent.device_activated )
         
+        self.gui_widgets['model_start_button'] = UI_Button(
+            parent=self.gui_widgets['model_card'],
+            position=(136, 204),
+            type='accent',
+            icon_name='play-circle-outline',
+            clicked_signal=parent.model_start_button_clicked )
+
+        self.gui_widgets['model_stop_button'] = UI_Button(
+            parent=self.gui_widgets['model_card'],
+            position=(96, 204),
+            type='accent',
+            icon_name='stop-circle-outline',
+            clicked_signal=parent.model_stop_button_clicked )
+
+        # ------------------
+        # Card Video Toolbar
+        # ------------------
+        self.gui_widgets['video_toolbar_card'] = UI_Card(
+            parent=parent,
+            position=(204, 16) )
+
+        self.gui_widgets['backFrame_button'] = UI_Button(
+            parent=self.gui_widgets['video_toolbar_card'],
+            position=(4, 4),
+            type='accent',
+            icon_name='step-backward',
+            enabled=True,
+            clicked_signal=parent.backFrame_button_clicked )
+
+        self.gui_widgets['reverse_button'] = UI_Button(
+            parent=self.gui_widgets['video_toolbar_card'],
+            position=(44, 4),
+            type='accent',
+            # icon_name='reverse',
+            enabled=True,
+            clicked_signal=parent.reverse_button_clicked )
+
+        self.gui_widgets['pause_button'] = UI_Button(
+            self.gui_widgets['video_toolbar_card'],
+            position=(84, 4),
+            type='accent',
+            icon_name='pause',
+            enabled=True,
+            clicked_signal=parent.pause_button_clicked )
+
+        self.gui_widgets['play_button'] = UI_Button(
+            parent=self.gui_widgets['video_toolbar_card'],
+            position=(124, 4),
+            type='accent',
+            icon_name='play', 
+            enabled=True,
+            clicked_signal=parent.play_button_clicked )
+
+        self.gui_widgets['frontFrame_button'] = UI_Button(
+            parent=self.gui_widgets['video_toolbar_card'],
+            position=(164, 4),
+            type='accent',
+            icon_name='step-forward', 
+            enabled=True,
+            clicked_signal=parent.frontFrame_button_clicked )
+
+        # self.gui_widgets['video_slider'] = MD3Slider(self.gui_widgets['video_toolbar_card'], {
+        #     'position': (208, 20),
+        #     'range': (0, 1, 10),
+        #     'value': 0,
+        #     'enabled': False,
+        #     'slider_moved': parent.on_video_slider_sliderMoved,
+        #     'slider_released': parent.on_video_slider_sliderReleased } )
+
+        # self.gui_widgets['frame_value_textfield'] = MD3TextField(self.gui_widgets['video_toolbar_card'], {
+        #     'width': 100,
+        #     'type': 'outlined',
+        #     'labels': ('Cuadro', 'Frame'),
+        #     'input': 'integer',
+        #     'language': self.language_value,
+        #     'return_pressed': parent.on_frame_value_textfield_returnPressed } )
+
+        # # ----------------
+        # # Card Video Image
+        # # ----------------
+        # self.gui_widgets['video_output_card'] = MD3Card(parent, {
+        #     'position': (196, 84),
+        #     'type': 'outlined',
+        #     'titles': ('Salida del Video','Video Output'),
+        #     'language': self.language_value } )
         
-
-
-        # classes=class_filter #Classes card
-
-        # Botón INICIAR INFERENCIA
-        # Es en este momento en que se carga el modelo de detección 
-        # y de seguimiento
-        # Se deben bloquear las opciones de Model Card al iniciar la inferencia
-        
-        # Botón DETENER INFERENCIA
-        # Reactiva las opciones de Model Card
-        # Reinicia la carga del modelo de detección
+        # self.gui_widgets['video_label'] = MD3ImageLabel(self.gui_widgets['video_output_card'], {
+        #     'position': (8, 48),
+        #     'scaled_image': True } )
 
         # ------------
         # Card Classes
@@ -293,79 +369,4 @@ class Main_UI(QWidget):
         #     'language': self.language_value,
         #     'clicked': parent.on_truck_chip_clicked } )
 
-        # # ------------------
-        # # Card Video Toolbar
-        # # ------------------
-        # self.gui_widgets['video_toolbar_card'] = MD3Card(parent, {
-        #     'position': (196, 8),
-        #     'type': 'outlined',
-        #     'language': self.language_value } )
-
-        # self.gui_widgets['backFrame_button'] = MD3Button(self.gui_widgets['video_toolbar_card'], {
-        #     'position': (8, 20),
-        #     'type': 'filled',
-        #     'icon': 'step_backward', 
-        #     'enabled': True,
-        #     'theme_color': self.theme_color,
-        #     'clicked': parent.on_backFrame_button_clicked } )
-
-        # self.gui_widgets['reverse_button'] = MD3Button(self.gui_widgets['video_toolbar_card'], {
-        #     'position': (48, 20),
-        #     'type': 'filled',
-        #     'icon': 'reverse', 
-        #     'enabled': True,
-        #     'theme_color': self.theme_color,
-        #     'clicked': parent.on_reverse_button_clicked } )
-
-        # self.gui_widgets['pause_button'] = MD3Button(self.gui_widgets['video_toolbar_card'], {
-        #     'position': (88, 20),
-        #     'type': 'filled',
-        #     'icon': 'pause', 
-        #     'enabled': True,
-        #     'theme_color': self.theme_color,
-        #     'clicked': parent.on_pause_button_clicked } )
-
-        # self.gui_widgets['play_button'] = MD3Button(self.gui_widgets['video_toolbar_card'], {
-        #     'position': (128, 20),
-        #     'type': 'filled',
-        #     'icon': 'play', 
-        #     'enabled': True,
-        #     'theme_color': self.theme_color,
-        #     'clicked': parent.on_play_button_clicked } )
-
-        # self.gui_widgets['frontFrame_button'] = MD3Button(self.gui_widgets['video_toolbar_card'], {
-        #     'position': (168, 20),
-        #     'type': 'filled',
-        #     'icon': 'step_forward', 
-        #     'enabled': True,
-        #     'theme_color': self.theme_color,
-        #     'clicked': parent.on_frontFrame_button_clicked } )
-
-        # self.gui_widgets['video_slider'] = MD3Slider(self.gui_widgets['video_toolbar_card'], {
-        #     'position': (208, 20),
-        #     'range': (0, 1, 10),
-        #     'value': 0,
-        #     'enabled': False,
-        #     'slider_moved': parent.on_video_slider_sliderMoved,
-        #     'slider_released': parent.on_video_slider_sliderReleased } )
-
-        # self.gui_widgets['frame_value_textfield'] = MD3TextField(self.gui_widgets['video_toolbar_card'], {
-        #     'width': 100,
-        #     'type': 'outlined',
-        #     'labels': ('Cuadro', 'Frame'),
-        #     'input': 'integer',
-        #     'language': self.language_value,
-        #     'return_pressed': parent.on_frame_value_textfield_returnPressed } )
-
-        # # ----------------
-        # # Card Video Image
-        # # ----------------
-        # self.gui_widgets['video_output_card'] = MD3Card(parent, {
-        #     'position': (196, 84),
-        #     'type': 'outlined',
-        #     'titles': ('Salida del Video','Video Output'),
-        #     'language': self.language_value } )
         
-        # self.gui_widgets['video_label'] = MD3ImageLabel(self.gui_widgets['video_output_card'], {
-        #     'position': (8, 48),
-        #     'scaled_image': True } )
