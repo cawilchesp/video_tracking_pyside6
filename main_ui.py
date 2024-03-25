@@ -9,6 +9,7 @@ from components.ui_radiobutton import UI_RadioButton
 from components.ui_chart import UI_Chart
 from components.ui_divider import UI_Divider
 from components.ui_numberbox import UI_NumberBox, UI_FloatBox
+from components.ui_slider import UI_Slider
 
 import yaml
 
@@ -270,13 +271,12 @@ class Main_UI(QWidget):
             enabled=True,
             clicked_signal=parent.frontFrame_button_clicked )
 
-        # self.gui_widgets['video_slider'] = MD3Slider(self.gui_widgets['video_toolbar_card'], {
-        #     'position': (208, 20),
-        #     'range': (0, 1, 10),
-        #     'value': 0,
-        #     'enabled': False,
-        #     'slider_moved': parent.on_video_slider_sliderMoved,
-        #     'slider_released': parent.on_video_slider_sliderReleased } )
+        self.gui_widgets['video_slider'] = UI_Slider(
+            parent=self.gui_widgets['video_toolbar_card'],
+            position=(208, 4),
+            # enabled=False,
+            slider_moved_signal=parent.video_slider_sliderMoved,
+            slider_released_signal=parent.video_slider_sliderReleased )
 
         # self.gui_widgets['frame_value_textfield'] = MD3TextField(self.gui_widgets['video_toolbar_card'], {
         #     'width': 100,
