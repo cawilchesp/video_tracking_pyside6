@@ -204,7 +204,7 @@ class MainWindow(QMainWindow):
         self.ui.gui_widgets['about_button'].move(160, height - 52)
 
         self.ui.gui_widgets['video_toolbar_card'].resize(width - 220, 48)
-        # self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 324, 32)
+        self.ui.gui_widgets['video_slider'].resize(self.ui.gui_widgets['video_toolbar_card'].width() - 236, 40)
         # self.ui.gui_widgets['frame_value_textfield'].move(self.ui.gui_widgets['video_toolbar_card'].width() - 108, 8)
 
         # self.ui.gui_widgets['video_output_card'].resize(width - 204, height - 92)
